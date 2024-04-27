@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "Todo"
+version = "0.1.0"
+description = "Another todo app"
+authors = ["datogoglidze <d.goglidze22@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "3.0.*"
+flask-session = "0.8.0"
+cachelib = "0.12.0"
+requests = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+pytest-sugar = "1.0.0"
+pytest-cov = "*"
+pytest-recording = "*"
+coverage = "*"
+faker = "*"
+types-requests = "*"
+python-dotenv = "*"
+
+[tool.poetry.group.lint.dependencies]
+mypy = "*"
+ruff = "*"
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+strict = true
+
+[tool.ruff]
+target-version = "py311"
+
+lint.select = ["E", "F", "I"]
+lint.ignore = []
+lint.fixable = ["A", "B", "C", "D", "E", "F", "I"]
+lint.unfixable = []
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.coverage.report]
+skip_empty = true
+skip_covered = true
+show_missing = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
