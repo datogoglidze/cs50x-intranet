@@ -1,4 +1,4 @@
-from todo.hello import hello
+from intranet.hello import hello
 
 
 def test_hello() -> None:
