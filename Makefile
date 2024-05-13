@@ -13,13 +13,13 @@ amend:
 	git commit --amend --no-edit -a
 
 format:
-	poetry run ruff format todo tests
-	poetry run ruff check todo tests --fix
+	poetry run ruff format intranet tests
+	poetry run ruff check intranet tests --fix
 
 lint:
-	poetry run ruff format todo tests --check
-	poetry run ruff check todo tests
-	poetry run mypy todo tests
+	poetry run ruff format intranet tests --check
+	poetry run ruff check intranet tests
+	poetry run mypy intranet tests
 
 test:
 	poetry run pytest tests \
@@ -28,4 +28,4 @@ test:
 	rm -rf tests/.flask_session
 
 run:
-	poetry run flask --app todo.app run
+	poetry run flask --app intranet.app run
