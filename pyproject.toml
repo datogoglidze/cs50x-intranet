@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "Todo"
+name = "Intranet"
 version = "0.1.0"
-description = "Another todo app"
+description = "Intranet for organizations"
 authors = ["datogoglidze <d.goglidze22@gmail.com>"]
 readme = "README.md"
 
