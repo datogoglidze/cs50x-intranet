@@ -6,14 +6,15 @@ from typing import ContextManager
 from flask import Flask, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from flask_session.__init__ import Session
+import flask_session
 from intranet.error import apology, login_required
 
 app = Flask(__name__)
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+app.config["SESSION_FILE_DIR"] = ".flask_session"
+flask_session.Session(app)
 
 
 @dataclass
