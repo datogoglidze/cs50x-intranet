@@ -19,7 +19,10 @@ def login():  # type: ignore
         if not request.form.get("password"):
             return apology("must provide password", 403)
 
-        AuthorizationSqliteRepository().login()
+        AuthorizationSqliteRepository(
+            username=request.form.get("username"),
+            password=request.form.get("password"),
+        ).login()
 
         return redirect("/")
 
@@ -39,7 +42,25 @@ def register():  # type: ignore
     session.clear()
 
     if request.method == "POST":
-        AuthorizationSqliteRepository().register()
+        if AuthorizationSqliteRepository(
+            username=request.form.get("username"),
+            password=request.form.get("password"),
+        ).check_user():
+            return apology("username already exists", 400)
+
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        if not request.form.get("password"):
+            return apology("must provide password", 403)
+
+        if request.form.get("password") != request.form.get("confirmation"):
+            return apology("password didn't match", 403)
+
+        AuthorizationSqliteRepository(
+            username=request.form.get("username"),
+            password=request.form.get("password"),
+        ).register()
 
         session.clear()
 
