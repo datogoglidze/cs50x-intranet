@@ -9,7 +9,7 @@ from intranet.runner.factory import SqliteConnector
 
 @dataclass
 class AuthorizationSqliteRepository:
-    def login(self):
+    def login(self) -> tuple[str, int] | None:  # type: ignore
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -27,7 +27,7 @@ class AuthorizationSqliteRepository:
             session["user_id"] = rows[0]["id"]
             session["username"] = rows[0]["username"]
 
-    def register(self):
+    def register(self) -> tuple[str, int] | None:  # type: ignore
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
