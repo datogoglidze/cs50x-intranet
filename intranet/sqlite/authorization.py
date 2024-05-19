@@ -49,7 +49,7 @@ class AuthorizationSqliteRepository:
                 dict(username=self.username, hash=password),
             )
 
-    def check_user(self) -> int:  # type: ignore
+    def user_existence(self) -> int:  # type: ignore
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
