@@ -3,10 +3,10 @@ from dataclasses import dataclass
 from sqlite3 import Connection
 from typing import ContextManager
 
+import flask_session
 from flask import Flask, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-import flask_session
 from intranet.error import apology, login_required
 
 app = Flask(__name__)
