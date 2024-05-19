@@ -16,7 +16,7 @@ def login():  # type: ignore
         if not request.form.get("username"):
             return apology("must provide username", 403)
 
-        elif not request.form.get("password"):
+        if not request.form.get("password"):
             return apology("must provide password", 403)
 
         AuthorizationSqliteRepository().login()
