@@ -18,6 +18,15 @@ app.register_blueprint(authorization)
 app.register_blueprint(home)
 
 
+@app.after_request
+def after_request(response):  # type: ignore
+    """Ensure responses aren't cached"""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
+
+
 @cli.command()
 def run(host: str = "0.0.0.0", port: int = 5000) -> None:
     app.run(host=host, port=port)

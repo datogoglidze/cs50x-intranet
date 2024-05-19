@@ -24,15 +24,6 @@ class SqliteConnector:
         return connection
 
 
-@authorization.after_request
-def after_request(response):  # type: ignore
-    """Ensure responses aren't cached"""
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
-
-
 @authorization.route("/login", methods=["GET", "POST"])
 def login():  # type: ignore
     session.clear()
