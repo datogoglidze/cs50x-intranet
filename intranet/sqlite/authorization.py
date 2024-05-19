@@ -9,8 +9,8 @@ from intranet.runner.factory import SqliteConnector
 
 @dataclass
 class AuthorizationSqliteRepository:
-    username: str
-    password: str
+    username: str | None
+    password: str | None
 
     def login(self) -> tuple[str, int] | None:  # type: ignore
         with SqliteConnector().connect() as connection:
@@ -39,7 +39,7 @@ class AuthorizationSqliteRepository:
             )
 
             password = generate_password_hash(
-                self.password,
+                self.password,  # type: ignore
                 method="pbkdf2",
                 salt_length=16,
             )
@@ -49,7 +49,7 @@ class AuthorizationSqliteRepository:
                 dict(username=self.username, hash=password),
             )
 
-    def user_existence(self) -> int:  # type: ignore
+    def user_existence(self) -> int:
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
