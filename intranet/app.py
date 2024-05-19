@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from sqlite3 import Connection
 from typing import ContextManager
 
-from flask import redirect, render_template, request, session, Blueprint
+from flask import Blueprint, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from intranet.error import apology, login_required
