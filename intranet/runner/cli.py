@@ -17,5 +17,5 @@ app.register_blueprint(intranet_page)
 
 
 @cli.command()
-def run(host: str = "0.0.0.0", port: int = 5000):
+def run(host: str = "0.0.0.0", port: int = 5000) -> None:
     app.run(host=host, port=port)
