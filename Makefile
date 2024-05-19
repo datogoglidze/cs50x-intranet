@@ -28,4 +28,4 @@ test:
 	rm -rf tests/.flask_session
 
 run:
-	poetry run flask --app intranet.app run
+	python -m intranet.runner --host localhost --port 5000

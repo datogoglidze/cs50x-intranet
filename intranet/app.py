@@ -3,18 +3,12 @@ from dataclasses import dataclass
 from sqlite3 import Connection
 from typing import ContextManager
 
-import flask_session
-from flask import Flask, redirect, render_template, request, session
+from flask import redirect, render_template, request, session, Blueprint
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from intranet.error import apology, login_required
 
-app = Flask(__name__)
-
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_FILE_DIR"] = ".flask_session"
-flask_session.Session(app)
+intranet_page = Blueprint("intranet", __name__, template_folder="templates")
 
 
 @dataclass
@@ -28,7 +22,7 @@ class SqliteConnector:
         return connection
 
 
-@app.after_request
+@intranet_page.after_request
 def after_request(response):  # type: ignore
     """Ensure responses aren't cached"""
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -37,13 +31,13 @@ def after_request(response):  # type: ignore
     return response
 
 
-@app.route("/")
+@intranet_page.route("/")
 @login_required  # type: ignore
 def index() -> str:
     return render_template("index.html")
 
 
-@app.route("/login", methods=["GET", "POST"])
+@intranet_page.route("/login", methods=["GET", "POST"])
 def login():  # type: ignore
     session.clear()
 
@@ -77,14 +71,14 @@ def login():  # type: ignore
         return render_template("login.html")
 
 
-@app.route("/logout")  # type: ignore
+@intranet_page.route("/logout")  # type: ignore
 def logout():
     session.clear()
 
     return redirect("/")
 
 
-@app.route("/register", methods=["GET", "POST"])
+@intranet_page.route("/register", methods=["GET", "POST"])
 def register():  # type: ignore
     session.clear()
 
