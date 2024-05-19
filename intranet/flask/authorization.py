@@ -6,9 +6,11 @@ from typing import ContextManager
 from flask import Blueprint, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from intranet.error import apology, login_required
+from intranet.error import apology
 
-intranet_page = Blueprint("intranet", __name__, template_folder="templates")
+authorization = Blueprint(
+    "authorization", __name__, template_folder="../front/templates"
+)
 
 
 @dataclass
@@ -22,7 +24,7 @@ class SqliteConnector:
         return connection
 
 
-@intranet_page.after_request
+@authorization.after_request
 def after_request(response):  # type: ignore
     """Ensure responses aren't cached"""
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -31,13 +33,7 @@ def after_request(response):  # type: ignore
     return response
 
 
-@intranet_page.route("/")
-@login_required  # type: ignore
-def index() -> str:
-    return render_template("index.html")
-
-
-@intranet_page.route("/login", methods=["GET", "POST"])
+@authorization.route("/login", methods=["GET", "POST"])
 def login():  # type: ignore
     session.clear()
 
@@ -71,14 +67,14 @@ def login():  # type: ignore
         return render_template("login.html")
 
 
-@intranet_page.route("/logout")  # type: ignore
+@authorization.route("/logout")  # type: ignore
 def logout():
     session.clear()
 
     return redirect("/")
 
 
-@intranet_page.route("/register", methods=["GET", "POST"])
+@authorization.route("/register", methods=["GET", "POST"])
 def register():  # type: ignore
     session.clear()
 
