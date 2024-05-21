@@ -1,5 +1,8 @@
+from uuid import uuid4
+
 from flask import Blueprint, redirect, render_template, request, session
 
+from intranet.core.user import User
 from intranet.error import apology
 from intranet.sqlite.authorization import AuthorizationSqliteRepository
 
@@ -13,16 +16,19 @@ def login():  # type: ignore
     session.clear()
 
     if request.method == "POST":
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
-
-        if not request.form.get("password"):
-            return apology("must provide password", 403)
-
-        AuthorizationSqliteRepository(
+        user = User(
+            id=str(uuid4()),
             username=request.form.get("username"),
             password=request.form.get("password"),
-        ).login()
+        )
+
+        if not user.username:
+            return apology("must provide username", 403)
+
+        if not user.password:
+            return apology("must provide password", 403)
+
+        AuthorizationSqliteRepository(user).login()
 
         return redirect("/")
 
@@ -42,25 +48,25 @@ def register():  # type: ignore
     session.clear()
 
     if request.method == "POST":
-        if AuthorizationSqliteRepository(
+        user = User(
+            id=str(uuid4()),
             username=request.form.get("username"),
             password=request.form.get("password"),
-        ).user_existence():
+        )
+
+        if AuthorizationSqliteRepository(user).user_existence():
             return apology("username already exists", 400)
 
-        if not request.form.get("username"):
+        if not user.username:
             return apology("must provide username", 403)
 
-        if not request.form.get("password"):
+        if not user.password:
             return apology("must provide password", 403)
 
-        if request.form.get("password") != request.form.get("confirmation"):
+        if user.password != request.form.get("confirmation"):
             return apology("password didn't match", 403)
 
-        AuthorizationSqliteRepository(
-            username=request.form.get("username"),
-            password=request.form.get("password"),
-        ).register()
+        AuthorizationSqliteRepository(user).register()
 
         session.clear()
 
