@@ -1,10 +1,8 @@
 from dataclasses import dataclass
 
-from flask import session
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 
 from intranet.core.user import User
-from intranet.error import apology
 from intranet.runner.factory import SqliteConnector
 
 SELECT = """SELECT * FROM users WHERE username = :username;"""
