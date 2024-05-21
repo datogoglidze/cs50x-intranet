@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Any
 
 from werkzeug.security import generate_password_hash
 
@@ -13,7 +14,7 @@ INSERT = """INSERT INTO users (username, hash) VALUES(:username, :hash);"""
 class AuthorizationSqliteRepository:
     user: User
 
-    def login(self) -> dict[str, str] | None:  # type: ignore
+    def login(self) -> Any:
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -25,24 +26,18 @@ class AuthorizationSqliteRepository:
 
     def register(self) -> tuple[str, int] | None:  # type: ignore
         with SqliteConnector().connect() as connection:
-            cursor = connection.cursor()
-            cursor.execute(
-                SELECT,
-                dict(username=self.user.username),
-            )
-
             password = generate_password_hash(
-                self.user.password,  # type: ignore
+                self.user.password,
                 method="pbkdf2",
                 salt_length=16,
             )
-
+            cursor = connection.cursor()
             cursor.execute(
                 INSERT,
                 dict(username=self.user.username, hash=password),
             )
 
-    def user_existence(self) -> int:
+    def user_existence(self) -> Any:
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(

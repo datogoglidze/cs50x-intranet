@@ -19,8 +19,8 @@ def login():  # type: ignore
     if request.method == "POST":
         user = User(
             id=str(uuid4()),
-            username=request.form.get("username"),
-            password=request.form.get("password"),
+            username=request.form.get("username", ""),
+            password=request.form.get("password", ""),
         )
 
         if not user.username:
@@ -36,7 +36,7 @@ def login():  # type: ignore
 
         if not check_password_hash(
             dict(authorize)["hash"],
-            user.password,  # type: ignore
+            user.password,
         ):
             return apology("invalid username and/or password", 403)
 
@@ -63,8 +63,8 @@ def register():  # type: ignore
     if request.method == "POST":
         user = User(
             id=str(uuid4()),
-            username=request.form.get("username"),
-            password=request.form.get("password"),
+            username=request.form.get("username", ""),
+            password=request.form.get("password", ""),
         )
 
         if AuthorizationSqliteRepository(user).user_existence():
@@ -76,7 +76,7 @@ def register():  # type: ignore
         if not user.password:
             return apology("must provide password", 403)
 
-        if user.password != request.form.get("confirmation"):
+        if user.password != request.form.get("confirmation", ""):
             return apology("password didn't match", 403)
 
         AuthorizationSqliteRepository(user).register()
