@@ -48,4 +48,4 @@ class AuthorizationSqliteRepository:
                 "SELECT * FROM users WHERE username = :username;",
                 dict(username=self.user.username),
             )
-            return len(cursor.fetchall())
+            return cursor.fetchone()
