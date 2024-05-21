@@ -7,6 +7,9 @@ from intranet.core.user import User
 from intranet.error import apology
 from intranet.runner.factory import SqliteConnector
 
+SELECT = """SELECT * FROM users WHERE username = :username;"""
+INSERT = """INSERT INTO users (username, hash) VALUES(:username, :hash);"""
+
 
 @dataclass
 class AuthorizationSqliteRepository:
@@ -16,7 +19,7 @@ class AuthorizationSqliteRepository:
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
-                "SELECT * FROM users WHERE username = :username;",
+                SELECT,
                 dict(username=self.user.username),
             )
 
@@ -26,7 +29,7 @@ class AuthorizationSqliteRepository:
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
-                "SELECT * FROM users WHERE username = :username;",
+                SELECT,
                 dict(username=self.user.username),
             )
 
@@ -37,7 +40,7 @@ class AuthorizationSqliteRepository:
             )
 
             cursor.execute(
-                "INSERT INTO users (username, hash) VALUES(:username, :hash);",
+                INSERT,
                 dict(username=self.user.username, hash=password),
             )
 
@@ -45,7 +48,7 @@ class AuthorizationSqliteRepository:
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
-                "SELECT * FROM users WHERE username = :username;",
+                SELECT,
                 dict(username=self.user.username),
             )
             return cursor.fetchone()
