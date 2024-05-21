@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from flask import Blueprint, redirect, render_template, request, session
+from werkzeug.security import check_password_hash
 
 from intranet.core.user import User
 from intranet.error import apology
@@ -28,7 +29,19 @@ def login():  # type: ignore
         if not user.password:
             return apology("must provide password", 403)
 
-        AuthorizationSqliteRepository(user).login()
+        authorize = AuthorizationSqliteRepository(user).login()
+
+        if not authorize:
+            return apology("invalid username and/or password", 403)
+
+        if not check_password_hash(
+            dict(authorize)["hash"],
+            user.password,  # type: ignore
+        ):
+            return apology("invalid username and/or password", 403)
+
+        session["user_id"] = dict(authorize)["id"]
+        session["username"] = dict(authorize)["username"]
 
         return redirect("/")
 

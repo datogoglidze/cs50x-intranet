@@ -12,23 +12,15 @@ from intranet.runner.factory import SqliteConnector
 class AuthorizationSqliteRepository:
     user: User
 
-    def login(self) -> tuple[str, int] | None:  # type: ignore
+    def login(self) -> dict[str, str] | None:  # type: ignore
         with SqliteConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
                 "SELECT * FROM users WHERE username = :username;",
                 dict(username=self.user.username),
             )
-            raw = cursor.fetchone()
 
-            if not raw or not check_password_hash(
-                raw["hash"],
-                self.user.password,  # type: ignore
-            ):
-                return apology("invalid username and/or password", 403)
-
-            session["user_id"] = raw["id"]
-            session["username"] = raw["username"]
+            return cursor.fetchone()
 
     def register(self) -> tuple[str, int] | None:  # type: ignore
         with SqliteConnector().connect() as connection:
