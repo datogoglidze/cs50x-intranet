@@ -35,7 +35,7 @@ def login():  # type: ignore
             return apology("invalid username and/or password", 403)
 
         if not check_password_hash(
-            dict(authorize)["hash"],
+            dict(authorize)["password_hash"],
             user.password,
         ):
             return apology("invalid username and/or password", 403)
