@@ -39,3 +39,42 @@ def test_login_without_password(client: FlaskClient) -> None:
     response = client.post("/login", data={"username": "asdf", "password": ""})
 
     assert b"must-provide-password" in response.data
+
+
+def test_register_without_username(client: FlaskClient) -> None:
+    response = client.post(
+        "/register",
+        data={
+            "username": "",
+            "password": "asdf",
+            "confirmation": "asdf",
+        },
+    )
+
+    assert b"must-provide-username" in response.data
+
+
+def test_register_without_password(client: FlaskClient) -> None:
+    response = client.post(
+        "/register",
+        data={
+            "username": "asdf",
+            "password": "",
+            "confirmation": "asdf",
+        },
+    )
+
+    assert b"must-provide-password" in response.data
+
+
+def test_register_without_confirmation(client: FlaskClient) -> None:
+    response = client.post(
+        "/register",
+        data={
+            "username": "asdf",
+            "password": "asdf",
+            "confirmation": "qwerty",
+        },
+    )
+
+    assert b"password-didn%27t-match" in response.data
