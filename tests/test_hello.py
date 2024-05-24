@@ -27,3 +27,15 @@ def test_home_without_authorization(client: FlaskClient) -> None:
     response = client.get("/")
 
     assert b"Redirecting..." in response.data
+
+
+def test_login_without_username(client: FlaskClient) -> None:
+    response = client.post("/login", data={"username": "", "password": "asdf"})
+
+    assert b"must-provide-username" in response.data
+
+
+def test_login_without_password(client: FlaskClient) -> None:
+    response = client.post("/login", data={"username": "asdf", "password": ""})
+
+    assert b"must-provide-password" in response.data
