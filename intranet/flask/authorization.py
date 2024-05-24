@@ -67,9 +67,6 @@ def register():  # type: ignore
             password=request.form.get("password", ""),
         )
 
-        if AuthorizationSqliteRepository(user).user_existence():
-            return apology("username already exists", 400)
-
         if not user.username:
             return apology("must provide username", 403)
 
@@ -78,6 +75,9 @@ def register():  # type: ignore
 
         if user.password != request.form.get("confirmation", ""):
             return apology("password didn't match", 403)
+
+        if AuthorizationSqliteRepository(user).user_existence():
+            return apology("username already exists", 400)
 
         AuthorizationSqliteRepository(user).register()
 
