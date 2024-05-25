@@ -1,11 +1,12 @@
 from uuid import uuid4
 
-from flask import Blueprint, redirect, render_template, request, session
-from werkzeug.security import check_password_hash
+from dependency_injector.wiring import Provide, inject
+from flask import Blueprint, current_app, redirect, render_template, request, session
+from werkzeug.security import check_password_hash, generate_password_hash
 
-from intranet.core.user import User
+from intranet.core.user import User, UserRepository
 from intranet.error import apology
-from intranet.sqlite.authorization import AuthorizationSqliteRepository
+from intranet.flask.dependable import Container
 
 authorization = Blueprint(
     "authorization", __name__, template_folder="../front/templates"
@@ -13,7 +14,8 @@ authorization = Blueprint(
 
 
 @authorization.route("/login", methods=["GET", "POST"])
-def login():  # type: ignore
+@inject
+def login(users: UserRepository = Provide[Container.user_repository]):  # type: ignore
     session.clear()
 
     if request.method == "POST":
@@ -29,19 +31,19 @@ def login():  # type: ignore
         if not user.password:
             return apology("must provide password", 403)
 
-        authorize = AuthorizationSqliteRepository(user).login()
-
-        if not authorize:
+        try:
+            existing_user = users.read(user.username)
+        except KeyError:
             return apology("invalid username and/or password", 403)
 
         if not check_password_hash(
-            dict(authorize)["password_hash"],
+            existing_user.password,
             user.password,
         ):
             return apology("invalid username and/or password", 403)
 
-        session["user_id"] = dict(authorize)["id"]
-        session["username"] = dict(authorize)["username"]
+        session["user_id"] = existing_user.id
+        session["username"] = existing_user.username
 
         return redirect("/")
 
@@ -57,8 +59,11 @@ def logout():
 
 
 @authorization.route("/register", methods=["GET", "POST"])
-def register():  # type: ignore
+@inject
+def register(users: UserRepository = Provide[Container.user_repository]):  # type: ignore
     session.clear()
+
+    current_app.logger.debug(f"users: {users}")
 
     if request.method == "POST":
         user = User(
@@ -76,10 +81,21 @@ def register():  # type: ignore
         if user.password != request.form.get("confirmation", ""):
             return apology("password didn't match", 403)
 
-        if AuthorizationSqliteRepository(user).user_existence():
-            return apology("username already exists", 400)
-
-        AuthorizationSqliteRepository(user).register()
+        try:
+            users.create(
+                {
+                    "username": user.username,
+                    "password": (
+                        generate_password_hash(
+                            user.password,
+                            method="pbkdf2",
+                            salt_length=16,
+                        )
+                    ),
+                }
+            )
+        except ValueError:
+            return apology("username already exists", 403)
 
         session.clear()
 

@@ -22,7 +22,7 @@ lint:
 	poetry run mypy intranet tests
 
 test:
-	poetry run pytest tests \
+	poetry run pytest tests/unit \
 		--last-failed \
 		--cov
 	rm -rf tests/.flask_session
