@@ -1,4 +1,5 @@
 import flask_session
+from cachelib import FileSystemCache
 from flask import Flask
 
 from intranet import flask
@@ -21,8 +22,8 @@ def setup() -> Flask:
     app.container = container  # type: ignore
 
     app.config["SESSION_PERMANENT"] = False
-    app.config["SESSION_TYPE"] = "filesystem"
-    app.config["SESSION_FILE_DIR"] = ".flask_session"
+    app.config["SESSION_TYPE"] = "cachelib"
+    app.config["SESSION_CACHELIB"] = FileSystemCache("flask_session")
 
     flask_session.Session(app)
 
