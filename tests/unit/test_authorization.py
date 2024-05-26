@@ -149,6 +149,30 @@ def test_login(app: FlaskClient) -> None:
     assert b"Redirecting..." in response.data
 
 
+def test_logout(app: FlaskClient) -> None:
+    app.post(
+        "/register",
+        data={
+            "username": "asdf",
+            "password": "asdf",
+            "confirmation": "asdf",
+        },
+    )
+
+    app.post(
+        "/login",
+        data={
+            "username": "asdf",
+            "password": "asdf",
+        },
+    )
+
+    response = app.get("/logout")
+
+    assert response.status_code == 302
+    assert b"Redirecting..." in response.data
+
+
 def test_home_without_authorization(app: FlaskClient) -> None:
     response = app.get("/")
 
