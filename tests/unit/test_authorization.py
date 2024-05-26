@@ -29,7 +29,7 @@ def test_register_without_username(app: FlaskClient) -> None:
     )
 
     assert response.status_code == 403
-    assert b"must-provide-username" in response.data
+    assert "must-provide-username" in response.get_data(as_text=True)
 
 
 def test_register_without_password(app: FlaskClient) -> None:
@@ -43,7 +43,7 @@ def test_register_without_password(app: FlaskClient) -> None:
     )
 
     assert response.status_code == 403
-    assert b"must-provide-password" in response.data
+    assert "must-provide-password" in response.get_data(as_text=True)
 
 
 def test_register_without_confirmation(app: FlaskClient) -> None:
@@ -57,7 +57,7 @@ def test_register_without_confirmation(app: FlaskClient) -> None:
     )
 
     assert response.status_code == 403
-    assert b"password-didn%27t-match" in response.data
+    assert "password-didn%27t-match" in response.get_data(as_text=True)
 
 
 def test_register(app: FlaskClient) -> None:
@@ -71,8 +71,8 @@ def test_register(app: FlaskClient) -> None:
     )
 
     assert response.status_code == 302
-    assert b"Redirecting..." in response.data
-    assert b"/login" in response.data
+    assert "Redirecting..." in response.get_data(as_text=True)
+    assert "/login" in response.get_data(as_text=True)
 
 
 def test_register_with_same_username(app: FlaskClient) -> None:
@@ -95,21 +95,21 @@ def test_register_with_same_username(app: FlaskClient) -> None:
     )
 
     assert response.status_code == 403
-    assert b"username-already-exists" in response.data
+    assert "username-already-exists" in response.get_data(as_text=True)
 
 
 def test_login_without_username(app: FlaskClient) -> None:
     response = app.post("/login", data={"username": "", "password": "asdf"})
 
     assert response.status_code == 403
-    assert b"must-provide-username" in response.data
+    assert "must-provide-username" in response.get_data(as_text=True)
 
 
 def test_login_without_password(app: FlaskClient) -> None:
     response = app.post("/login", data={"username": "asdf", "password": ""})
 
     assert response.status_code == 403
-    assert b"must-provide-password" in response.data
+    assert "must-provide-password" in response.get_data(as_text=True)
 
 
 def test_login_with_wrong_password(app: FlaskClient) -> None:
@@ -131,7 +131,7 @@ def test_login_with_wrong_password(app: FlaskClient) -> None:
     )
 
     assert response.status_code == 403
-    assert b"invalid-username-and~sor-password" in response.data
+    assert "invalid-username-and~sor-password" in response.get_data(as_text=True)
 
 
 def test_login(app: FlaskClient) -> None:
@@ -153,7 +153,7 @@ def test_login(app: FlaskClient) -> None:
     )
 
     assert response.status_code == 302
-    assert b"Redirecting..." in response.data
+    assert "Redirecting..." in response.get_data(as_text=True)
 
 
 def test_logout(app: FlaskClient) -> None:
@@ -177,15 +177,15 @@ def test_logout(app: FlaskClient) -> None:
     response = app.get("/logout")
 
     assert response.status_code == 302
-    assert b"Redirecting..." in response.data
+    assert "Redirecting..." in response.get_data(as_text=True)
 
 
 def test_home_without_authorization(app: FlaskClient) -> None:
     response = app.get("/")
 
     assert response.status_code == 302
-    assert b"Redirecting..." in response.data
-    assert b"/login" in response.data
+    assert "Redirecting..." in response.get_data(as_text=True)
+    assert "/login" in response.get_data(as_text=True)
 
 
 def test_home_with_authorization(app: FlaskClient) -> None:
@@ -208,4 +208,4 @@ def test_home_with_authorization(app: FlaskClient) -> None:
     response = app.get("/")
 
     assert response.status_code == 200
-    assert b"Home | Intranet" in response.data
+    assert "Home | Intranet" in response.get_data(as_text=True)
