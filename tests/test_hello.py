@@ -85,6 +85,28 @@ def test_register_without_password(app: FlaskClient) -> None:
     assert b"must-provide-password" in response.data
 
 
+def test_login_with_wrong_password(app: FlaskClient) -> None:
+    app.post(
+        "/register",
+        data={
+            "username": "asdf",
+            "password": "asdf",
+            "confirmation": "asdf",
+        },
+    )
+
+    response = app.post(
+        "/login",
+        data={
+            "username": "datoie",
+            "password": "qwerty",
+        },
+    )
+
+    assert response.status_code == 403
+    assert b"invalid-username-and~sor-password" in response.data
+
+
 def test_register_without_confirmation(app: FlaskClient) -> None:
     response = app.post(
         "/register",
