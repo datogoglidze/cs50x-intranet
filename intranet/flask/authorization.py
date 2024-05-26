@@ -4,9 +4,8 @@ from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, current_app, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from intranet.core.user import User
+from intranet.core.user import User, UserRepository
 from intranet.error import apology
-from intranet.in_memory.users import UserInMemoryRepository
 from intranet.runner.factory import Container
 
 authorization = Blueprint(
@@ -25,7 +24,7 @@ def after_request(response):  # type: ignore
 
 @authorization.route("/login", methods=["GET", "POST"])
 @inject
-def login(users: UserInMemoryRepository = Provide[Container.user_repository]):  # type: ignore
+def login(users: UserRepository = Provide[Container.user_repository]):  # type: ignore
     session.clear()
 
     if request.method == "POST":
@@ -70,7 +69,7 @@ def logout():
 
 @authorization.route("/register", methods=["GET", "POST"])
 @inject
-def register(users: UserInMemoryRepository = Provide[Container.user_repository]):  # type: ignore
+def register(users: UserRepository = Provide[Container.user_repository]):  # type: ignore
     session.clear()
 
     current_app.logger.debug(f"users: {users}")

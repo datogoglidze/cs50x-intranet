@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
-from typing import Any, Iterable
+from typing import Any, Iterator
 from uuid import uuid4
 
-from intranet.core.user import User
+from intranet.core.user import User, UserRepository
 
 
 @dataclass
-class UserInMemoryRepository:
+class UserInMemoryRepository(UserRepository):
     users: list[User] = field(default_factory=list)
 
     def create(self, user: dict[str, Any]) -> User:
@@ -28,5 +28,5 @@ class UserInMemoryRepository:
 
         raise KeyError
 
-    def __iter__(self) -> Iterable[User]:
+    def __iter__(self) -> Iterator[User]:
         yield from self.users
