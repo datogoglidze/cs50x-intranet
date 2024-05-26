@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Iterator, Protocol
 
 
-class UserRepository(Protocol):
+class UserRepository(Protocol):  # pragma: no cover
     def create(self, user: dict[str, Any]) -> User:
         pass
 
