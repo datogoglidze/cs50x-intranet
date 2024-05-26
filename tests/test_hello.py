@@ -1,6 +1,5 @@
 import pytest
 from flask.testing import FlaskClient
-from werkzeug.security import generate_password_hash
 
 from intranet.runner.setup import setup
 
