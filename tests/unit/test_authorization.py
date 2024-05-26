@@ -11,6 +11,13 @@ def app() -> FlaskClient:
     return app
 
 
+def test_login_page(app: FlaskClient) -> None:
+    response = app.get("/login")
+
+    assert response.status_code == 200
+    assert "Login | Intranet" in response.get_data(as_text=True)
+
+
 def test_register_without_username(app: FlaskClient) -> None:
     response = app.post(
         "/register",
