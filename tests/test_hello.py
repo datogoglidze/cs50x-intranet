@@ -1,7 +1,7 @@
 import pytest
 from flask.testing import FlaskClient
 
-from intranet.runner.cli import setup
+from intranet.runner.setup import setup
 
 
 @pytest.fixture()
