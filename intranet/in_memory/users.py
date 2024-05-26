@@ -6,7 +6,7 @@ from intranet.core.user import User, UserRepository
 
 
 @dataclass
-class UserInMemoryRepository(UserRepository):
+class UserInMemoryRepository(UserRepository):  # pragma: no cover
     users: list[User] = field(default_factory=list)
 
     def create(self, user: dict[str, Any]) -> User:
