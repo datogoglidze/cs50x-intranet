@@ -95,7 +95,7 @@ def register(users: UserRepository = Provide[Container.user_repository]):  # typ
                 }
             )
         except ValueError:
-            pass
+            return apology("username already exists", 403)
 
         session.clear()
 

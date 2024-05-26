@@ -1,5 +1,6 @@
 import pytest
 from flask.testing import FlaskClient
+from werkzeug.security import generate_password_hash
 
 from intranet.runner.setup import setup
 
@@ -111,3 +112,26 @@ def test_register(app: FlaskClient) -> None:
     assert response.status_code == 302
     assert b"Redirecting..." in response.data
     assert b"/login" in response.data
+
+
+def test_register_with_same_username(app: FlaskClient) -> None:
+    app.post(
+        "/register",
+        data={
+            "username": "asdf",
+            "password": "asdf",
+            "confirmation": "asdf",
+        },
+    )
+
+    response = app.post(
+        "/register",
+        data={
+            "username": "asdf",
+            "password": "asdf",
+            "confirmation": "asdf",
+        },
+    )
+
+    assert response.status_code == 403
+    assert b"username-already-exists" in response.data
