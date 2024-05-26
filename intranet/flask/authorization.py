@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from intranet.core.user import User, UserRepository
 from intranet.error import apology
-from intranet.runner.factory import Container
+from intranet.flask.dependable import Container
 
 authorization = Blueprint(
     "authorization", __name__, template_folder="../front/templates"

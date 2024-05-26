@@ -4,8 +4,8 @@ from typer import Typer
 
 from intranet import flask
 from intranet.flask.authorization import authorization
+from intranet.flask.dependable import Container
 from intranet.flask.index import home
-from intranet.runner.factory import Container
 
 cli = Typer(no_args_is_help=True, add_completion=False)
 
