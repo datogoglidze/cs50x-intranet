@@ -1,7 +1,7 @@
-import flask_session
 from cachelib import FileSystemCache
 from flask import Flask
 
+import flask_session
 from intranet import flask
 from intranet.flask.authorization import authorization
 from intranet.flask.dependable import Container
@@ -24,7 +24,10 @@ def setup() -> Flask:
 
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "cachelib"
-    app.config["SESSION_CACHELIB"] = FileSystemCache("flask_session")
+    app.config["SESSION_CACHELIB"] = FileSystemCache(
+        cache_dir="flask_session",
+        threshold=500,
+    )
 
     flask_session.Session(app)
 
