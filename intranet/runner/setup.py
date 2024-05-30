@@ -17,8 +17,9 @@ def no_cache_after_request(response):  # type: ignore
 
 
 def setup() -> Flask:
-    container = Container()
     app = Flask(__name__)
+
+    container = Container()
     app.container = container  # type: ignore
 
     app.config["SESSION_PERMANENT"] = False
