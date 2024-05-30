@@ -1,6 +1,6 @@
-import flask_session
 from cachelib import FileSystemCache
 from flask import Flask
+from flask_session import Session
 
 from intranet import flask
 from intranet.flask.authorization import authorization
@@ -25,11 +25,11 @@ def setup() -> Flask:
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "cachelib"
     app.config["SESSION_CACHELIB"] = FileSystemCache(
-        cache_dir="flask_session",
+        cache_dir=".flask_session",
         threshold=500,
     )
 
-    flask_session.Session(app)
+    Session(app)
 
     app.register_blueprint(authorization)
     app.register_blueprint(home)
