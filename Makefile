@@ -25,7 +25,6 @@ test:
 	poetry run pytest tests/unit \
 		--last-failed \
 		--cov
-	rm -rf tests/.flask_session
 
 run:
 	python -m intranet.runner --host localhost --port 5000
