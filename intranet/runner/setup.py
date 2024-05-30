@@ -1,7 +1,7 @@
+import flask_session
 from cachelib import FileSystemCache
 from flask import Flask
 
-import flask_session
 from intranet import flask
 from intranet.flask.authorization import authorization
 from intranet.flask.dependable import Container
