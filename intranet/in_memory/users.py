@@ -28,5 +28,8 @@ class UserInMemoryRepository(UserRepository):  # pragma: no cover
 
         raise KeyError
 
+    def read_all(self) -> list[User]:
+        return self.users
+
     def __iter__(self) -> Iterator[User]:
         yield from self.users
