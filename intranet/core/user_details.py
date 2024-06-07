@@ -5,10 +5,10 @@ from typing import Any, Iterator, Protocol
 
 
 class UserDetailsRepository(Protocol):  # pragma: no cover
-    def create(self, user: dict[str, Any]) -> UserDetails:
+    def create(self, user_details: dict[str, Any]) -> UserDetails:
         pass
 
-    def read(self, username: str) -> UserDetails:
+    def read(self, user_id: str) -> UserDetails:
         pass
 
     def __iter__(self) -> Iterator[UserDetails]:

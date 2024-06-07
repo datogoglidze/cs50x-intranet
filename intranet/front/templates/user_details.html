@@ -1,0 +1,15 @@
+{% extends "layout.html" %} {% block title %}User Details {% endblock %} {% block main %}
+
+    <h2 style="color: #e8e8e8">User Details</h2>
+    
+    <div class="section">
+        <p>first name {{ user_details.first_name }}</p>
+        <p>last name {{ user_details.last_name }}</p>
+        <p>birt date {{ user_details.birth_date }}</p>
+        <p>department {{ user_details.department }}</p>
+        <p>email {{ user_details.email }}</p>
+        <p>phone_number {{ user_details.phone_number }}</p>
+    </div>
+    
+
+{% endblock %}

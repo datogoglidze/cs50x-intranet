@@ -2,9 +2,11 @@ from uuid import uuid4
 
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, redirect, render_template, request, session
+from werkzeug import Response
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from intranet.core.user import User, UserRepository
+from intranet.core.user_details import UserDetailsRepository
 from intranet.error import apology
 from intranet.flask.dependable import Container
 
@@ -14,14 +16,14 @@ authorization = Blueprint(
 
 
 @authorization.get("/login")
-def login_page():  # type: ignore
+def login_page() -> str:
     session.clear()
 
     return render_template("login.html")
 
 
 @authorization.get("/register")
-def register_page():  # type: ignore
+def register_page() -> str:
     session.clear()
 
     return render_template("register.html")
@@ -29,7 +31,9 @@ def register_page():  # type: ignore
 
 @authorization.post("/login")
 @inject
-def login(users: UserRepository = Provide[Container.user_repository]):  # type: ignore
+def login(
+    users: UserRepository = Provide[Container.user_repository],
+) -> Response | tuple[str, int]:
     session.clear()
 
     user = User(
@@ -61,8 +65,8 @@ def login(users: UserRepository = Provide[Container.user_repository]):  # type: 
     return redirect("/")
 
 
-@authorization.get("/logout")  # type: ignore
-def logout():
+@authorization.get("/logout")
+def logout() -> Response:
     session.clear()
 
     return redirect("/")
@@ -70,7 +74,10 @@ def logout():
 
 @authorization.post("/register")
 @inject
-def register(users: UserRepository = Provide[Container.user_repository]):  # type: ignore
+def register(
+    users: UserRepository = Provide[Container.user_repository],
+    details: UserDetailsRepository = Provide[Container.user_details_repository],
+) -> Response | tuple[str, int]:
     session.clear()
 
     user = User(
@@ -103,6 +110,8 @@ def register(users: UserRepository = Provide[Container.user_repository]):  # typ
         )
     except ValueError:
         return apology("username already exists", 403)
+
+    details.create({"id": users.read(user.username).id})
 
     session.clear()
 
