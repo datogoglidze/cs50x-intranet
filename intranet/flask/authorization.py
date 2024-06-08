@@ -5,6 +5,7 @@ from flask import Blueprint, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from intranet.core.user import User, UserRepository
+from intranet.core.user_details import UserDetailsRepository
 from intranet.error import apology
 from intranet.flask.dependable import Container
 
@@ -70,7 +71,10 @@ def logout():
 
 @authorization.post("/register")
 @inject
-def register(users: UserRepository = Provide[Container.user_repository]):  # type: ignore
+def register(
+    users: UserRepository = Provide[Container.user_repository],
+    details: UserDetailsRepository = Provide[Container.user_details_repository],
+):  # type: ignore
     session.clear()
 
     user = User(
@@ -103,6 +107,8 @@ def register(users: UserRepository = Provide[Container.user_repository]):  # typ
         )
     except ValueError:
         return apology("username already exists", 403)
+
+    details.create({"id": users.read(user.username).id})
 
     session.clear()
 
