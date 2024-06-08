@@ -6,6 +6,7 @@ from intranet import flask
 from intranet.flask.authorization import authorization
 from intranet.flask.dependable import Container
 from intranet.flask.index import home
+from intranet.flask.user_details import user_details
 
 
 def no_cache_after_request(response):  # type: ignore
@@ -33,11 +34,13 @@ def setup() -> Flask:
 
     app.register_blueprint(authorization)
     app.register_blueprint(home)
+    app.register_blueprint(user_details)
 
     container.wire(
         modules=[
             flask.authorization,
             flask.index,
+            flask.user_details,
         ]
     )
 
