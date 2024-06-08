@@ -1,11 +1,9 @@
-from uuid import uuid4
 
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, redirect, render_template, request, session
+from flask import Blueprint, render_template, session
 
-from intranet.core.user import User, UserRepository
 from intranet.core.user_details import UserDetailsRepository
-from intranet.error import apology, login_required
+from intranet.error import login_required
 from intranet.flask.dependable import Container
 
 user_details = Blueprint("user_details", __name__, template_folder="../front/templates")
