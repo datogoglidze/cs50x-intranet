@@ -1,4 +1,3 @@
-
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, render_template, session
 
@@ -11,10 +10,10 @@ user_details = Blueprint("user_details", __name__, template_folder="../front/tem
 
 @user_details.get("/user-details")
 @inject
-@login_required  # type: ignore
+@login_required
 def user_details_page(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
-):  # type: ignore
+) -> str:
     _user_details = details.read(session["user_id"])
 
     return render_template("user_details.html", user_details=_user_details)

@@ -1,4 +1,5 @@
 from functools import wraps
+from typing import Any
 
 from flask import redirect, render_template, session
 
@@ -21,7 +22,7 @@ def apology(message: str, code: int = 400) -> tuple[str, int]:
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
 
-def login_required(f):  # type: ignore
+def login_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args, **kwargs):  # type: ignore
         if session.get("user_id") is None:

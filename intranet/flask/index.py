@@ -6,6 +6,6 @@ home = Blueprint("index", __name__, template_folder="../front/templates")
 
 
 @home.get("/")
-@login_required  # type: ignore
+@login_required
 def index_page() -> str:
     return render_template("index.html")

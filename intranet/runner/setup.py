@@ -1,3 +1,5 @@
+from typing import Any
+
 from cachelib import FileSystemCache
 from flask import Flask
 from flask_session import Session
@@ -9,7 +11,7 @@ from intranet.flask.index import home
 from intranet.flask.user_details import user_details
 
 
-def no_cache_after_request(response):  # type: ignore
+def no_cache_after_request(response: Any) -> Any:
     """Ensure responses aren't cached"""
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
