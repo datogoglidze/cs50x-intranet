@@ -1,7 +1,8 @@
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, render_template, session
+from flask import Blueprint, redirect, render_template, request, session
+from werkzeug import Response
 
-from intranet.core.user_details import UserDetailsRepository
+from intranet.core.user_details import UserDetails, UserDetailsRepository
 from intranet.error import login_required
 from intranet.flask.dependable import Container
 
@@ -17,3 +18,23 @@ def user_details_page(
     _user_details = details.read(session["user_id"])
 
     return render_template("user_details.html", user_details=_user_details)
+
+
+@user_details.post("/user-details")
+@inject
+def create_user_details(
+    details: UserDetailsRepository = Provide[Container.user_details_repository],
+) -> Response | tuple[str, int]:
+    _details = UserDetails(
+        id=session["user_id"],
+        first_name=request.form.get("first_name", ""),
+        last_name=request.form.get("last_name", ""),
+        birth_date=int(request.form.get("birth_date", "")),
+        department=request.form.get("department", ""),
+        email=request.form.get("email", ""),
+        phone_number=request.form.get("phone_number", ""),
+    )
+
+    details.update(_details)
+
+    return redirect("/user-details")
