@@ -8,10 +8,10 @@ from intranet.core.user_details import UserDetails, UserDetailsRepository
 class UsersDetailsInMemoryRepository(UserDetailsRepository):  # pragma: no cover
     user_details: list[UserDetails] = field(default_factory=list)
 
-    def create(self, user_details: dict[str, Any]) -> UserDetails:
-        self._ensure_does_not_exist(user_details["id"])
+    def create(self, user_details: UserDetails) -> UserDetails:
+        self._ensure_does_not_exist(user_details.id)
 
-        self.user_details.append(UserDetails(**user_details))
+        self.user_details.append(user_details)
 
         return self.user_details[-1]
 
@@ -32,3 +32,20 @@ class UsersDetailsInMemoryRepository(UserDetailsRepository):  # pragma: no cover
 
     def __iter__(self) -> Iterator[UserDetails]:
         yield from self.user_details
+
+    def delete(self, item_id: Any) -> None:
+        for i, user in enumerate(self.user_details):
+            if user.id == str(item_id):
+                del self.user_details[i]
+                return
+
+        raise DoesNotExistError(item_id)
+
+    def update(self, item: UserDetails) -> None:
+        self.delete(item.id)
+        self.create(item)
+
+
+@dataclass
+class DoesNotExistError(Exception):
+    id: Any = "unknown"

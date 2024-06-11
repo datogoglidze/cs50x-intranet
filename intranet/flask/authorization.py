@@ -6,7 +6,7 @@ from werkzeug import Response
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from intranet.core.user import User, UserRepository
-from intranet.core.user_details import UserDetailsRepository
+from intranet.core.user_details import UserDetails, UserDetailsRepository
 from intranet.error import apology
 from intranet.flask.dependable import Container
 
@@ -111,7 +111,7 @@ def register(
     except ValueError:
         return apology("username already exists", 403)
 
-    details.create({"id": users.read(user.username).id})
+    details.create(UserDetails(id=users.read(user.username).id))
 
     session.clear()
 
