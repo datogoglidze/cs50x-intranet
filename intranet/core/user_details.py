@@ -11,6 +11,9 @@ class UserDetailsRepository(Protocol):  # pragma: no cover
     def read(self, user_id: str) -> UserDetails:
         pass
 
+    def update(self, user_details: UserDetails) -> None:
+        pass
+
     def __iter__(self) -> Iterator[UserDetails]:
         pass
 
