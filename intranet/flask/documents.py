@@ -55,6 +55,7 @@ def create_document(
         first_name=user.first_name,
         last_name=user.last_name,
         dates=request.form.get("dates", ""),
+        category=request.form.get("category", ""),
     )
 
     if not document.first_name or not document.last_name:
@@ -68,6 +69,7 @@ def create_document(
         document.first_name,
         document.last_name,
         document.dates,
+        document.category,
     )
 
     return redirect("/documents")
@@ -78,6 +80,7 @@ def generate_document_with(
     first_name: str,
     last_name: str,
     dates: str,
+    category: str,
 ) -> None:
     document = Document("document_templates/vacation_template.docx")
     document.styles["Normal"].font.name = "Sylfaen"
@@ -104,6 +107,7 @@ def generate_document_with(
         f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         f"-{last_name}"
         f"-{first_name}"
+        f"-{category}"
     )
     document.save(f"documents/{new_document}.docx")
 
