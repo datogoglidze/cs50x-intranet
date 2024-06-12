@@ -163,4 +163,4 @@ cython_debug/
 
 # Database
 database
-.documents
+documents

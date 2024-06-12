@@ -30,6 +30,8 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 def user_details_page(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
 ) -> str:
+    if not os.path.exists("documents"):
+        os.makedirs("documents")
     _documents = os.listdir("documents")
     last_name = details.read(session["user_id"]).last_name
     user_documents = [file for file in _documents if last_name in file]
