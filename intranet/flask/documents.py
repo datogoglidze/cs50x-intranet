@@ -2,10 +2,10 @@ import datetime
 import os
 from uuid import uuid4
 
+import docx2pdf
 import pythoncom
 from dependency_injector.wiring import Provide, inject
 from docx import Document
-from docx2pdf import convert
 from flask import (
     Blueprint,
     redirect,
@@ -49,38 +49,43 @@ def pdf_viewer(filename: str) -> Response:
 def create_document(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
 ) -> Response | tuple[str, int]:
-    user_details = details.read(session["user_id"])
-    user_document = UserDocument(
+    user = details.read(session["user_id"])
+    document = UserDocument(
         id=str(uuid4()),
-        first_name=user_details.first_name,
-        last_name=user_details.last_name,
+        first_name=user.first_name,
+        last_name=user.last_name,
         dates=request.form.get("dates", ""),
     )
 
-    if not user_document.first_name or not user_document.last_name:
+    if not document.first_name or not document.last_name:
         return apology("must fill details", 403)
 
-    if not user_document.dates:
+    if not document.dates:
         return apology("must specify date", 403)
 
-    generate_document(
-        user_document.id,
-        user_document.first_name,
-        user_document.last_name,
-        user_document.dates,
+    generate_document_with(
+        document.id,
+        document.first_name,
+        document.last_name,
+        document.dates,
     )
 
     return redirect("/documents")
 
 
-def generate_document(_id: str, first_name: str, last_name: str, dates: str) -> None:
+def generate_document_with(
+    document_id: str,
+    first_name: str,
+    last_name: str,
+    dates: str,
+) -> None:
     document = Document("document_templates/vacation_template.docx")
     document.styles["Normal"].font.name = "Sylfaen"
 
     for paragraph in document.paragraphs:
         paragraph.text = paragraph.text.replace(
             "!<<DOC_ID>>",
-            _id,
+            document_id,
         )
         paragraph.text = paragraph.text.replace(
             "!<<FIRST_NAME>>",
@@ -95,12 +100,16 @@ def generate_document(_id: str, first_name: str, last_name: str, dates: str) -> 
             dates,
         )
 
-    document_name = f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}-{last_name}-{first_name}"
-    document.save(f"vacations/{document_name}.docx")
+    new_document = (
+        f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
+        f"-{last_name}"
+        f"-{first_name}"
+    )
+    document.save(f"documents/{new_document}.docx")
 
     pythoncom.CoInitialize()
-    convert(
-        f"documents/{document_name}.docx",
+    docx2pdf.convert(
+        f"documents/{new_document}.docx",
         "documents/",
     )
-    os.remove(f"documents/{document_name}.docx")
+    os.remove(f"documents/{new_document}.docx")
