@@ -21,12 +21,10 @@ from intranet.core.user_documents import UserDocument
 from intranet.error import apology, login_required
 from intranet.flask.dependable import Container
 
-user_documents = Blueprint(
-    "user_documents", __name__, template_folder="../front/templates"
-)
+documents = Blueprint("documents", __name__, template_folder="../front/templates")
 
 
-@user_documents.get("/documents")
+@documents.get("/documents")
 @inject
 @login_required
 def user_details_page(
@@ -39,13 +37,13 @@ def user_details_page(
     return render_template("user_documents.html", documents=documents)
 
 
-@user_documents.get("/documents/<filename>")
+@documents.get("/documents/<filename>")
 @login_required
 def pdf_viewer(filename: str) -> Response:
     return send_from_directory("../../vacations", filename)
 
 
-@user_documents.post("/documents")
+@documents.post("/documents")
 @inject
 @login_required
 def create_document(
