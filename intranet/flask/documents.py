@@ -30,11 +30,11 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 def user_details_page(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
 ) -> str:
-    files_and_dirs = os.listdir("documents")
+    _documents = os.listdir("documents")
     last_name = details.read(session["user_id"]).last_name
-    documents = [file for file in files_and_dirs if last_name in file]
+    user_documents = [file for file in _documents if last_name in file]
 
-    return render_template("user_documents.html", documents=documents)
+    return render_template("user_documents.html", documents=user_documents)
 
 
 @documents.get("/documents/<filename>")
