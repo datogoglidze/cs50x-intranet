@@ -1,6 +1,8 @@
 import datetime
+import os
 from uuid import uuid4
 
+import pythoncom
 from dependency_injector.wiring import Provide, inject
 from docx import Document
 from docx2pdf import convert
@@ -33,7 +35,7 @@ def create_document(
     user_document = UserDocument(
         id=str(uuid4()),
         first_name=user_details.first_name,
-        last_name=user_details.last_name[:-1] + "ის",
+        last_name=user_details.last_name,
         dates=request.form.get("dates", ""),
     )
 
@@ -68,7 +70,7 @@ def generate_document(_id: str, first_name: str, last_name: str, dates: str) -> 
         )
         paragraph.text = paragraph.text.replace(
             "!<<LAST_NAME>>",
-            last_name,
+            last_name[:-1] + "ის",
         )
         paragraph.text = paragraph.text.replace(
             "!<<DATE>>",
@@ -76,8 +78,11 @@ def generate_document(_id: str, first_name: str, last_name: str, dates: str) -> 
         )
 
     document_name = f"{datetime.datetime.now().date()} {last_name} {_id}"
-    document.save("vacations/" + document_name + ".docx")
+    document.save(f"vacations/{document_name}.docx")
+
+    pythoncom.CoInitialize()
     convert(
         f"vacations/{document_name}.docx",
-        f"vacations/{document_name}.pdf",
+        "vacations/",
     )
+    os.remove(f"vacations/{document_name}.docx")
