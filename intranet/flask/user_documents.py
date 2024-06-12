@@ -72,7 +72,7 @@ def create_document(
         user_document.dates,
     )
 
-    return redirect("/user-details")
+    return redirect("/documents")
 
 
 def generate_document(_id: str, first_name: str, last_name: str, dates: str) -> None:
