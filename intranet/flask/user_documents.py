@@ -6,7 +6,14 @@ import pythoncom
 from dependency_injector.wiring import Provide, inject
 from docx import Document
 from docx2pdf import convert
-from flask import Blueprint, redirect, render_template, request, session
+from flask import (
+    Blueprint,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+    session,
+)
 from werkzeug import Response
 
 from intranet.core.user_details import UserDetailsRepository
@@ -20,9 +27,22 @@ user_documents = Blueprint(
 
 
 @user_documents.get("/documents")
+@inject
 @login_required
-def user_details_page() -> str:
-    return render_template("user_documents.html")
+def user_details_page(
+    details: UserDetailsRepository = Provide[Container.user_details_repository],
+) -> str:
+    files_and_dirs = os.listdir("vacations")
+    last_name = details.read(session["user_id"]).last_name
+    documents = [file for file in files_and_dirs if last_name in file]
+
+    return render_template("user_documents.html", documents=documents)
+
+
+@user_documents.get("/documents/<filename>")
+@login_required
+def pdf_viewer(filename: str) -> Response:
+    return send_from_directory("../../vacations", filename)
 
 
 @user_documents.post("/documents")
@@ -77,7 +97,7 @@ def generate_document(_id: str, first_name: str, last_name: str, dates: str) -> 
             dates,
         )
 
-    document_name = f"{datetime.datetime.now().date()} {last_name} {_id}"
+    document_name = f"{datetime.datetime.now().date()}-{last_name}"
     document.save(f"vacations/{document_name}.docx")
 
     pythoncom.CoInitialize()
