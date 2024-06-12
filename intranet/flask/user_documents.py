@@ -97,7 +97,7 @@ def generate_document(_id: str, first_name: str, last_name: str, dates: str) -> 
             dates,
         )
 
-    document_name = f"{datetime.datetime.now().date()}-{last_name}"
+    document_name = f"{datetime.datetime.now().date()}-{last_name}-{first_name}"
     document.save(f"vacations/{document_name}.docx")
 
     pythoncom.CoInitialize()
