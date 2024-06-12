@@ -30,7 +30,7 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 def user_details_page(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
 ) -> str:
-    files_and_dirs = os.listdir("vacations")
+    files_and_dirs = os.listdir("documents")
     last_name = details.read(session["user_id"]).last_name
     documents = [file for file in files_and_dirs if last_name in file]
 
@@ -40,7 +40,7 @@ def user_details_page(
 @documents.get("/documents/<filename>")
 @login_required
 def pdf_viewer(filename: str) -> Response:
-    return send_from_directory("../../vacations", filename)
+    return send_from_directory("../../documents", filename)
 
 
 @documents.post("/documents")
@@ -100,7 +100,7 @@ def generate_document(_id: str, first_name: str, last_name: str, dates: str) -> 
 
     pythoncom.CoInitialize()
     convert(
-        f"vacations/{document_name}.docx",
-        "vacations/",
+        f"documents/{document_name}.docx",
+        "documents/",
     )
-    os.remove(f"vacations/{document_name}.docx")
+    os.remove(f"documents/{document_name}.docx")
