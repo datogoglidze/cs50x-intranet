@@ -1,11 +1,9 @@
 import datetime
 import os
+from io import BytesIO
 from uuid import uuid4
 
-import docx2pdf
-import pythoncom
 from dependency_injector.wiring import Provide, inject
-from docx import Document
 from flask import (
     Blueprint,
     redirect,
@@ -14,6 +12,9 @@ from flask import (
     send_from_directory,
     session,
 )
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 from werkzeug import Response
 
 from intranet.core.user_details import UserDetailsRepository
@@ -84,38 +85,48 @@ def generate_document_with(
     dates: str,
     category: str,
 ) -> None:
-    document = Document("document_templates/vacation_template.docx")
-    document.styles["Normal"].font.name = "Sylfaen"
+    pdfmetrics.registerFont(
+        TTFont(
+            "GeorgianFontNormal",
+            "intranet/assets/fonts/DejaVuSans.ttf",
+        )
+    )
+    pdfmetrics.registerFont(
+        TTFont(
+            "GeorgianFontBold",
+            "intranet/assets/fonts/DejaVuSans-Bold.ttf",
+        )
+    )
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
+    p.setFont("GeorgianFontNormal", 12)
 
-    for paragraph in document.paragraphs:
-        paragraph.text = paragraph.text.replace(
-            "!<<DOC_ID>>",
-            document_id,
-        )
-        paragraph.text = paragraph.text.replace(
-            "!<<FIRST_NAME>>",
-            first_name,
-        )
-        paragraph.text = paragraph.text.replace(
-            "!<<LAST_NAME>>",
-            last_name[:-1] + "ის",
-        )
-        paragraph.text = paragraph.text.replace(
-            "!<<DATE>>",
-            dates,
-        )
+    # Create a PDF document
+    p.drawString(100, 750, "Book Catalog")
+
+    y = 700
+
+    # TODO: Generalize pdf drawing (maybe with for loop while reading file)
+    p.drawString(100, y, f"ID: {document_id}")
+    p.drawString(100, y - 20, f"Author: {first_name}")
+    p.drawString(100, y - 40, f"Year: {dates}")
+    y -= 60
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
 
     new_document = (
+        f"documents/"
         f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         f"-{last_name}"
         f"-{first_name}"
         f"-{category}"
+        f".pdf"
     )
-    document.save(f"documents/{new_document}.docx")
 
-    pythoncom.CoInitialize()
-    docx2pdf.convert(
-        f"documents/{new_document}.docx",
-        "documents/",
-    )
-    os.remove(f"documents/{new_document}.docx")
+    with open(new_document, "wb") as f:
+        f.write(buffer.getvalue())
+
+    buffer.close()
