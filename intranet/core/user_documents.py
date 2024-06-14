@@ -7,3 +7,4 @@ class UserDocument:
     first_name: str
     last_name: str
     dates: str
+    category: str

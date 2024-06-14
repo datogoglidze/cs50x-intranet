@@ -100,8 +100,18 @@
                 <input autocomplete="off" autofocus type="text" name="dates" />
                 <label>Dates</label>
             </div>
+            <div class="user-box">
+                <input autocomplete="off" autofocus type="text" name="category" />
+                <label>Category</label>
+            </div>
             <button class="btn" type="submit">TO VACATION!</button>
         </form>
+    </div>
+    
+    <div class="box section">
+        {% for document in documents %}
+            <button onclick="window.location.href='/documents/{{ document }}'">{{ document }}</button>
+        {% endfor %}
     </div>
 </div>
 
