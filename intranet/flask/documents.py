@@ -12,9 +12,11 @@ from flask import (
     send_from_directory,
     session,
 )
+from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
+from reportlab.pdfgen.canvas import Canvas
 from werkzeug import Response
 
 from intranet.core.user_details import UserDetailsRepository
@@ -97,20 +99,63 @@ def generate_document_with(
             "intranet/assets/fonts/DejaVuSans-Bold.ttf",
         )
     )
+
+    with open(
+        "document_templates/vacation_template.txt",
+        "r",
+        encoding="utf-8",
+    ) as file:
+        template_text = file.read()
+
+    document_id = str(uuid4())
+    updated_text = template_text.replace("!<<DOC_ID>>", document_id)
+    updated_text = updated_text.replace("!<<FIRST_NAME>>", first_name)
+    updated_text = updated_text.replace("!<<LAST_NAME>>", last_name)
+    updated_text = updated_text.replace("!<<DATE>>", dates)
+
     buffer = BytesIO()
-    p = canvas.Canvas(buffer)
+    p = canvas.Canvas(buffer, pagesize=letter)
     p.setFont("GeorgianFontNormal", 12)
 
-    # Create a PDF document
-    p.drawString(100, 750, "Book Catalog")
+    page_width, page_height = letter
+    margin = 50
+    y = page_height - margin  # Start from a reasonable position on the first page
+    line_height = 18  # Line height for normal text
 
-    y = 700
+    def draw_wrapped_text(
+        text: str,
+        _p: Canvas,
+        _x: int,
+        _y: float,
+        _max_width: float,
+        _line_height: int,
+    ) -> float:
+        words = text.split()
+        _line = ""
+        for word in words:
+            test_line = f"{_line} {word}".strip()
+            if _p.stringWidth(test_line, "GeorgianFontNormal", 12) <= _max_width:
+                _line = test_line
+            else:
+                _p.drawString(_x, _y, _line)
+                _y -= _line_height
+                _line = word
+                if _y < margin:
+                    _p.showPage()
+                    _p.setFont("GeorgianFontNormal", 12)
+                    _y = page_height - margin
+        _p.drawString(_x, _y, _line)
+        return _y - _line_height
 
-    # TODO: Generalize pdf drawing (maybe with for loop while reading file)
-    p.drawString(100, y, f"ID: {document_id}")
-    p.drawString(100, y - 20, f"Author: {first_name}")
-    p.drawString(100, y - 40, f"Year: {dates}")
-    y -= 60
+    x = margin
+    max_width = page_width - 2 * margin
+
+    for line in updated_text.split("\n"):
+        y = draw_wrapped_text(line, p, x, y, max_width, line_height)
+        if y < margin:
+            p.showPage()
+            p.setFont("GeorgianFontNormal", 12)
+            y = page_height - margin
 
     p.showPage()
     p.save()
