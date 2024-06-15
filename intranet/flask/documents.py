@@ -124,9 +124,9 @@ def generate_document_with(
 
     def draw_wrapped_text(
         text: str,
-        _p: Canvas,
-        _x: int,
-        _y: float,
+        pdf: Canvas,
+        _margin: int,
+        y_location: float,
         _max_width: float,
         _line_height: int,
     ) -> float:
@@ -134,24 +134,23 @@ def generate_document_with(
         _line = ""
         for word in words:
             test_line = f"{_line} {word}".strip()
-            if _p.stringWidth(test_line, "GeorgianFontNormal", 12) <= _max_width:
+            if pdf.stringWidth(test_line, "GeorgianFontNormal", 12) <= _max_width:
                 _line = test_line
             else:
-                _p.drawString(_x, _y, _line)
-                _y -= _line_height
+                pdf.drawString(_margin, y_location, _line)
+                y_location -= _line_height
                 _line = word
-                if _y < margin:
-                    _p.showPage()
-                    _p.setFont("GeorgianFontNormal", 12)
-                    _y = page_height - margin
-        _p.drawString(_x, _y, _line)
-        return _y - _line_height
+                if y_location < margin:
+                    pdf.showPage()
+                    pdf.setFont("GeorgianFontNormal", 12)
+                    y_location = page_height - margin
+        pdf.drawString(_margin, y_location, _line)
+        return y_location - _line_height
 
-    x = margin
     max_width = page_width - 2 * margin
 
     for line in updated_text.split("\n"):
-        y = draw_wrapped_text(line, p, x, y, max_width, line_height)
+        y = draw_wrapped_text(line, p, margin, y, max_width, line_height)
         if y < margin:
             p.showPage()
             p.setFont("GeorgianFontNormal", 12)
