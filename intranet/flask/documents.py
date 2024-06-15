@@ -95,7 +95,13 @@ class GenerateDocument:
 
     id: str = field(default_factory=lambda: str(uuid4()))
 
-    def with_layout(self, page_width, page_height, margin, line_height):
+    def with_layout(
+        self,
+        page_width: float,
+        page_height: float,
+        margin: int,
+        line_height: int,
+    ) -> None:
         pdfmetrics.registerFont(
             TTFont(
                 "GeorgianFontNormal",
