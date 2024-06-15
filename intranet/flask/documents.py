@@ -105,34 +105,34 @@ class GenerateDocument:
 
         updated_text = self.replace_fields()
 
-        buffer = BytesIO()
-        pdf = canvas.Canvas(buffer, pagesize=letter)
-        pdf.setFont("GeorgianFontNormal", 12)
+        with BytesIO() as buffer:
+            pdf = canvas.Canvas(buffer, pagesize=letter)
+            pdf.setFont("GeorgianFontNormal", 12)
 
-        page_width, page_height = letter
-        margin = 50
-        y = page_height - margin  # Start from a reasonable position on the first page
-        line_height = 18  # Line height for normal text
-        max_width = page_width - 2 * margin
+            page_width, page_height = letter
+            margin = 50
+            y = (
+                page_height - margin
+            )  # Start from a reasonable position on the first page
+            line_height = 18  # Line height for normal text
+            max_width = page_width - 2 * margin
 
-        for line in updated_text.split("\n"):
-            y = PdfConstructor(
-                page_width, max_width, page_height, margin, line_height
-            ).draw_wrapped_text(line, pdf, y)
-            if y < margin:
-                pdf.showPage()
-                pdf.setFont("GeorgianFontNormal", 12)
-                y = page_height - margin
+            for line in updated_text.split("\n"):
+                y = PdfConstructor(
+                    page_width, max_width, page_height, margin, line_height
+                ).draw_wrapped_text(line, pdf, y)
+                if y < margin:
+                    pdf.showPage()
+                    pdf.setFont("GeorgianFontNormal", 12)
+                    y = page_height - margin
 
-        pdf.showPage()
-        pdf.save()
+            pdf.showPage()
+            pdf.save()
 
-        buffer.seek(0)
+            buffer.seek(0)
 
-        with open(self.with_name(), "wb") as f:
-            f.write(buffer.getvalue())
-
-        buffer.close()
+            with open(self.with_name(), "wb") as f:
+                f.write(buffer.getvalue())
 
     def with_name(self) -> str:
         return (
