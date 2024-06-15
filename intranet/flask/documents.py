@@ -182,7 +182,7 @@ class PdfConstructor:
     margin: int
     line_height: int
 
-    def draw_wrapped_text(self, line: str, pdf: Canvas, y_location: float):
+    def draw_wrapped_text(self, line: str, pdf: Canvas, y_location: float) -> float:
         words = line.split()
         write_line = ""
 
