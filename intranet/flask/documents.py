@@ -113,6 +113,7 @@ class GenerateDocument:
         margin = 50
         y = page_height - margin  # Start from a reasonable position on the first page
         line_height = 18  # Line height for normal text
+        max_width = page_width - 2 * margin
 
         def draw_wrapped_text(
             text: str,
@@ -137,9 +138,8 @@ class GenerateDocument:
                         pdf.setFont("GeorgianFontNormal", 12)
                         y_location = page_height - margin
             pdf.drawString(_margin, y_location, _line)
-            return y_location - _line_height
 
-        max_width = page_width - 2 * margin
+            return y_location - _line_height
 
         for line in updated_text.split("\n"):
             y = draw_wrapped_text(line, p, margin, y, max_width, line_height)
