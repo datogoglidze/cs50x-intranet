@@ -163,7 +163,13 @@ class GenerateDocument:
 
         buffer.seek(0)
 
-        new_document = (
+        with open(self.with_name(), "wb") as f:
+            f.write(buffer.getvalue())
+
+        buffer.close()
+
+    def with_name(self):
+        return (
             f"documents/"
             f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
             f"-{self.last_name}"
@@ -171,8 +177,3 @@ class GenerateDocument:
             f"-{self.category}"
             f".pdf"
         )
-
-        with open(new_document, "wb") as f:
-            f.write(buffer.getvalue())
-
-        buffer.close()
