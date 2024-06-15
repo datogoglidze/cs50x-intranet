@@ -14,6 +14,7 @@ from flask import (
     session,
 )
 from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
@@ -75,7 +76,12 @@ def create_document(
         document.last_name,
         document.dates,
         document.category,
-    ).generate_document_with()
+    ).with_layout(
+        page_width=8.5 * inch,
+        page_height=11 * inch,
+        margin=50,
+        line_height=18,
+    )
 
     return redirect("/documents")
 
@@ -89,7 +95,7 @@ class GenerateDocument:
 
     id: str = field(default_factory=lambda: str(uuid4()))
 
-    def generate_document_with(self):
+    def with_layout(self, page_width, page_height, margin, line_height):
         pdfmetrics.registerFont(
             TTFont(
                 "GeorgianFontNormal",
@@ -109,17 +115,15 @@ class GenerateDocument:
             pdf = canvas.Canvas(buffer, pagesize=letter)
             pdf.setFont("GeorgianFontNormal", 12)
 
-            page_width, page_height = letter
-            margin = 50
-            y = (
-                page_height - margin
-            )  # Start from a reasonable position on the first page
-            line_height = 18  # Line height for normal text
-            max_width = page_width - 2 * margin
+            # Start from a reasonable position on the first page
+            y = page_height - margin
 
             for line in updated_text.split("\n"):
                 y = PdfConstructor(
-                    page_width, max_width, page_height, margin, line_height
+                    page_width,
+                    page_height,
+                    margin,
+                    line_height,
                 ).draw_wrapped_text(line, pdf, y)
                 if y < margin:
                     pdf.showPage()
@@ -168,7 +172,6 @@ class GenerateDocument:
 @dataclass
 class PdfConstructor:
     page_width: float
-    max_width: float
     page_height: float
     margin: int
     line_height: int
@@ -179,7 +182,10 @@ class PdfConstructor:
 
         for word in words:
             test_line = f"{write_line} {word}".strip()
-            if pdf.stringWidth(test_line, "GeorgianFontNormal", 12) <= self.max_width:
+            if (
+                pdf.stringWidth(test_line, "GeorgianFontNormal", 12)
+                <= self.page_width - 2 * self.margin
+            ):
                 write_line = test_line
             else:
                 pdf.drawString(self.margin, y_location, write_line)
