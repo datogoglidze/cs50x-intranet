@@ -103,12 +103,7 @@ class GenerateDocument:
             )
         )
 
-        with open(
-            "document_templates/vacation_template.txt",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            template_text = file.read()
+        template_text = self.with_template()
 
         updated_text = template_text.replace("!<<DOC_ID>>", self.id)
         updated_text = updated_text.replace("!<<FIRST_NAME>>", self.first_name)
@@ -177,3 +172,13 @@ class GenerateDocument:
             f"-{self.category}"
             f".pdf"
         )
+
+    def with_template(self):
+        with open(
+            "document_templates/vacation_template.txt",
+            "r",
+            encoding="utf-8",
+        ) as file:
+            template_text = file.read()
+
+        return template_text
