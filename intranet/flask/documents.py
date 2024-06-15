@@ -158,7 +158,7 @@ class GenerateDocument:
 
         buffer.close()
 
-    def with_name(self):
+    def with_name(self) -> str:
         return (
             f"documents/"
             f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
@@ -168,7 +168,7 @@ class GenerateDocument:
             f".pdf"
         )
 
-    def with_template(self):
+    def with_template(self) -> str:
         with open(
             "document_templates/vacation_template.txt",
             "r",
