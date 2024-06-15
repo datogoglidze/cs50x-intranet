@@ -106,8 +106,8 @@ class GenerateDocument:
         updated_text = self.replace_fields()
 
         buffer = BytesIO()
-        p = canvas.Canvas(buffer, pagesize=letter)
-        p.setFont("GeorgianFontNormal", 12)
+        pdf = canvas.Canvas(buffer, pagesize=letter)
+        pdf.setFont("GeorgianFontNormal", 12)
 
         page_width, page_height = letter
         margin = 50
@@ -115,41 +115,17 @@ class GenerateDocument:
         line_height = 18  # Line height for normal text
         max_width = page_width - 2 * margin
 
-        def draw_wrapped_text(
-            text: str,
-            pdf: Canvas,
-            _margin: int,
-            y_location: float,
-            _max_width: float,
-            _line_height: int,
-        ) -> float:
-            words = text.split()
-            _line = ""
-            for word in words:
-                test_line = f"{_line} {word}".strip()
-                if pdf.stringWidth(test_line, "GeorgianFontNormal", 12) <= _max_width:
-                    _line = test_line
-                else:
-                    pdf.drawString(_margin, y_location, _line)
-                    y_location -= _line_height
-                    _line = word
-                    if y_location < margin:
-                        pdf.showPage()
-                        pdf.setFont("GeorgianFontNormal", 12)
-                        y_location = page_height - margin
-            pdf.drawString(_margin, y_location, _line)
-
-            return y_location - _line_height
-
         for line in updated_text.split("\n"):
-            y = draw_wrapped_text(line, p, margin, y, max_width, line_height)
+            y = PdfConstructor(
+                page_width, max_width, page_height, margin, line_height
+            ).draw_wrapped_text(line, pdf, y)
             if y < margin:
-                p.showPage()
-                p.setFont("GeorgianFontNormal", 12)
+                pdf.showPage()
+                pdf.setFont("GeorgianFontNormal", 12)
                 y = page_height - margin
 
-        p.showPage()
-        p.save()
+        pdf.showPage()
+        pdf.save()
 
         buffer.seek(0)
 
@@ -187,3 +163,32 @@ class GenerateDocument:
         updated_text = updated_text.replace("!<<DATE>>", self.dates)
 
         return updated_text
+
+
+@dataclass
+class PdfConstructor:
+    page_width: float
+    max_width: float
+    page_height: float
+    margin: int
+    line_height: int
+
+    def draw_wrapped_text(self, line: str, pdf: Canvas, y_location: float):
+        words = line.split()
+        write_line = ""
+
+        for word in words:
+            test_line = f"{write_line} {word}".strip()
+            if pdf.stringWidth(test_line, "GeorgianFontNormal", 12) <= self.max_width:
+                write_line = test_line
+            else:
+                pdf.drawString(self.margin, y_location, write_line)
+                y_location -= self.line_height
+                write_line = word
+                if y_location < self.margin:
+                    pdf.showPage()
+                    pdf.setFont("GeorgianFontNormal", 12)
+                    y_location = self.page_height - self.margin
+        pdf.drawString(self.margin, y_location, write_line)
+
+        return y_location - self.line_height
