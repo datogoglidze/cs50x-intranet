@@ -103,12 +103,7 @@ class GenerateDocument:
             )
         )
 
-        template_text = self.with_template()
-
-        updated_text = template_text.replace("!<<DOC_ID>>", self.id)
-        updated_text = updated_text.replace("!<<FIRST_NAME>>", self.first_name)
-        updated_text = updated_text.replace("!<<LAST_NAME>>", self.last_name)
-        updated_text = updated_text.replace("!<<DATE>>", self.dates)
+        updated_text = self.replace_fields()
 
         buffer = BytesIO()
         p = canvas.Canvas(buffer, pagesize=letter)
@@ -182,3 +177,13 @@ class GenerateDocument:
             template_text = file.read()
 
         return template_text
+
+    def replace_fields(self) -> str:
+        template_text = self.with_template()
+
+        updated_text = template_text.replace("!<<DOC_ID>>", self.id)
+        updated_text = updated_text.replace("!<<FIRST_NAME>>", self.first_name)
+        updated_text = updated_text.replace("!<<LAST_NAME>>", self.last_name)
+        updated_text = updated_text.replace("!<<DATE>>", self.dates)
+
+        return updated_text
