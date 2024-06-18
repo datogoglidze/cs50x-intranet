@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime
 import os
 from dataclasses import dataclass, field
+from enum import Enum
 from io import BytesIO
 from uuid import uuid4
 
@@ -74,7 +75,7 @@ def create_document(
         return apology("must specify date", 403)
 
     GenerateDocument(
-        Document(document.dates).with_category(document.category),
+        Document(document.dates).with_category(DocumentCategory(document.category)),
         document.first_name,
         document.last_name,
         document.category,
@@ -181,33 +182,21 @@ class GenerateDocument:
         )
 
 
+class DocumentCategory(Enum):
+    paid_vacation: str = "paid_vacation"
+    unpaid_vacation: str = "unpaid_vacation"
+
+
 @dataclass
 class Document:
     dates: str
 
-    def with_category(self, category: str) -> str:
-        if category == "paid_vacation":
-            return self.vacation()
-        if category == "unpaid_vacation":
-            return self.unpaid_vacation()
-        else:
-            raise ValueError("Invalid category")
+    def with_category(self, category: DocumentCategory) -> str:
+        return self.from_template(category)
 
-    def vacation(self) -> str:
+    def from_template(self, category: DocumentCategory) -> str:
         with open(
-            "document_templates/vacation_body.txt",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            template_text = file.read()
-
-        updated_text = template_text.replace("!<<DATE>>", self.dates)
-
-        return updated_text
-
-    def unpaid_vacation(self) -> str:
-        with open(
-            "document_templates/unpaid_vacation_body.txt",
+            f"document_templates/{category.value}_body.txt",
             "r",
             encoding="utf-8",
         ) as file:
