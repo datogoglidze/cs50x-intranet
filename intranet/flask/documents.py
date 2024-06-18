@@ -121,9 +121,6 @@ class GenerateDocument:
 
         return footer
 
-    def concatenate(self) -> str:
-        return self.with_header() + self.body + self.with_footer()
-
     def with_layout(
         self,
         page_width: float,
@@ -144,7 +141,7 @@ class GenerateDocument:
             )
         )
 
-        updated_text = self.concatenate()
+        updated_text = self.with_header() + self.body + self.with_footer()
 
         with BytesIO() as buffer:
             pdf = canvas.Canvas(buffer, pagesize=letter)
