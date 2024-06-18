@@ -3,7 +3,7 @@ from __future__ import annotations
 import datetime
 import os
 from dataclasses import dataclass, field
-from enum import Enum, auto
+from enum import Enum
 from io import BytesIO
 from uuid import uuid4
 
