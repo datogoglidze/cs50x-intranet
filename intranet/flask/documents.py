@@ -74,7 +74,7 @@ def create_document(
         return apology("must specify date", 403)
 
     GenerateDocument(
-        Document().vacation(document.dates),
+        Document(document.dates).with_category(document.category),
         document.first_name,
         document.last_name,
         document.category,
@@ -183,7 +183,17 @@ class GenerateDocument:
 
 @dataclass
 class Document:
-    def vacation(self, dates: str) -> str:
+    dates: str
+
+    def with_category(self, category: str) -> str:
+        if category == "paid_vacation":
+            return self.vacation()
+        if category == "unpaid_vacation":
+            return self.unpaid_vacation()
+        else:
+            raise ValueError("Invalid category")
+
+    def vacation(self) -> str:
         with open(
             "document_templates/vacation_body.txt",
             "r",
@@ -191,7 +201,19 @@ class Document:
         ) as file:
             template_text = file.read()
 
-        updated_text = template_text.replace("!<<DATE>>", dates)
+        updated_text = template_text.replace("!<<DATE>>", self.dates)
+
+        return updated_text
+
+    def unpaid_vacation(self) -> str:
+        with open(
+            "document_templates/unpaid_vacation_body.txt",
+            "r",
+            encoding="utf-8",
+        ) as file:
+            template_text = file.read()
+
+        updated_text = template_text.replace("!<<DATE>>", self.dates)
 
         return updated_text
 
