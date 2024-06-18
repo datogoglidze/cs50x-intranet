@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import os
 from dataclasses import dataclass, field
@@ -72,9 +74,9 @@ def create_document(
         return apology("must specify date", 403)
 
     GenerateDocument(
+        Document().vacation(document.dates),
         document.first_name,
         document.last_name,
-        document.dates,
         document.category,
     ).with_layout(
         page_width=8.5 * inch,
@@ -88,12 +90,36 @@ def create_document(
 
 @dataclass
 class GenerateDocument:
+    body: str
     first_name: str
     last_name: str
-    dates: str
     category: str
 
     id: str = field(default_factory=lambda: str(uuid4()))
+
+    def with_header(self) -> str:
+        with open(
+            "document_templates/head.txt",
+            "r",
+            encoding="utf-8",
+        ) as file:
+            header = file.read()
+
+        updated_header = header.replace("!<<DOC_ID>>", self.id)
+        updated_header = updated_header.replace("!<<FIRST_NAME>>", self.first_name)
+        updated_header = updated_header.replace("!<<LAST_NAME>>", self.last_name)
+
+        return updated_header
+
+    def with_footer(self) -> str:
+        with open(
+            "document_templates/foot.txt",
+            "r",
+            encoding="utf-8",
+        ) as file:
+            footer = file.read()
+
+        return footer
 
     def with_layout(
         self,
@@ -115,7 +141,7 @@ class GenerateDocument:
             )
         )
 
-        updated_text = self.replace_fields()
+        updated_text = self.with_header() + self.body + self.with_footer()
 
         with BytesIO() as buffer:
             pdf = canvas.Canvas(buffer, pagesize=letter)
@@ -154,23 +180,18 @@ class GenerateDocument:
             f".pdf"
         )
 
-    def with_template(self) -> str:
+
+@dataclass
+class Document:
+    def vacation(self, dates: str) -> str:
         with open(
-            "document_templates/vacation_template.txt",
+            "document_templates/vacation_body.txt",
             "r",
             encoding="utf-8",
         ) as file:
             template_text = file.read()
 
-        return template_text
-
-    def replace_fields(self) -> str:
-        template_text = self.with_template()
-
-        updated_text = template_text.replace("!<<DOC_ID>>", self.id)
-        updated_text = updated_text.replace("!<<FIRST_NAME>>", self.first_name)
-        updated_text = updated_text.replace("!<<LAST_NAME>>", self.last_name)
-        updated_text = updated_text.replace("!<<DATE>>", self.dates)
+        updated_text = template_text.replace("!<<DATE>>", dates)
 
         return updated_text
 
