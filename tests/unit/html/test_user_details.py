@@ -103,4 +103,4 @@ def test_should_not_add_details_without_authorization(app: FlaskClient) -> None:
         },
     )
 
-    assert response.status_code == 500
+    assert response.status_code == 302
