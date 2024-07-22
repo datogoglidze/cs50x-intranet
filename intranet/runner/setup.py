@@ -8,7 +8,7 @@ from intranet import flask
 from intranet.flask.authorization import authorization
 from intranet.flask.dependable import Container
 from intranet.flask.documents import documents
-from intranet.flask.index import home
+from intranet.flask.news import news
 from intranet.flask.user_details import user_details
 
 
@@ -36,15 +36,15 @@ def setup() -> Flask:
     Session(app)
 
     app.register_blueprint(authorization)
-    app.register_blueprint(home)
     app.register_blueprint(user_details)
+    app.register_blueprint(news)
     app.register_blueprint(documents)
 
     container.wire(
         modules=[
             flask.authorization,
-            flask.index,
             flask.user_details,
+            flask.news,
             flask.documents,
         ]
     )
