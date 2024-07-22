@@ -24,8 +24,8 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfgen.canvas import Canvas
 from werkzeug import Response
 
+from intranet.core.documents import Document
 from intranet.core.user_details import UserDetailsRepository
-from intranet.core.user_documents import UserDocument
 from intranet.error import apology, login_required
 from intranet.flask.dependable import Container
 
@@ -60,7 +60,7 @@ def create_document(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
 ) -> Response | tuple[str, int]:
     user = details.read(session["user_id"])
-    document = UserDocument(
+    document = Document(
         id=str(uuid4()),
         first_name=user.first_name,
         last_name=user.last_name,
@@ -75,7 +75,9 @@ def create_document(
         return apology("must specify date", 403)
 
     GenerateDocument(
-        Document(document.dates).with_category(DocumentCategory(document.category)),
+        DocumentGenerator(document.dates).with_category(
+            DocumentCategory(document.category)
+        ),
         document.first_name,
         document.last_name,
         document.category,
@@ -188,7 +190,7 @@ class DocumentCategory(Enum):
 
 
 @dataclass
-class Document:
+class DocumentGenerator:
     dates: str
 
     def with_category(self, category: DocumentCategory) -> str:
