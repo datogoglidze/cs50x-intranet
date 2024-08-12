@@ -2,4 +2,38 @@
 
     <h2 style="color: #e8e8e8">Index page</h2>
 
+    <form action="/news" method="post">
+        <div>
+            <input autocomplete="off" autofocus type="text" name="title" />
+            <label>title</label>
+        </div>
+        <div>
+            <input autocomplete="off" autofocus type="text" name="content" />
+            <label>content</label>
+        </div>
+        <button class="btn" type="submit">Add news</button>
+    </form>
+    
+    <div class="section">
+        <h2>News</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>title</th>
+                    <th>content</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for news in news %}
+
+                <tr>
+                    <td>{{ news.title }}</td>
+                    <td>{{ news.content }}</td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 {% endblock %}

@@ -49,3 +49,15 @@ class FakeUserDetails:
 
     def unknown_user_details(self) -> str:
         return self.fake.text(length=10)
+
+
+@dataclass
+class FakeNews:
+    fake: Fake = field(default_factory=Fake)
+
+    @cached_property
+    def dict(self) -> dict[str, Any]:
+        return {
+            "title": self.fake.text(length=5),
+            "content": self.fake.text(length=5),
+        }

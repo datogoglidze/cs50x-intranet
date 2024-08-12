@@ -22,6 +22,7 @@ def user_details_page(
 
 @user_details.post("/user-details")
 @inject
+@login_required
 def create_user_details(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
 ) -> Response | tuple[str, int]:

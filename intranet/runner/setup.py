@@ -1,3 +1,4 @@
+import os
 from typing import Any
 
 from cachelib import FileSystemCache
@@ -8,7 +9,7 @@ from intranet import flask
 from intranet.flask.authorization import authorization
 from intranet.flask.dependable import Container
 from intranet.flask.documents import documents
-from intranet.flask.index import home
+from intranet.flask.news import news
 from intranet.flask.user_details import user_details
 
 
@@ -21,6 +22,13 @@ def no_cache_after_request(response: Any) -> Any:
 
 
 def setup() -> Flask:
+    try:
+        sessions = os.listdir(".flask_session")
+        for session in sessions:
+            os.remove(f".flask_session/{session}")
+    except FileNotFoundError:
+        pass
+
     app = Flask(__name__)
 
     container = Container()
@@ -36,15 +44,15 @@ def setup() -> Flask:
     Session(app)
 
     app.register_blueprint(authorization)
-    app.register_blueprint(home)
     app.register_blueprint(user_details)
+    app.register_blueprint(news)
     app.register_blueprint(documents)
 
     container.wire(
         modules=[
             flask.authorization,
-            flask.index,
             flask.user_details,
+            flask.news,
             flask.documents,
         ]
     )
