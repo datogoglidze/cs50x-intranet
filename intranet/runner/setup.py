@@ -1,3 +1,4 @@
+import os
 from typing import Any
 
 from cachelib import FileSystemCache
@@ -21,6 +22,10 @@ def no_cache_after_request(response: Any) -> Any:
 
 
 def setup() -> Flask:
+    sessions = os.listdir(".flask_session")
+    for session in sessions:
+        os.remove(f".flask_session/{session}")
+
     app = Flask(__name__)
 
     container = Container()
