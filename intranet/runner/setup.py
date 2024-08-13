@@ -22,9 +22,12 @@ def no_cache_after_request(response: Any) -> Any:
 
 
 def setup() -> Flask:
-    sessions = os.listdir(".flask_session")
-    for session in sessions:
-        os.remove(f".flask_session/{session}")
+    try:
+        sessions = os.listdir(".flask_session")
+        for session in sessions:
+            os.remove(f".flask_session/{session}")
+    except FileNotFoundError:
+        pass
 
     app = Flask(__name__)
 
