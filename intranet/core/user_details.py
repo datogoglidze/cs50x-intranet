@@ -21,9 +21,9 @@ class UserDetailsRepository(Protocol):  # pragma: no cover
 @dataclass
 class UserDetails:
     id: str
-    first_name: str = ""
-    last_name: str = ""
+    first_name: str = " "
+    last_name: str = " "
     birth_date: int = 0
-    department: str = ""
-    email: str = ""
-    phone_number: str = ""
+    department: str = " "
+    email: str = " "
+    phone_number: str = " "
