@@ -12,7 +12,7 @@ news = Blueprint("news", __name__, template_folder="../front/templates")
 @news.get("/")
 @inject
 @login_required
-def news_page(
+def read_news(
     news_repository: NewsRepository = Provide[Container.news_repository],
 ) -> str:
     news_items = []
