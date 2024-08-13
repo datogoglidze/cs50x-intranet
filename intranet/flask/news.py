@@ -23,12 +23,6 @@ def news_page(
     return render_template("index.html", news=news_items)
 
 
-@news.get("/news")
-@login_required
-def add_news_page() -> str:
-    return render_template("news.html")
-
-
 @news.post("/news")
 @inject
 @login_required
