@@ -35,14 +35,11 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 @documents.get("/documents")
 @inject
 @login_required
-def user_details_page(
-    details: UserDetailsRepository = Provide[Container.user_details_repository],
-) -> str:
+def user_details_page() -> str:
     if not os.path.exists("documents"):
         os.makedirs("documents")
     _documents = os.listdir("documents")
-    last_name = details.read(session["user_id"]).last_name
-    user_documents = [file for file in _documents if last_name in file]
+    user_documents = [file for file in _documents if session["user_id"] in file]
 
     return render_template("user_documents.html", documents=user_documents)
 
@@ -180,6 +177,7 @@ class GenerateDocument:
             f"-{self.last_name}"
             f"-{self.first_name}"
             f"-{self.category}"
+            f"-{session['user_id']}"
             f".pdf"
         )
 
