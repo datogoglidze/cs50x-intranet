@@ -6,6 +6,7 @@ from flask import Flask
 from flask_session import Session
 
 from intranet import flask
+from intranet.flask.about_us import about
 from intranet.flask.authorization import authorization
 from intranet.flask.dependable import Container
 from intranet.flask.documents import documents
@@ -47,6 +48,7 @@ def setup() -> Flask:
     app.register_blueprint(user_details)
     app.register_blueprint(news)
     app.register_blueprint(documents)
+    app.register_blueprint(about)
 
     container.wire(
         modules=[
