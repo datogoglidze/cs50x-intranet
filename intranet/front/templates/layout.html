@@ -17,7 +17,7 @@
         crossorigin="anonymous"
     ></script>
 
-    <link href="/static/favicon.ico" rel="icon"/>
+    <link href="../static/favicon.ico" rel="icon"/>
 
     <link
         rel="stylesheet"
@@ -30,7 +30,7 @@
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
 
-    <link href="/static/index.css" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"/>
 
     <title>{% block title %}{% endblock %}| Intranet</title>
 </head>
@@ -45,7 +45,7 @@
     {% if session["user_id"] %}
     <ul class="navbar-nav me-auto mt-1 mx-auto">
         <li class="nav-item me-md-3 fs-6 fw-semibold">
-            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/intranet/static">Home</a>
         </li>
         <li class="nav-item fs-6 fw-semibold">
             <a class="nav-link" href="/about">About Company</a>
