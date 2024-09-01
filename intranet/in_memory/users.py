@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Iterator
-from uuid import uuid4
+from typing import Iterator
 
 from intranet.core.user import User, UserRepository
 
@@ -9,10 +8,10 @@ from intranet.core.user import User, UserRepository
 class UserInMemoryRepository(UserRepository):  # pragma: no cover
     users: list[User] = field(default_factory=list)
 
-    def create(self, user: dict[str, Any]) -> User:
-        self._ensure_does_not_exist(user["username"])
+    def create(self, user: User) -> User:
+        self._ensure_does_not_exist(user.username)
 
-        self.users.append(User(id=str(uuid4()), **user))
+        self.users.append(user)
 
         return self.users[-1]
 

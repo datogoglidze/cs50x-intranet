@@ -31,7 +31,7 @@ def test_should_not_read_unknown(details: UsersDetailsInMemoryRepository) -> Non
 
 
 def test_should_persist(details: UsersDetailsInMemoryRepository) -> None:
-    _details = details.create(UserDetails(**FakeUserDetails().dict))
+    _details = details.create(FakeUserDetails().entity)
 
     assert details.read(_details.id) == UserDetails(
         id=ANY,
@@ -45,8 +45,8 @@ def test_should_persist(details: UsersDetailsInMemoryRepository) -> None:
 
 
 def test_should_persist_many(details: UsersDetailsInMemoryRepository) -> None:
-    details_1 = details.create(UserDetails(**FakeUserDetails().dict))
-    details_2 = details.create(UserDetails(**FakeUserDetails().dict))
+    details_1 = details.create(FakeUserDetails().entity)
+    details_2 = details.create(FakeUserDetails().entity)
 
     assert details.read_all() == [
         UserDetails(
@@ -74,8 +74,8 @@ def test_should_not_duplicate(
     users: UserInMemoryRepository,
     details: UsersDetailsInMemoryRepository,
 ) -> None:
-    user_id = users.create(FakeUser().dict).id
-    _details = UserDetails(**FakeUserDetails().dict)
+    user_id = users.create(FakeUser().entity).id
+    _details = FakeUserDetails().entity
     _details.id = user_id
     details.create(_details)
 

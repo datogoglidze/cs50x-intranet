@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Iterator
-from uuid import uuid4
+from typing import Iterator
 
 from intranet.core.user import User, UserRepository
 from intranet.mssql.connector import MsSqlConnector
@@ -8,10 +7,8 @@ from intranet.mssql.connector import MsSqlConnector
 
 @dataclass
 class UserMssqlRepository(UserRepository):  # pragma: no cover
-    def create(self, user: dict[str, Any]) -> User:
-        self._ensure_does_not_exist(user["username"])
-
-        _user = User(id=str(uuid4()), **user)
+    def create(self, user: User) -> User:
+        self._ensure_does_not_exist(user.username)
 
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
@@ -20,10 +17,10 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
                 INSERT INTO users (id, username, password)
                 VALUES (%s, %s, %s)
                 """,
-                (_user.id, _user.username, _user.password),
+                (user.id, user.username, user.password),
             )
 
-            return _user
+            return user
 
     def _ensure_does_not_exist(self, username: str) -> None:
         with MsSqlConnector().connect() as connection:

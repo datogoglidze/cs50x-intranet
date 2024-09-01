@@ -23,7 +23,7 @@ def test_should_not_read_unknown(users: UserInMemoryRepository) -> None:
 
 
 def test_should_persist(users: UserInMemoryRepository) -> None:
-    user = users.create(FakeUser().dict)
+    user = users.create(FakeUser().entity)
 
     assert users.read(user.username) == User(
         id=ANY,
@@ -33,8 +33,8 @@ def test_should_persist(users: UserInMemoryRepository) -> None:
 
 
 def test_should_persist_many(users: UserInMemoryRepository) -> None:
-    user_1 = users.create(FakeUser().dict)
-    user_2 = users.create(FakeUser().dict)
+    user_1 = users.create(FakeUser().entity)
+    user_2 = users.create(FakeUser().entity)
 
     assert users.read_all() == [
         User(id=ANY, username=user_1.username, password=user_1.password),
@@ -43,7 +43,7 @@ def test_should_persist_many(users: UserInMemoryRepository) -> None:
 
 
 def test_should_not_duplicate(users: UserInMemoryRepository) -> None:
-    user = FakeUser().dict
+    user = FakeUser().entity
     users.create(user)
 
     with pytest.raises(ValueError):
