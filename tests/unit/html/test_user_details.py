@@ -1,7 +1,6 @@
 import pytest
 from flask.testing import FlaskClient
 
-from intranet.core.user_details import UserDetails
 from intranet.runner.setup import setup
 from tests.fake import FakeUserDetails
 
@@ -47,7 +46,7 @@ def test_should_not_display_details_page_without_authorization(
 
 
 def test_should_add_details(app: FlaskClient) -> None:
-    user_details = UserDetails(**FakeUserDetails().dict)
+    user_details = FakeUserDetails().entity
     app.post(
         "/register",
         data={
@@ -89,7 +88,7 @@ def test_should_add_details(app: FlaskClient) -> None:
 
 
 def test_should_not_add_details_without_authorization(app: FlaskClient) -> None:
-    user_details = UserDetails(**FakeUserDetails().dict)
+    user_details = FakeUserDetails().entity
 
     response = app.post(
         "/user-details",

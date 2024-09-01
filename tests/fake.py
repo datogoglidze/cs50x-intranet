@@ -1,8 +1,12 @@
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Any
+from uuid import uuid4
 
 from faker import Faker
+
+from intranet.core.news import News
+from intranet.core.user import User
+from intranet.core.user_details import UserDetails
 
 
 @dataclass
@@ -21,11 +25,12 @@ class FakeUser:
     fake: Fake = field(default_factory=Fake)
 
     @cached_property
-    def dict(self) -> dict[str, Any]:
-        return {
-            "username": self.fake.text(length=10),
-            "password": self.fake.text(length=5),
-        }
+    def entity(self) -> User:
+        return User(
+            id=str(uuid4()),
+            username=self.fake.text(length=10),
+            password=self.fake.text(length=5),
+        )
 
     def unknown_username(self) -> str:
         return self.fake.text(length=10)
@@ -36,16 +41,16 @@ class FakeUserDetails:
     fake: Fake = field(default_factory=Fake)
 
     @cached_property
-    def dict(self) -> dict[str, Any]:
-        return {
-            "id": self.fake.text(length=5),
-            "first_name": self.fake.text(length=5),
-            "last_name": self.fake.text(length=10),
-            "birth_date": self.fake.timestamp(),
-            "department": self.fake.text(length=10),
-            "email": self.fake.text(length=5),
-            "phone_number": self.fake.text(length=5),
-        }
+    def entity(self) -> UserDetails:
+        return UserDetails(
+            id=self.fake.text(length=5),
+            first_name=self.fake.text(length=5),
+            last_name=self.fake.text(length=10),
+            birth_date=self.fake.timestamp(),
+            department=self.fake.text(length=10),
+            email=self.fake.text(length=5),
+            phone_number=self.fake.text(length=5),
+        )
 
     def unknown_user_details(self) -> str:
         return self.fake.text(length=10)
@@ -56,8 +61,8 @@ class FakeNews:
     fake: Fake = field(default_factory=Fake)
 
     @cached_property
-    def dict(self) -> dict[str, Any]:
-        return {
-            "title": self.fake.text(length=5),
-            "content": self.fake.text(length=5),
-        }
+    def entity(self) -> News:
+        return News(
+            title=self.fake.text(length=5),
+            content=self.fake.text(length=5),
+        )

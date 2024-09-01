@@ -20,7 +20,7 @@ def test_should_not_read_when_none_exist(
 
 
 def test_should_persist(news: NewsInMemoryRepository) -> None:
-    _news = news.create(News(**FakeNews().dict))
+    _news = news.create(FakeNews().entity)
 
     assert news.read(_news.id) == News(
         id=ANY,
@@ -30,9 +30,8 @@ def test_should_persist(news: NewsInMemoryRepository) -> None:
 
 
 def test_should_persist_many(news: NewsInMemoryRepository) -> None:
-    news_1 = news.create(News(**FakeNews().dict))
-    news_2 = news.create(News(**FakeNews().dict))
-
+    news_1 = news.create(FakeNews().entity)
+    news_2 = news.create(FakeNews().entity)
     assert news.read_all() == [
         News(
             id=ANY,

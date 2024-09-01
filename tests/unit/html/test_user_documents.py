@@ -1,7 +1,6 @@
 import pytest
 from flask.testing import FlaskClient
 
-from intranet.core.user_details import UserDetails
 from intranet.runner.setup import setup
 from tests.fake import FakeUserDetails
 
@@ -73,7 +72,7 @@ def test_should_not_add_without_user_details(app: FlaskClient) -> None:
 
 
 def test_should_not_add_without_dates(app: FlaskClient) -> None:
-    user_details = UserDetails(**FakeUserDetails().dict)
+    user_details = FakeUserDetails().entity
     app.post(
         "/register",
         data={

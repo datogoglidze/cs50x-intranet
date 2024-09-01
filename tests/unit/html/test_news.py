@@ -1,7 +1,6 @@
 import pytest
 from flask.testing import FlaskClient
 
-from intranet.core.news import News
 from intranet.runner.setup import setup
 from tests.fake import FakeNews
 
@@ -47,7 +46,7 @@ def test_should_not_display_news_page_without_authorization(
 
 
 def test_should_add_news(app: FlaskClient) -> None:
-    news = News(**FakeNews().dict)
+    news = FakeNews().entity
     app.post(
         "/register",
         data={
@@ -79,7 +78,7 @@ def test_should_add_news(app: FlaskClient) -> None:
 
 
 def test_should_not_add_news_without_authorization(app: FlaskClient) -> None:
-    news = News(**FakeNews().dict)
+    news = FakeNews().entity
 
     response = app.post(
         "/news",

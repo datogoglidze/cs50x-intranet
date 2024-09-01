@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Iterator, Protocol
+from typing import Iterator, Protocol
 
 
 class UserRepository(Protocol):  # pragma: no cover
-    def create(self, user: dict[str, Any]) -> User:
+    def create(self, user: User) -> User:
         pass
 
     def read(self, username: str) -> User:

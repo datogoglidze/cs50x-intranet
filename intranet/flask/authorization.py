@@ -97,16 +97,15 @@ def register(
 
     try:
         users.create(
-            {
-                "username": user.username,
-                "password": (
-                    generate_password_hash(
-                        user.password,
-                        method="pbkdf2",
-                        salt_length=16,
-                    )
+            User(
+                id=user.id,
+                username=user.username,
+                password=generate_password_hash(
+                    user.password,
+                    method="pbkdf2",
+                    salt_length=16,
                 ),
-            }
+            )
         )
     except ValueError:
         return apology("username already exists", 403)
