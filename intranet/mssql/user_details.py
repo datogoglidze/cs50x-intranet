@@ -84,28 +84,6 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
 
         raise KeyError(f"UserDetails with id '{_id}' not found.")
 
-    def read_all(self) -> list[UserDetails]:
-        with MsSqlConnector().connect() as connection:
-            cursor = connection.cursor()
-            cursor.execute(
-                """
-                SELECT
-                    id,
-                    first_name,
-                    last_name,
-                    birth_date,
-                    department,
-                    email, phone_number
-                FROM user_details
-                """
-            )
-            rows = cursor.fetchall()
-
-            return [
-                UserDetails(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
-                for row in rows
-            ]
-
     def delete(self, item_id: Any) -> None:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
