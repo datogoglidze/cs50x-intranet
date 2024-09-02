@@ -15,10 +15,7 @@ news = Blueprint("news", __name__, template_folder="../front/templates")
 def read_news(
     news_repository: NewsRepository = Provide[Container.news_repository],
 ) -> str:
-    news_items = []
-
-    for _news in news_repository:
-        news_items.append(_news)
+    news_items = [item for item in news_repository]
 
     return render_template("index.html", news=news_items)
 
