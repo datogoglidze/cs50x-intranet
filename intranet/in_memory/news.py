@@ -9,23 +9,16 @@ class NewsInMemoryRepository(NewsRepository):  # pragma: no cover
     news: list[News] = field(default_factory=list)
 
     def create(self, news: News) -> News:
-        self._ensure_does_not_exist(news.id)
-
         self.news.append(news)
 
-        return self.news[-1]
-
-    def _ensure_does_not_exist(self, _id: str) -> None:
-        for existing in self.news:
-            if _id == existing.id:
-                raise ValueError
+        return news
 
     def read(self, _id: str) -> News:
         for news in self.news:
             if news.id == _id:
                 return news
 
-        raise KeyError
+        raise KeyError(f"News with id '{_id}' not found.")
 
     def read_all(self) -> list[News]:
         return self.news
