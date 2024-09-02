@@ -35,29 +35,21 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
             if cursor.fetchone() is not None:
                 raise ValueError(f"User with username '{username}' already exists.")
 
-    def read(self, username: str) -> User:
+    def read(self, user_id: str) -> User:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
                 """
-                SELECT id, username, password FROM users WHERE username = %s
+                SELECT id, username, password FROM users WHERE id = %s
                 """,
-                (username,),
+                (user_id,),
             )
             row = cursor.fetchone()
 
             if row is not None:
-                return User(row["id"], row["username"], row["password"])
+                return User(row["username"], row["password"], row["id"])
 
-        raise KeyError(f"User with username '{username}' not found.")
-
-    def read_all(self) -> list[User]:
-        with MsSqlConnector().connect() as connection:
-            cursor = connection.cursor()
-            cursor.execute("""SELECT id, username, password FROM users""")
-            rows = cursor.fetchall()
-
-            return [User(row[0], row[1], row[2]) for row in rows]
+        raise KeyError(f"User with id '{user_id}' not found.")
 
     def __iter__(self) -> Iterator[User]:
         with MsSqlConnector().connect() as connection:
@@ -66,4 +58,4 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
             rows = cursor.fetchall()
 
         for row in rows:
-            yield User(row["id"], row["username"], row["password"])
+            yield User(row["username"], row["password"], row["id"])

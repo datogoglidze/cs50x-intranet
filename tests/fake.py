@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from functools import cached_property
-from uuid import uuid4
 
 from faker import Faker
 
@@ -27,7 +26,6 @@ class FakeUser:
     @cached_property
     def entity(self) -> User:
         return User(
-            id=str(uuid4()),
             username=self.fake.text(length=10),
             password=self.fake.text(length=5),
         )
