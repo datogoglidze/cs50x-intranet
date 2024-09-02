@@ -43,7 +43,9 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
             cursor = connection.cursor()
             cursor.execute(
                 """
-                SELECT id FROM user_details WHERE id = %s
+                SELECT id
+                FROM user_details
+                WHERE id = %s
                 """,
                 (_id,),
             )

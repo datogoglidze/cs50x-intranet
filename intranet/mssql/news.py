@@ -12,10 +12,18 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
             cursor = connection.cursor()
             cursor.execute(
                 """
-                INSERT INTO news (id, title, content)
+                INSERT INTO news (
+                    id,
+                    title,
+                    content
+                )
                 VALUES (%s, %s, %s)
                 """,
-                (news.id, news.title, news.content),
+                (
+                    news.id,
+                    news.title,
+                    news.content,
+                ),
             )
 
             return news
@@ -25,14 +33,23 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
             cursor = connection.cursor()
             cursor.execute(
                 """
-                SELECT id, title, content FROM news WHERE id = %s
+                SELECT
+                    id,
+                    title,
+                    content
+                FROM news
+                WHERE id = %s
                 """,
                 (news_id,),
             )
             row = cursor.fetchone()
 
             if row is not None:
-                return News(row["title"], row["content"], row["id"])
+                return News(
+                    row["title"],
+                    row["content"],
+                    row["id"],
+                )
 
         raise KeyError(f"News with id '{news_id}' not found.")
 
@@ -51,4 +68,8 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
             rows = cursor.fetchall()
 
         for row in rows:
-            yield News(row["title"], row["content"], row["id"])
+            yield News(
+                row["title"],
+                row["content"],
+                row["id"],
+            )
