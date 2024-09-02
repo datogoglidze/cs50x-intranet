@@ -1,5 +1,3 @@
-from unittest.mock import ANY
-
 import pytest
 
 from intranet.core.user import User
@@ -25,8 +23,8 @@ def test_should_not_read_unknown(users: UserInMemoryRepository) -> None:
 def test_should_persist(users: UserInMemoryRepository) -> None:
     user = users.create(FakeUser().entity)
 
-    assert users.read(user.username) == User(
-        id=ANY,
+    assert users.read(user.id) == User(
+        id=user.id,
         username=user.username,
         password=user.password,
     )
@@ -37,8 +35,8 @@ def test_should_persist_many(users: UserInMemoryRepository) -> None:
     user_2 = users.create(FakeUser().entity)
 
     assert users.read_all() == [
-        User(id=ANY, username=user_1.username, password=user_1.password),
-        User(id=ANY, username=user_2.username, password=user_2.password),
+        User(id=user_1.id, username=user_1.username, password=user_1.password),
+        User(id=user_2.id, username=user_2.username, password=user_2.password),
     ]
 
 

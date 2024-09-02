@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, redirect, render_template, request, session
 from werkzeug import Response
@@ -37,7 +35,6 @@ def login(
     session.clear()
 
     user = User(
-        id=str(uuid4()),
         username=request.form.get("username", ""),
         password=request.form.get("password", ""),
     )
@@ -48,21 +45,16 @@ def login(
     if not user.password:
         return apology("must provide password", 403)
 
-    try:
-        existing_user = users.read(user.username)
-    except KeyError:
-        return apology("invalid username and/or password", 403)
+    for existing in users:
+        if user.username == existing.username and check_password_hash(
+            existing.password, user.password
+        ):
+            session["user_id"] = existing.id
+            session["username"] = existing.username
 
-    if not check_password_hash(
-        existing_user.password,
-        user.password,
-    ):
-        return apology("invalid username and/or password", 403)
+            return redirect("/")
 
-    session["user_id"] = existing_user.id
-    session["username"] = existing_user.username
-
-    return redirect("/")
+    return apology("invalid username and/or password", 403)
 
 
 @authorization.get("/logout")
@@ -81,7 +73,6 @@ def register(
     session.clear()
 
     user = User(
-        id=str(uuid4()),
         username=request.form.get("username", ""),
         password=request.form.get("password", ""),
     )
@@ -110,7 +101,7 @@ def register(
     except ValueError:
         return apology("username already exists", 403)
 
-    details.create(UserDetails(id=users.read(user.username).id))
+    details.create(UserDetails(id=user.id))
 
     session.clear()
 

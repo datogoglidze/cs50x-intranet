@@ -13,19 +13,19 @@ class UserInMemoryRepository(UserRepository):  # pragma: no cover
 
         self.users.append(user)
 
-        return self.users[-1]
+        return user
 
     def _ensure_does_not_exist(self, username: str) -> None:
         for existing in self.users:
             if username == existing.username:
-                raise ValueError
+                raise ValueError(f"User with username '{username}' already exists.")
 
-    def read(self, username: str) -> User:
+    def read(self, user_id: str) -> User:
         for user in self.users:
-            if user.username == username:
+            if user.id == user_id:
                 return user
 
-        raise KeyError
+        raise KeyError(f"User with id '{user_id}' not found.")
 
     def read_all(self) -> list[User]:
         return self.users
