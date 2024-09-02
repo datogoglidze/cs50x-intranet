@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from intranet.in_memory.news import NewsInMemoryRepository
 from intranet.in_memory.users import UserInMemoryRepository
 from intranet.in_memory.users_details import UsersDetailsInMemoryRepository
+from intranet.mssql.news import NewsMssqlRepository
 from intranet.mssql.user_details import UserDetailsMssqlRepository
 from intranet.mssql.users import UserMssqlRepository
 
@@ -31,4 +32,8 @@ class Container(containers.DeclarativeContainer):
         else UsersDetailsInMemoryRepository()
     )
 
-    news_repository = providers.Singleton(NewsInMemoryRepository)
+    news_repository = providers.Singleton(
+        lambda: NewsMssqlRepository()
+        if "DB_HOST" in os.environ
+        else NewsInMemoryRepository()
+    )
