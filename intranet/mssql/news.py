@@ -39,7 +39,15 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
     def __iter__(self) -> Iterator[News]:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
-            cursor.execute("""SELECT id, title, content FROM news""")
+            cursor.execute("""
+                SELECT
+                    position,
+                    id,
+                    title,
+                    content
+                FROM news
+                ORDER BY position DESC
+            """)
             rows = cursor.fetchall()
 
         for row in rows:
