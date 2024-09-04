@@ -14,10 +14,17 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
             cursor = connection.cursor()
             cursor.execute(
                 """
-                INSERT INTO users (id, username, password)
+                INSERT INTO users (
+                    id,
+                    username,
+                    password)
                 VALUES (%s, %s, %s)
                 """,
-                (user.id, user.username, user.password),
+                (
+                    user.id,
+                    user.username,
+                    user.password,
+                ),
             )
 
             return user
@@ -27,7 +34,12 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
             cursor = connection.cursor()
             cursor.execute(
                 """
-                SELECT id, username, password FROM users WHERE username = %s
+                SELECT
+                    id,
+                    username,
+                    password
+                FROM users
+                WHERE username = %s
                 """,
                 (username,),
             )
@@ -40,22 +52,41 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
             cursor = connection.cursor()
             cursor.execute(
                 """
-                SELECT id, username, password FROM users WHERE id = %s
+                SELECT
+                    id,
+                    username,
+                    password
+                FROM users
+                WHERE id = %s
                 """,
                 (user_id,),
             )
             row = cursor.fetchone()
 
             if row is not None:
-                return User(row["username"], row["password"], row["id"])
+                return User(
+                    row["username"],
+                    row["password"],
+                    row["id"],
+                )
 
         raise KeyError(f"User with id '{user_id}' not found.")
 
     def __iter__(self) -> Iterator[User]:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
-            cursor.execute("""SELECT id, username, password FROM users""")
+            cursor.execute("""
+                SELECT
+                    id,
+                    username,
+                    password
+                FROM users
+            """)
             rows = cursor.fetchall()
 
         for row in rows:
-            yield User(row["username"], row["password"], row["id"])
+            yield User(
+                row["username"],
+                row["password"],
+                row["id"],
+            )
