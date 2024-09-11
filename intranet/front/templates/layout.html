@@ -45,7 +45,7 @@
                 right: 0;
                 margin: 0 auto;
                 content: "";
-                background-color: rgba(232, 232, 232, 0.7);
+                background-color: rgba(37, 107, 248, 0.7);
                 width: 0;
                 height: 2px;
                 transition: all 0.5s;
@@ -59,7 +59,7 @@
 
     <body
         class="container"
-        style="background-color: #121928; font-family: Roboto, sans-serif"
+        style="background-color: #eceef1; font-family: Roboto, sans-serif"
     >
         <nav
             class="navbar mt-4 navbar-expand justify-content-center align-items-center"
@@ -67,23 +67,23 @@
             {% if session["user_id"] %}
             <ul class="navbar-nav">
                 <li class="nav-item me-sm-5 fs-6 fw-semibold">
-                    <a class="nav-link text-white" href="/">HOME</a>
+                    <a class="nav-link text-primary" href="/">HOME</a>
                 </li>
                 <li class="nav-item me-sm-5 fs-6 fw-semibold">
-                    <a class="nav-link text-white" href="/about">ABOUT US</a>
+                    <a class="nav-link text-primary" href="/about">ABOUT US</a>
                 </li>
                 <li class="nav-item me-sm-5 fs-6 fw-semibold">
-                    <a class="nav-link text-white" href="/user-details"
+                    <a class="nav-link text-primary" href="/user-details"
                         >USER DETAILS</a
                     >
                 </li>
                 <li class="nav-item me-sm-5 fs-6 fw-semibold">
-                    <a class="nav-link text-white" href="/documents"
+                    <a class="nav-link text-primary" href="/documents"
                         >DOCUMENTS</a
                     >
                 </li>
                 <li class="nav-item fs-6 fw-semibold">
-                    <a class="nav-link text-white" href="/logout">LOG OUT</a>
+                    <a class="nav-link text-primary" href="/logout">LOG OUT</a>
                 </li>
             </ul>
             {% endif %}
