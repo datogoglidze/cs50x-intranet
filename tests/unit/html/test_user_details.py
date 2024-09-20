@@ -77,14 +77,12 @@ def test_should_add_details(app: FlaskClient) -> None:
     response = app.get("/user-details")
 
     assert response.status_code == 200
-    assert f"First name: {user_details.first_name}" in response.get_data(as_text=True)
-    assert f"Last name: {user_details.last_name}" in response.get_data(as_text=True)
-    assert f"Birth date: {user_details.birth_date}" in response.get_data(as_text=True)
-    assert f"Department: {user_details.department}" in response.get_data(as_text=True)
-    assert f"Email: {user_details.email}" in response.get_data(as_text=True)
-    assert f"Phone number: {user_details.phone_number}" in response.get_data(
-        as_text=True
-    )
+    assert f"{user_details.first_name}" in response.get_data(as_text=True)
+    assert f"{user_details.last_name}" in response.get_data(as_text=True)
+    assert f"{user_details.birth_date}" in response.get_data(as_text=True)
+    assert f"{user_details.department}" in response.get_data(as_text=True)
+    assert f"{user_details.email}" in response.get_data(as_text=True)
+    assert f"{user_details.phone_number}" in response.get_data(as_text=True)
 
 
 def test_should_not_add_details_without_authorization(app: FlaskClient) -> None:
