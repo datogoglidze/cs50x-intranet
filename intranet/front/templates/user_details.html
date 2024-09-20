@@ -6,12 +6,18 @@ block main %}
         padding: 20px;
     }
 
-    .box {
-        background: rgb(255, 255, 255);
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    .input-box {
+        background: #ffffff;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
         padding: 40px;
-        color: #838383;
+    }
+
+    .output-box {
+        background: #ffffff;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        padding: 40px;
     }
 
     .user-box {
@@ -50,29 +56,22 @@ block main %}
     }
 
     .btn {
-        color: #ffffff;
+        display: inline-block;
         padding: 10px 20px;
         font-size: 16px;
-        text-transform: uppercase;
-        overflow: hidden;
-        transition: 0.5s;
-        letter-spacing: 4px;
+        text-decoration: none;
+        letter-spacing: 2px;
+        color: #fff;
         background: #00b4d8;
-        cursor: pointer;
+        border: none;
     }
 
     .btn:hover {
         background: #0077b6;
         color: #fff;
-        border-radius: 5px;
-        box-shadow:
-            0 0 5px #0077b6,
-            0 0 7px #0077b6,
-            0 0 10px #0077b6,
-            0 0 12px #0077b6;
     }
 
-    .details-box p {
+    .output-box p {
         margin: 10px 0;
     }
 
@@ -86,8 +85,8 @@ block main %}
 <div class="container">
     <div class="row g-4">
         <div class="col-md-6 mb-md-0">
-            <div class="box">
-                <h3 class="mb-4">Edit Details</h3>
+            <div class="input-box">
+                <h3 class="mb-5">Edit Details</h3>
                 <form action="/user-details" method="post">
                     <div class="user-box">
                         <input
@@ -149,13 +148,13 @@ block main %}
                         />
                         <label>Phone number</label>
                     </div>
-                    <button class="btn" type="submit">Edit details</button>
+                    <button class="btn mt-3" type="submit">Edit details</button>
                 </form>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="box details-box">
-                <h3 class="mb-4">Current Details</h3>
+            <div class="output-box">
+                <h3 class="mb-5">Current Details</h3>
                 <p>
                     <strong>First name:</strong> {{ user_details.first_name }}
                 </p>
