@@ -8,109 +8,73 @@ main %}
         width: 400px;
         padding: 40px;
         transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.5);
+        background: #ffffff;
         box-sizing: border-box;
-        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
     }
 
-    .register-box h2 {
-        margin: 0 0 30px;
-        padding: 0;
-        color: #fff;
-        text-align: center;
-    }
-
-    .register-box .user-box {
+    .user-box {
         position: relative;
+        margin-bottom: 30px;
     }
 
-    .register-box .user-box input {
+    .user-box input {
         width: 100%;
         padding: 10px 0;
         font-size: 16px;
-        color: #fff;
-        margin-bottom: 30px;
+        color: #000000;
         border: none;
-        border-bottom: 1px solid #fff;
+        border-bottom: 1px solid #838383;
         outline: none;
         background: transparent;
     }
-    .register-box .user-box label {
+
+    .user-box label {
         position: absolute;
         top: 0;
         left: 0;
         padding: 10px 0;
         font-size: 16px;
-        color: #fff;
+        color: #838383;
         pointer-events: none;
         transition: 0.5s;
     }
 
-    .register-box .user-box input:focus ~ label,
-    .register-box .user-box input:valid ~ label {
+    .user-box input:focus ~ label,
+    .user-box input:valid ~ label {
         top: -20px;
         left: 0;
-        color: #03e9f4;
+        color: #838383;
         font-size: 12px;
     }
 
-    .register-box form button {
-        position: relative;
+    .btn {
         display: inline-block;
         padding: 10px 20px;
-        color: #03e9f4;
         font-size: 16px;
         text-decoration: none;
-        text-transform: uppercase;
-        overflow: hidden;
-        transition: 0.5s;
-        letter-spacing: 4px;
+        letter-spacing: 2px;
     }
 
-    .register-box form a {
-        position: relative;
-        display: inline-block;
-        padding: 10px 20px;
-        color: #03e9f4;
-        font-size: 16px;
-        text-decoration: none;
-        text-transform: uppercase;
-        overflow: hidden;
-        transition: 0.5s;
-        letter-spacing: 4px;
-    }
-
-    .register-box button:hover {
-        background: #03e9f4;
+    .register.btn {
         color: #fff;
-        border-radius: 5px;
-        box-shadow:
-            0 0 5px #03e9f4,
-            0 0 25px #03e9f4,
-            0 0 50px #03e9f4,
-            0 0 100px #03e9f4;
+        background: #00b4d8;
+        border: none;
     }
 
-    .register-box button span {
-        position: absolute;
-        display: block;
-    }
-
-    .register-box a:hover {
-        background: #03e9f4;
+    .register.btn:hover {
+        background: #0077b6;
         color: #fff;
-        border-radius: 5px;
-        box-shadow:
-            0 0 5px #03e9f4,
-            0 0 25px #03e9f4,
-            0 0 50px #03e9f4,
-            0 0 100px #03e9f4;
     }
 
-    .register-box a span {
-        position: absolute;
-        display: block;
+    .login.btn {
+        color: #1f1f1f;
+        border: 1px solid #838383;
+    }
+
+    .login.btn:hover {
+        border-color: #151515;
     }
 
     ::-ms-reveal {
@@ -119,21 +83,23 @@ main %}
 </style>
 
 <div class="register-box">
+    <h3 class="mb-5">Register</h3>
     <form action="/register" method="post">
         <div class="user-box">
-            <input autocomplete="off" autofocus type="text" name="username" />
+            <input autocomplete="off" autofocus type="text" name="username" required/>
             <label>Username</label>
         </div>
         <div class="user-box">
-            <input type="password" name="password" />
+            <input type="password" name="password" required/>
             <label>Password</label>
         </div>
         <div class="user-box">
-            <input type="password" name="confirmation" />
+            <input type="password" name="confirmation" required/>
             <label>Repeat Password</label>
         </div>
-        <button class="btn" type="submit">Create Account</button>
-        <a class="btn mt-4" href="/login">Login</a>
+        <button class="register btn mb-3 mt-3" type="submit">Register</button>
+        <h6 class="text-black-50">- or -</h6>
+        <a class="login btn mt-2" href="/login">Login</a>
     </form>
 </div>
 {% endblock %}

@@ -1,40 +1,91 @@
 {% extends "layout.html" %} {% block title %}Home {% endblock %} {% block main
 %}
 
-<h2 style="color: #e8e8e8">Index page</h2>
+<div class="row d-flex flex-column container-fluid mx-auto">
+    <h2 class="text-center" style="color: #e8e8e8">News</h2>
 
-<form action="/news" method="post">
-    <div>
-        <input autocomplete="off" autofocus type="text" name="title" />
-        <label>title</label>
+    <div
+        class="col-12 col-md-11 col-lg-10 col-xl-9 mt-4 mx-auto py-5 px-2 px-md-4 border border-3 rounded"
+        id="news"
+    >
+        <table
+            class="table table-responsive table-hover caption-top align-middle text-center"
+        >
+            <caption class="fw-bold text-white">
+                Current news
+            </caption>
+            <thead class="table-dark align-middle">
+                <tr>
+                    <th scope="col" style="padding-left: 1rem">Title</th>
+                    <th scope="col" style="padding-right: 1rem">Content</th>
+                </tr>
+            </thead>
+
+            <tbody class="table-group-divider">
+                {% for news in news %}
+                <tr>
+                    <td>{{ news.title }}</td>
+                    <td>{{ news.content }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <div>
-        <input autocomplete="off" autofocus type="text" name="content" />
-        <label>content</label>
+
+    <div
+        class="col-12 col-md-11 col-lg-10 col-xl-9 mt-4 mx-auto py-5 px-2 px-md-4 border border-3 rounded"
+        id="create-news"
+    >
+        <form action="/news" method="post">
+            <table
+                class="table table-responsive caption-top align-middle text-center"
+            >
+                <caption class="fw-bold text-white">
+                    Add news
+                </caption>
+                <thead class="table-dark align-middle">
+                    <tr>
+                        <th scope="col" style="padding-left: 1rem">Title</th>
+                        <th scope="col" style="padding-right: 1rem">Content</th>
+                        <th scope="col" style="padding-left: 1rem"></th>
+                    </tr>
+                </thead>
+
+                <tbody class="table-group-divider">
+                    <tr>
+                        <td>
+                            <label>
+                                <input
+                                    autocomplete="off"
+                                    autofocus
+                                    type="text"
+                                    name="title"
+                                />
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input
+                                    autocomplete="off"
+                                    autofocus
+                                    type="text"
+                                    name="content"
+                                />
+                            </label>
+                        </td>
+                        <td>
+                            <button
+                                class="btn btn-outline-success"
+                                type="submit"
+                            >
+                                Add news
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
-    <button class="btn" type="submit">Add news</button>
-</form>
-
-<div class="section">
-    <h2>News</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>title</th>
-                <th>content</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for news in news %}
-
-            <tr>
-                <td>{{ news.title }}</td>
-                <td>{{ news.content }}</td>
-            </tr>
-
-            {% endfor %}
-        </tbody>
-    </table>
 </div>
 
 {% endblock %}

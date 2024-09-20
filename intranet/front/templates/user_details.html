@@ -2,168 +2,176 @@
 block main %}
 <style>
     .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         min-height: 100vh;
         padding: 20px;
     }
 
-    .box {
-        width: 100%;
-        max-width: 400px;
-        padding: 40px;
-        background: rgba(0, 0, 0, 0.5);
-        box-sizing: border-box;
-        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+    .input-box {
+        background: #ffffff;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
-        margin-bottom: 20px;
-        color: #e8e8e8;
+        padding: 40px;
     }
 
-    .box h2 {
-        margin: 0 0 30px;
-        padding: 0;
-        color: #fff;
-        text-align: center;
+    .output-box {
+        background: #ffffff;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        padding: 40px;
     }
 
-    .box .user-box {
+    .user-box {
         position: relative;
+        margin-bottom: 30px;
     }
 
-    .box .user-box input {
+    .user-box input {
         width: 100%;
         padding: 10px 0;
         font-size: 16px;
-        color: #fff;
-        margin-bottom: 30px;
+        color: #000000;
         border: none;
-        border-bottom: 1px solid #fff;
+        border-bottom: 1px solid #838383;
         outline: none;
         background: transparent;
     }
 
-    .box .user-box label {
+    .user-box label {
         position: absolute;
         top: 0;
         left: 0;
         padding: 10px 0;
         font-size: 16px;
-        color: #fff;
+        color: #838383;
         pointer-events: none;
         transition: 0.5s;
     }
 
-    .box .user-box input:focus ~ label,
-    .box .user-box input:valid ~ label {
+    .user-box input:focus ~ label,
+    .user-box input:valid ~ label {
         top: -20px;
         left: 0;
-        color: #03e9f4;
+        color: #838383;
         font-size: 12px;
     }
 
-    .box form button,
-    .box form a {
-        position: relative;
+    .btn {
         display: inline-block;
         padding: 10px 20px;
-        color: #03e9f4;
         font-size: 16px;
         text-decoration: none;
-        text-transform: uppercase;
-        overflow: hidden;
-        transition: 0.5s;
-        letter-spacing: 4px;
-        border: none;
-        background: none;
-        cursor: pointer;
-    }
-
-    .box form button:hover,
-    .box form a:hover {
-        background: #03e9f4;
+        letter-spacing: 2px;
         color: #fff;
-        border-radius: 5px;
-        box-shadow:
-            0 0 5px #03e9f4,
-            0 0 25px #03e9f4,
-            0 0 50px #03e9f4,
-            0 0 100px #03e9f4;
+        background: #00b4d8;
+        border: none;
     }
 
-    .section p {
+    .btn:hover {
+        background: #0077b6;
+        color: #fff;
+    }
+
+    .output-box p {
         margin: 10px 0;
+    }
+
+    @media (max-width: 767.98px) {
+        .mb-md-0 {
+            margin-bottom: 2rem !important;
+        }
     }
 </style>
 
 <div class="container">
-    <h2 style="color: #e8e8e8">User Details</h2>
-
-    <div class="box details-box">
-        <form action="/user-details" method="post">
-            <div class="user-box">
-                <input
-                    autocomplete="off"
-                    autofocus
-                    type="text"
-                    name="first_name"
-                />
-                <label>First name</label>
+    <div class="row g-4">
+        <div class="col-md-6 mb-md-0">
+            <div class="input-box">
+                <h3 class="mb-5">Edit Details</h3>
+                <form action="/user-details" method="post">
+                    <div class="user-box">
+                        <input
+                            autocomplete="off"
+                            autofocus
+                            type="text"
+                            name="first_name"
+                            required
+                        />
+                        <label>First name</label>
+                    </div>
+                    <div class="user-box">
+                        <input
+                            autocomplete="off"
+                            autofocus
+                            type="text"
+                            name="last_name"
+                            required
+                        />
+                        <label>Last name</label>
+                    </div>
+                    <div class="user-box">
+                        <input
+                            autocomplete="off"
+                            autofocus
+                            type="text"
+                            name="birth_date"
+                            required
+                        />
+                        <label>Birth Date</label>
+                    </div>
+                    <div class="user-box">
+                        <input
+                            autocomplete="off"
+                            autofocus
+                            type="text"
+                            name="department"
+                            required
+                        />
+                        <label>Department</label>
+                    </div>
+                    <div class="user-box">
+                        <input
+                            autocomplete="off"
+                            autofocus
+                            type="text"
+                            name="email"
+                            required
+                        />
+                        <label>E-mail</label>
+                    </div>
+                    <div class="user-box">
+                        <input
+                            autocomplete="off"
+                            autofocus
+                            type="text"
+                            name="phone_number"
+                            required
+                        />
+                        <label>Phone number</label>
+                    </div>
+                    <button class="btn mt-3" type="submit">Edit details</button>
+                </form>
             </div>
-            <div class="user-box">
-                <input
-                    autocomplete="off"
-                    autofocus
-                    type="text"
-                    name="last_name"
-                />
-                <label>Last name</label>
+        </div>
+        <div class="col-md-6">
+            <div class="output-box">
+                <h3 class="mb-5">Current Details</h3>
+                <p>
+                    <strong>First name:</strong> {{ user_details.first_name }}
+                </p>
+                <p><strong>Last name:</strong> {{ user_details.last_name }}</p>
+                <p>
+                    <strong>Birth date:</strong> {{ user_details.birth_date }}
+                </p>
+                <p>
+                    <strong>Department:</strong> {{ user_details.department }}
+                </p>
+                <p><strong>Email:</strong> {{ user_details.email }}</p>
+                <p>
+                    <strong>Phone number:</strong> {{ user_details.phone_number
+                    }}
+                </p>
             </div>
-            <div class="user-box">
-                <input
-                    autocomplete="off"
-                    autofocus
-                    type="text"
-                    name="birth_date"
-                />
-                <label>Birth Date</label>
-            </div>
-            <div class="user-box">
-                <input
-                    autocomplete="off"
-                    autofocus
-                    type="text"
-                    name="department"
-                />
-                <label>Department</label>
-            </div>
-            <div class="user-box">
-                <input autocomplete="off" autofocus type="text" name="email" />
-                <label>E-mail</label>
-            </div>
-            <div class="user-box">
-                <input
-                    autocomplete="off"
-                    autofocus
-                    type="text"
-                    name="phone_number"
-                />
-                <label>Phone number</label>
-            </div>
-            <button class="btn" type="submit">Edit details</button>
-        </form>
-    </div>
-
-    <div class="box section">
-        <p>First name: {{ user_details.first_name }}</p>
-        <p>Last name: {{ user_details.last_name }}</p>
-        <p>Birth date: {{ user_details.birth_date }}</p>
-        <p>Department: {{ user_details.department }}</p>
-        <p>Email: {{ user_details.email }}</p>
-        <p>Phone number: {{ user_details.phone_number }}</p>
+        </div>
     </div>
 </div>
-
 {% endblock %}
