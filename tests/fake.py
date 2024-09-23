@@ -44,7 +44,7 @@ class FakeUserDetails:
             id=self.fake.text(length=5),
             first_name=self.fake.text(length=5),
             last_name=self.fake.text(length=10),
-            birth_date=self.fake.timestamp(),
+            birth_date=self.fake.text(length=10),
             department=self.fake.text(length=10),
             email=self.fake.text(length=5),
             phone_number=self.fake.text(length=5),
