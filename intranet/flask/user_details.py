@@ -30,7 +30,7 @@ def create_user_details(
         id=session["user_id"],
         first_name=request.form.get("first_name", ""),
         last_name=request.form.get("last_name", ""),
-        birth_date=int(request.form.get("birth_date", "")),
+        birth_date=request.form.get("birth_date", ""),
         department=request.form.get("department", ""),
         email=request.form.get("email", ""),
         phone_number=request.form.get("phone_number", ""),
