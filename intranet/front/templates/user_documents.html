@@ -25,13 +25,13 @@ main %}
 </style>
 
 <div class="box mb-5">
-    <form class="row g-2" action="/documents" method="post">
-        <div class="col-md form-floating mb-3">
+    <form class="row g-0" action="/documents" method="post">
+        <div class="col-md m-md-2 form-floating mb-3">
             <input class="form-control" id="floatingDate" autocomplete="off" autofocus type="text" name="dates"
                    placeholder="Dates" required/>
             <label for="floatingDate">Dates</label>
         </div>
-        <div class="col-md form-floating mb-3">
+        <div class="col-md m-md-2 form-floating mb-3">
             <select class="form-select" id="floatingCategory" name="category" required>
                 <option value="" disabled selected></option>
                 <option value="paid_vacation">Paid Vacation</option>
@@ -39,7 +39,7 @@ main %}
             </select>
             <label for="floatingCategory">Category</label>
         </div>
-        <button class="btn col-md mb-3" type="submit">Create</button>
+        <button class="btn col-md m-md-2 mb-3" type="submit">Create</button>
     </form>
 </div>
 
