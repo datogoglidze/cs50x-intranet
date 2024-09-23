@@ -81,96 +81,100 @@ block main %}
     }
 </style>
 
-<div class="container">
-    <div class="row g-4">
-        <div class="col-md-6 mb-md-0">
-            <div class="input-box">
-                <h3 class="mb-5">Edit Details</h3>
-                <form action="/user-details" method="post">
-                    <div class="user-box">
-                        <input
-                            autocomplete="off"
-                            autofocus
-                            type="text"
-                            name="first_name"
-                            required
-                        />
-                        <label>First name</label>
-                    </div>
-                    <div class="user-box">
-                        <input
-                            autocomplete="off"
-                            autofocus
-                            type="text"
-                            name="last_name"
-                            required
-                        />
-                        <label>Last name</label>
-                    </div>
-                    <div class="user-box">
-                        <input
-                            autocomplete="off"
-                            autofocus
-                            type="text"
-                            name="birth_date"
-                            required
-                        />
-                        <label>Birth Date</label>
-                    </div>
-                    <div class="user-box">
-                        <input
-                            autocomplete="off"
-                            autofocus
-                            type="text"
-                            name="department"
-                            required
-                        />
-                        <label>Department</label>
-                    </div>
-                    <div class="user-box">
-                        <input
-                            autocomplete="off"
-                            autofocus
-                            type="text"
-                            name="email"
-                            required
-                        />
-                        <label>E-mail</label>
-                    </div>
-                    <div class="user-box">
-                        <input
-                            autocomplete="off"
-                            autofocus
-                            type="text"
-                            name="phone_number"
-                            required
-                        />
-                        <label>Phone number</label>
-                    </div>
-                    <button class="btn mt-3" type="submit">Edit details</button>
-                </form>
-            </div>
+<div class="row g-4">
+    <div class="col-md-6 mb-md-0">
+        <div class="input-box">
+            <h3 class="mb-5">Edit Details</h3>
+            <form action="/user-details" method="post">
+                <div class="user-box">
+                    <input
+                        autocomplete="off"
+                        autofocus
+                        type="text"
+                        name="first_name"
+                        required
+                    />
+                    <label>First name</label>
+                </div>
+                <div class="user-box">
+                    <input
+                        autocomplete="off"
+                        type="text"
+                        name="last_name"
+                        required
+                    />
+                    <label>Last name</label>
+                </div>
+                <div class="user-box">
+                    <input
+                        id="dateInput"
+                        type="text"
+                        autocomplete="off"
+                        name="birth_date"
+                        required
+                    />
+                    <label class="fixed-label">BirthDate</label>
+                </div>
+                <div class="user-box no-float">
+                    <input
+                        autocomplete="off"
+                        type="text"
+                        name="department"
+                        required
+                    />
+                    <label>Department</label>
+                </div>
+                <div class="user-box">
+                    <input
+                        autocomplete="off"
+                        type="text"
+                        name="email"
+                        required
+                    />
+                    <label>E-mail</label>
+                </div>
+                <div class="user-box">
+                    <input
+                        autocomplete="off"
+                        type="text"
+                        name="phone_number"
+                        required
+                    />
+                    <label>Phone number</label>
+                </div>
+                <button class="btn mt-3" type="submit">Edit details</button>
+            </form>
         </div>
-        <div class="col-md-6">
-            <div class="output-box">
-                <h3 class="mb-5">Current Details</h3>
-                <p>
-                    <strong>First name:</strong> {{ user_details.first_name }}
-                </p>
-                <p><strong>Last name:</strong> {{ user_details.last_name }}</p>
-                <p>
-                    <strong>Birth date:</strong> {{ user_details.birth_date }}
-                </p>
-                <p>
-                    <strong>Department:</strong> {{ user_details.department }}
-                </p>
-                <p><strong>Email:</strong> {{ user_details.email }}</p>
-                <p>
-                    <strong>Phone number:</strong> {{ user_details.phone_number
-                    }}
-                </p>
-            </div>
+    </div>
+    <div class="col-md-6">
+        <div class="output-box">
+            <h3 class="mb-5">Current Details</h3>
+            <p>
+                <strong>First name:</strong> {{ user_details.first_name }}
+            </p>
+            <p><strong>Last name:</strong> {{ user_details.last_name }}</p>
+            <p>
+                <strong>Birthdate:</strong> {{ user_details.birth_date }}
+            </p>
+            <p>
+                <strong>Department:</strong> {{ user_details.department }}
+            </p>
+            <p><strong>Email:</strong> {{ user_details.email }}</p>
+            <p>
+                <strong>Phone number:</strong> {{ user_details.phone_number
+                }}
+            </p>
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#dateInput", {
+        dateFormat: "Y/m/d",
+        minDate: "1900-01",
+        maxDate: "today",
+        altInput: true,
+    });
+</script>
 {% endblock %}
