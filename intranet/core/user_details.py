@@ -23,7 +23,7 @@ class UserDetails:
     id: str
     first_name: str = ""
     last_name: str = ""
-    birth_date: int = 0
+    birth_date: str = ""
     department: str = ""
     email: str = ""
     phone_number: str = ""
