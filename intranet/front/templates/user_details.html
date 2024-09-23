@@ -1,68 +1,19 @@
 {% extends "layout.html" %} {% block title %}User Details {% endblock %} {%
 block main %}
 <style>
-    .container {
-        min-height: 100vh;
-        padding: 20px;
-    }
-
-    .input-box {
+    .box {
         background: #ffffff;
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
         padding: 40px;
-    }
-
-    .output-box {
-        background: #ffffff;
-        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-        padding: 40px;
-    }
-
-    .user-box {
-        position: relative;
-        margin-bottom: 30px;
-    }
-
-    .user-box input {
-        width: 100%;
-        padding: 10px 0;
-        font-size: 16px;
-        color: #000000;
-        border: none;
-        border-bottom: 1px solid #838383;
-        outline: none;
-        background: transparent;
-    }
-
-    .user-box label {
-        position: absolute;
-        top: 0;
-        left: 0;
-        padding: 10px 0;
-        font-size: 16px;
-        color: #838383;
-        pointer-events: none;
-    }
-
-    .user-box input:focus ~ label,
-    .user-box input:valid ~ label {
-        top: -20px;
-        left: 0;
-        color: #838383;
-        font-size: 12px;
     }
 
     .btn {
-        display: inline-block;
-        padding: 10px 20px;
+        padding: 10px .25rem;
         font-size: 16px;
-        text-decoration: none;
         letter-spacing: 2px;
         color: #fff;
         background: #00b4d8;
-        border: none;
     }
 
     .btn:hover {
@@ -70,7 +21,7 @@ block main %}
         color: #fff;
     }
 
-    .output-box p {
+    .box p {
         margin: 10px 0;
     }
 
@@ -81,73 +32,91 @@ block main %}
     }
 </style>
 
-<div class="row g-4">
+<div class="row">
     <div class="col-md-6 mb-md-0">
-        <div class="input-box">
+        <div class="box">
             <h3 class="mb-5">Edit Details</h3>
-            <form action="/user-details" method="post">
-                <div class="user-box">
+            <form class="row g-0" action="/user-details" method="post">
+                <div class="form-floating mb-3">
                     <input
+                        class="form-control"
+                        id="floatingFirstName"
                         autocomplete="off"
                         autofocus
                         type="text"
                         name="first_name"
+                        placeholder="First Name"
                         required
                     />
-                    <label>First name</label>
+                    <label for="floatingFirstName">First name</label>
                 </div>
-                <div class="user-box">
+                <div class="form-floating mb-3">
                     <input
+                        class="form-control"
+                        id="floatingLastName"
                         autocomplete="off"
                         type="text"
                         name="last_name"
+                        placeholder="Last Name"
                         required
                     />
-                    <label>Last name</label>
+                    <label for="floatingLastName">Last name</label>
                 </div>
-                <div class="user-box">
+                <div class="form-floating mb-3">
                     <input
+                        class="form-control"
                         id="dateInput"
                         type="text"
                         autocomplete="off"
                         name="birth_date"
+                        placeholder="BirthDate"
                         required
                     />
                     <label class="fixed-label">BirthDate</label>
                 </div>
-                <div class="user-box no-float">
+                <div class="form-floating mb-3">
                     <input
+                        class="form-control"
+                        id="floatingDepartment"
                         autocomplete="off"
                         type="text"
                         name="department"
+                        placeholder="Department"
                         required
                     />
-                    <label>Department</label>
+                    <label for="floatingDepartment">Department</label>
                 </div>
-                <div class="user-box">
+                <div class="form-floating mb-3">
                     <input
+                        class="form-control"
+                        id="floatingMail"
                         autocomplete="off"
                         type="text"
                         name="email"
+                        placeholder="E-mail"
                         required
                     />
-                    <label>E-mail</label>
+                    <label for="floatingMail">E-mail</label>
                 </div>
-                <div class="user-box">
+                <div class="form-floating mb-3">
                     <input
+                        class="form-control"
+                        id="floatingPhone"
                         autocomplete="off"
                         type="text"
                         name="phone_number"
+                        placeholder="Phone Number"
                         required
                     />
-                    <label>Phone number</label>
+                    <label for="floatingPhone">Phone Number</label>
                 </div>
                 <button class="btn mt-3" type="submit">Edit details</button>
             </form>
         </div>
     </div>
+    
     <div class="col-md-6">
-        <div class="output-box">
+        <div class="box">
             <h3 class="mb-5">Current Details</h3>
             <p>
                 <strong>First name:</strong> {{ user_details.first_name }}
@@ -175,6 +144,7 @@ block main %}
         minDate: "1900-01",
         maxDate: "today",
         altInput: true,
+        defaultDate: "today"
     });
 </script>
 {% endblock %}
