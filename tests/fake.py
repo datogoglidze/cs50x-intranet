@@ -3,6 +3,7 @@ from functools import cached_property
 
 from faker import Faker
 
+from intranet.core.document import Document
 from intranet.core.news import News
 from intranet.core.user import User
 from intranet.core.user_details import UserDetails
@@ -63,4 +64,20 @@ class FakeNews:
         return News(
             title=self.fake.text(length=5),
             content=self.fake.text(length=5),
+        )
+
+
+@dataclass
+class FakeDocument:
+    fake: Fake = field(default_factory=Fake)
+
+    @cached_property
+    def entity(self) -> Document:
+        return Document(
+            id=self.fake.text(length=5),
+            user_id=self.fake.text(length=5),
+            creation_date=self.fake.text(length=5),
+            category="paid_vacation",
+            directory=self.fake.text(length=5),
+            status="warning",
         )

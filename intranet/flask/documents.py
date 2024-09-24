@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import datetime
-import os
-from dataclasses import dataclass, field
-from enum import Enum
+from dataclasses import dataclass
 from io import BytesIO
 from uuid import uuid4
 
@@ -21,10 +19,14 @@ from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from reportlab.pdfgen.canvas import Canvas
 from werkzeug import Response
 
-from intranet.core.documents import Document
+from intranet.core.document import (
+    Document,
+    DocumentCategory,
+    DocumentForm,
+    DocumentRepository,
+)
 from intranet.core.user_details import UserDetailsRepository
 from intranet.error import apology, login_required
 from intranet.flask.dependable import Container
@@ -35,11 +37,12 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 @documents.get("/documents")
 @inject
 @login_required
-def user_details_page() -> str:
-    if not os.path.exists("documents"):
-        os.makedirs("documents")
-    _documents = os.listdir("documents")
-    user_documents = [file for file in _documents if session["user_id"] in file]
+def user_details_page(
+    document_repository: DocumentRepository = Provide[Container.document_repository],
+) -> str:
+    user_documents = [
+        item for item in document_repository if item.user_id == session["user_id"]
+    ]
 
     return render_template("user_documents.html", documents=user_documents)
 
@@ -55,71 +58,99 @@ def pdf_viewer(filename: str) -> Response:
 @login_required
 def create_document(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
+    document_repository: DocumentRepository = Provide[Container.document_repository],
 ) -> Response | tuple[str, int]:
     user = details.read(session["user_id"])
-    document = Document(
-        id=str(uuid4()),
-        first_name=user.first_name,
-        last_name=user.last_name,
+
+    form = DocumentForm(
         dates=request.form.get("dates", ""),
         category=request.form.get("category", ""),
     )
 
-    if not document.first_name or not document.last_name:
+    if not user.first_name or not user.last_name:
         return apology("must fill details", 403)
 
-    if not document.dates:
+    if not form.dates:
         return apology("must specify date", 403)
 
-    GenerateDocument(
-        DocumentGenerator(document.dates).with_category(
-            DocumentCategory(document.category)
-        ),
-        document.first_name,
-        document.last_name,
-        document.category,
-    ).with_layout(
-        page_width=8.5 * inch,
-        page_height=11 * inch,
-        margin=50,
-        line_height=18,
+    if not form.category:
+        return apology("must choose category", 403)
+
+    document_id = str(uuid4())
+    document = Document(
+        id=document_id,
+        user_id=session["user_id"],
+        creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
+        category=form.category,
+        directory=f"/documents/{document_id}.pdf",
+        status="warning",
     )
+
+    (
+        GenerateDocument()
+        .with_id(document.id)
+        .with_form(DocumentCategory[form.category].name, form.dates)
+        .with_name(user.first_name)
+        .with_lastname(user.last_name)
+        .with_layout(
+            page_width=8.5 * inch,
+            page_height=11 * inch,
+            margin=50,
+            line_height=18,
+        )
+    )
+
+    document_repository.create(document)
 
     return redirect("/documents")
 
 
 @dataclass
 class GenerateDocument:
-    body: str
-    first_name: str
-    last_name: str
-    category: str
+    id: str = ""
+    body: str = ""
+    first_name: str = ""
+    last_name: str = ""
 
-    id: str = field(default_factory=lambda: str(uuid4()))
+    @staticmethod
+    def read_template(file_path: str) -> str:
+        with open(file_path, "r", encoding="utf-8") as file:
+            return file.read()
 
-    def with_header(self) -> str:
-        with open(
-            "document_templates/head.txt",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            header = file.read()
+    def with_id(self, document_id: str) -> GenerateDocument:
+        self.id = document_id
 
-        updated_header = header.replace("!<<DOC_ID>>", self.id)
-        updated_header = updated_header.replace("!<<FIRST_NAME>>", self.first_name)
-        updated_header = updated_header.replace("!<<LAST_NAME>>", self.last_name)
+        return self
 
-        return updated_header
+    def with_form(self, category: str, dates: str) -> GenerateDocument:
+        self.body = self.body_using(category, dates)
 
-    def with_footer(self) -> str:
-        with open(
-            "document_templates/foot.txt",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            footer = file.read()
+        return self
 
-        return footer
+    def with_name(self, first_name: str) -> GenerateDocument:
+        self.first_name = first_name
+
+        return self
+
+    def with_lastname(self, last_name: str) -> GenerateDocument:
+        self.last_name = last_name
+
+        return self
+
+    def header(self) -> str:
+        header = self.read_template("document_templates/head.txt")
+
+        return header.replace("!<<FIRST_NAME>>", self.first_name).replace(
+            "!<<LAST_NAME>>", self.last_name
+        )
+
+    def body_using(self, category: str, dates: str) -> str:
+        body_template = self.read_template(f"document_templates/{category}_body.txt")
+
+        return body_template.replace("!<<DATE>>", dates)
+
+    def footer(self) -> str:
+        return self.read_template("document_templates/foot.txt")
 
     def with_layout(
         self,
@@ -127,7 +158,7 @@ class GenerateDocument:
         page_height: float,
         margin: int,
         line_height: int,
-    ) -> None:
+    ) -> GenerateDocument:
         pdfmetrics.registerFont(
             TTFont(
                 "GeorgianFontNormal",
@@ -141,7 +172,7 @@ class GenerateDocument:
             )
         )
 
-        updated_text = self.with_header() + self.body + self.with_footer()
+        updated_text = self.header() + self.body + self.footer()
 
         with BytesIO() as buffer:
             pdf = canvas.Canvas(buffer, pagesize=letter)
@@ -149,13 +180,9 @@ class GenerateDocument:
 
             # Start from a reasonable position on the first page
             y = page_height - margin
-
             for line in updated_text.split("\n"):
                 y = PdfConstructor(
-                    page_width,
-                    page_height,
-                    margin,
-                    line_height,
+                    page_width, page_height, margin, line_height
                 ).draw_wrapped_text(line, pdf, y)
                 if y < margin:
                     pdf.showPage()
@@ -166,45 +193,10 @@ class GenerateDocument:
             pdf.save()
 
             buffer.seek(0)
-
-            with open(self.with_name(), "wb") as f:
+            with open(f"documents/{self.id}.pdf", "wb") as f:
                 f.write(buffer.getvalue())
 
-    def with_name(self) -> str:
-        return (
-            f"documents/"
-            f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
-            f"-{self.last_name}"
-            f"-{self.first_name}"
-            f"-{self.category}"
-            f"-{session['user_id']}"
-            f".pdf"
-        )
-
-
-class DocumentCategory(Enum):
-    paid_vacation: str = "paid_vacation"
-    unpaid_vacation: str = "unpaid_vacation"
-
-
-@dataclass
-class DocumentGenerator:
-    dates: str
-
-    def with_category(self, category: DocumentCategory) -> str:
-        return self.from_template(category)
-
-    def from_template(self, category: DocumentCategory) -> str:
-        with open(
-            f"document_templates/{category.value}_body.txt",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            template_text = file.read()
-
-        updated_text = template_text.replace("!<<DATE>>", self.dates)
-
-        return updated_text
+        return self
 
 
 @dataclass
@@ -214,7 +206,9 @@ class PdfConstructor:
     margin: int
     line_height: int
 
-    def draw_wrapped_text(self, line: str, pdf: Canvas, y_location: float) -> float:
+    def draw_wrapped_text(
+        self, line: str, pdf: canvas.Canvas, y_location: float
+    ) -> float:
         words = line.split()
         write_line = ""
 
