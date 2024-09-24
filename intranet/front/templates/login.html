@@ -42,13 +42,24 @@
     <h3 class="mb-5">Sign in</h3>
     <form class="row g-0" action="/login" method="post">
         <div class="form-floating mb-3">
-            <input class="form-control" id="floatingUsername" autocomplete="off" autofocus type="text" name="username"
-                   placeholder="Username" required/>
+            <input
+                class="form-control"
+                id="floatingUsername"
+                autocomplete="on"
+                autofocus type="text"
+                name="username"
+                placeholder="Username"
+                required/>
             <label for="floatingUsername">Username</label>
         </div>
         <div class="form-floating mb-3">
-            <input class="form-control" id="floatingPassword" type="password" name="password" placeholder="Password"
-                   required/>
+            <input
+                class="form-control"
+                id="floatingPassword"
+                type="password"
+                name="password"
+                placeholder="Password"
+                required/>
             <label for="floatingPassword">Password</label>
         </div>
         <button class="login btn mb-3 mt-3" type="submit">Sign in</button>
