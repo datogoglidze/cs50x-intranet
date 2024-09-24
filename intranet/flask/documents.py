@@ -19,7 +19,6 @@ from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from reportlab.pdfgen.canvas import Canvas
 from werkzeug import Response
 
 from intranet.core.document import (
@@ -92,7 +91,7 @@ def create_document(
         .with_id(document.id)
         .with_form(DocumentCategory[form.category].name, form.dates)
         .with_name(user.first_name)
-        .with_surname(user.last_name)
+        .with_lastname(user.last_name)
         .with_layout(
             page_width=8.5 * inch,
             page_height=11 * inch,
@@ -113,45 +112,45 @@ class GenerateDocument:
     first_name: str = ""
     last_name: str = ""
 
-    def with_id(self, doc_id: str) -> GenerateDocument:
-        self.id = doc_id
+    @staticmethod
+    def read_template(file_path: str) -> str:
+        with open(file_path, "r", encoding="utf-8") as file:
+            return file.read()
+
+    def with_id(self, document_id: str) -> GenerateDocument:
+        self.id = document_id
+
         return self
 
     def with_form(self, category: str, dates: str) -> GenerateDocument:
-        self.body = DocumentGenerator().with_form(category, dates)
+        self.body = self.body_using(category, dates)
+
         return self
 
     def with_name(self, first_name: str) -> GenerateDocument:
         self.first_name = first_name
+
         return self
 
-    def with_surname(self, last_name: str) -> GenerateDocument:
+    def with_lastname(self, last_name: str) -> GenerateDocument:
         self.last_name = last_name
+
         return self
 
-    def with_header(self) -> str:
-        with open(
-            "document_templates/head.txt",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            header = file.read()
+    def header(self) -> str:
+        header = self.read_template("document_templates/head.txt")
 
-        updated_header = header.replace("!<<DOC_ID>>", self.id)
-        updated_header = updated_header.replace("!<<FIRST_NAME>>", self.first_name)
-        updated_header = updated_header.replace("!<<LAST_NAME>>", self.last_name)
+        return header.replace("!<<FIRST_NAME>>", self.first_name).replace(
+            "!<<LAST_NAME>>", self.last_name
+        )
 
-        return updated_header
+    def body_using(self, category: str, dates: str) -> str:
+        body_template = self.read_template(f"document_templates/{category}_body.txt")
 
-    def with_footer(self) -> str:
-        with open(
-            "document_templates/foot.txt",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            footer = file.read()
+        return body_template.replace("!<<DATE>>", dates)
 
-        return footer
+    def footer(self) -> str:
+        return self.read_template("document_templates/foot.txt")
 
     def with_layout(
         self,
@@ -159,7 +158,7 @@ class GenerateDocument:
         page_height: float,
         margin: int,
         line_height: int,
-    ) -> None:
+    ) -> GenerateDocument:
         pdfmetrics.registerFont(
             TTFont(
                 "GeorgianFontNormal",
@@ -173,7 +172,7 @@ class GenerateDocument:
             )
         )
 
-        updated_text = self.with_header() + self.body + self.with_footer()
+        updated_text = self.header() + self.body + self.footer()
 
         with BytesIO() as buffer:
             pdf = canvas.Canvas(buffer, pagesize=letter)
@@ -181,13 +180,9 @@ class GenerateDocument:
 
             # Start from a reasonable position on the first page
             y = page_height - margin
-
             for line in updated_text.split("\n"):
                 y = PdfConstructor(
-                    page_width,
-                    page_height,
-                    margin,
-                    line_height,
+                    page_width, page_height, margin, line_height
                 ).draw_wrapped_text(line, pdf, y)
                 if y < margin:
                     pdf.showPage()
@@ -198,27 +193,10 @@ class GenerateDocument:
             pdf.save()
 
             buffer.seek(0)
-
-            with open(self.with_filename(), "wb") as f:
+            with open(f"documents/{self.id}.pdf", "wb") as f:
                 f.write(buffer.getvalue())
 
-    def with_filename(self) -> str:
-        return f"documents/{self.id}.pdf"
-
-
-@dataclass
-class DocumentGenerator:
-    def with_form(self, category: str, dates: str) -> str:
-        with open(
-            f"document_templates/{category}_body.txt",
-            "r",
-            encoding="utf-8",
-        ) as file:
-            template_text = file.read()
-
-        updated_text = template_text.replace("!<<DATE>>", dates)
-
-        return updated_text
+        return self
 
 
 @dataclass
@@ -228,7 +206,9 @@ class PdfConstructor:
     margin: int
     line_height: int
 
-    def draw_wrapped_text(self, line: str, pdf: Canvas, y_location: float) -> float:
+    def draw_wrapped_text(
+        self, line: str, pdf: canvas.Canvas, y_location: float
+    ) -> float:
         words = line.split()
         write_line = ""
 
