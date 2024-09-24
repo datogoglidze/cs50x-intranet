@@ -52,7 +52,7 @@ main %}
 {% if documents %}
 <div class="box">
     {% for document in documents %}
-    <button onclick="window.location.href='/documents/{{ document }}'">
+    <button onclick="window.open('/documents/{{ document }}', '_blank')">
         {{ document }}
     </button>
     {% endfor %}
