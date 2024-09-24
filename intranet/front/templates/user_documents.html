@@ -27,8 +27,14 @@ main %}
 <div class="box mb-5">
     <form class="row g-0" action="/documents" method="post">
         <div class="col-md m-md-2 form-floating mb-3">
-            <input class="form-control" id="floatingDate" autocomplete="off" autofocus type="text" name="dates"
-                   placeholder="Dates" required/>
+            <input
+                class="form-control"
+                id="floatingDate"
+                autocomplete="off"
+                autofocus type="text"
+                name="dates"
+                placeholder="Dates"
+                required/>
             <label for="floatingDate">Dates</label>
         </div>
         <div class="col-md m-md-2 form-floating mb-3">
@@ -43,12 +49,15 @@ main %}
     </form>
 </div>
 
+{% if documents %}
 <div class="box">
     {% for document in documents %}
-    <button onclick="window.location.href='/documents/{{ document }}'">
+    <button onclick="window.open('/documents/{{ document }}', '_blank')">
         {{ document }}
     </button>
     {% endfor %}
 </div>
+{% endif %}
+
 
 {% endblock %}
