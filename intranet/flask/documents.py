@@ -195,9 +195,6 @@ class DocumentGenerator:
     dates: str
 
     def with_category(self, category: str) -> str:
-        return self.from_template(category)
-
-    def from_template(self, category: str) -> str:
         with open(
             f"document_templates/{category}_body.txt",
             "r",
