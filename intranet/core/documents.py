@@ -8,3 +8,4 @@ class Document:
     last_name: str
     dates: str
     category: str
+    status: str

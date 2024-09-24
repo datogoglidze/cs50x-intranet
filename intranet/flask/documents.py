@@ -63,6 +63,7 @@ def create_document(
         last_name=user.last_name,
         dates=request.form.get("dates", ""),
         category=request.form.get("category", ""),
+        status="warning",
     )
 
     if not document.first_name or not document.last_name:
