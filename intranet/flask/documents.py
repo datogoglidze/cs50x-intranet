@@ -87,18 +87,18 @@ def create_document(
         status="warning",
     )
 
-    GenerateDocument(
-        DocumentGenerator(form.dates).with_category(
-            DocumentCategory[form.category].name
-        ),
-        user.first_name,
-        user.last_name,
-        document.id,
-    ).with_layout(
-        page_width=8.5 * inch,
-        page_height=11 * inch,
-        margin=50,
-        line_height=18,
+    (
+        GenerateDocument()
+        .with_id(document.id)
+        .with_form(DocumentCategory[form.category].name, form.dates)
+        .with_name(user.first_name)
+        .with_surname(user.last_name)
+        .with_layout(
+            page_width=8.5 * inch,
+            page_height=11 * inch,
+            margin=50,
+            line_height=18,
+        )
     )
 
     document_repository.create(document)
@@ -108,10 +108,26 @@ def create_document(
 
 @dataclass
 class GenerateDocument:
-    body: str
-    first_name: str
-    last_name: str
-    id: str
+    id: str = ""
+    body: str = ""
+    first_name: str = ""
+    last_name: str = ""
+
+    def with_id(self, doc_id: str) -> GenerateDocument:
+        self.id = doc_id
+        return self
+
+    def with_form(self, category: str, dates: str) -> GenerateDocument:
+        self.body = DocumentGenerator().with_form(category, dates)
+        return self
+
+    def with_name(self, first_name: str) -> GenerateDocument:
+        self.first_name = first_name
+        return self
+
+    def with_surname(self, last_name: str) -> GenerateDocument:
+        self.last_name = last_name
+        return self
 
     def with_header(self) -> str:
         with open(
@@ -183,18 +199,16 @@ class GenerateDocument:
 
             buffer.seek(0)
 
-            with open(self.with_name(), "wb") as f:
+            with open(self.with_filename(), "wb") as f:
                 f.write(buffer.getvalue())
 
-    def with_name(self) -> str:
+    def with_filename(self) -> str:
         return f"documents/{self.id}.pdf"
 
 
 @dataclass
 class DocumentGenerator:
-    dates: str
-
-    def with_category(self, category: str) -> str:
+    def with_form(self, category: str, dates: str) -> str:
         with open(
             f"document_templates/{category}_body.txt",
             "r",
@@ -202,7 +216,7 @@ class DocumentGenerator:
         ) as file:
             template_text = file.read()
 
-        updated_text = template_text.replace("!<<DATE>>", self.dates)
+        updated_text = template_text.replace("!<<DATE>>", dates)
 
         return updated_text
 
