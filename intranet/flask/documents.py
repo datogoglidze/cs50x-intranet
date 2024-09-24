@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import datetime
-import os
-from dataclasses import dataclass, field
-from enum import Enum
+from dataclasses import dataclass
 from io import BytesIO
 from uuid import uuid4
 
@@ -24,7 +22,12 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfgen.canvas import Canvas
 from werkzeug import Response
 
-from intranet.core.documents import Document
+from intranet.core.document import (
+    Document,
+    DocumentCategory,
+    DocumentForm,
+    DocumentRepository,
+)
 from intranet.core.user_details import UserDetailsRepository
 from intranet.error import apology, login_required
 from intranet.flask.dependable import Container
@@ -35,11 +38,12 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 @documents.get("/documents")
 @inject
 @login_required
-def user_details_page() -> str:
-    if not os.path.exists("documents"):
-        os.makedirs("documents")
-    _documents = os.listdir("documents")
-    user_documents = [file for file in _documents if session["user_id"] in file]
+def user_details_page(
+    document_repository: DocumentRepository = Provide[Container.document_repository],
+) -> str:
+    user_documents = [
+        item for item in document_repository if item.user_id == session["user_id"]
+    ]
 
     return render_template("user_documents.html", documents=user_documents)
 
@@ -55,36 +59,49 @@ def pdf_viewer(filename: str) -> Response:
 @login_required
 def create_document(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
+    document_repository: DocumentRepository = Provide[Container.document_repository],
 ) -> Response | tuple[str, int]:
     user = details.read(session["user_id"])
-    document = Document(
-        id=str(uuid4()),
-        first_name=user.first_name,
-        last_name=user.last_name,
+
+    form = DocumentForm(
         dates=request.form.get("dates", ""),
         category=request.form.get("category", ""),
+    )
+
+    if not user.first_name or not user.last_name:
+        return apology("must fill details", 403)
+
+    if not form.dates:
+        return apology("must specify date", 403)
+
+    if not form.category:
+        return apology("must choose category", 403)
+
+    document_id = str(uuid4())
+    document = Document(
+        id=document_id,
+        user_id=session["user_id"],
+        creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
+        category=form.category,
+        directory=f"/documents/{document_id}.pdf",
         status="warning",
     )
 
-    if not document.first_name or not document.last_name:
-        return apology("must fill details", 403)
-
-    if not document.dates:
-        return apology("must specify date", 403)
-
     GenerateDocument(
-        DocumentGenerator(document.dates).with_category(
-            DocumentCategory(document.category)
+        DocumentGenerator(form.dates).with_category(
+            DocumentCategory[form.category].name
         ),
-        document.first_name,
-        document.last_name,
-        document.category,
+        user.first_name,
+        user.last_name,
+        document.id,
     ).with_layout(
         page_width=8.5 * inch,
         page_height=11 * inch,
         margin=50,
         line_height=18,
     )
+
+    document_repository.create(document)
 
     return redirect("/documents")
 
@@ -94,9 +111,7 @@ class GenerateDocument:
     body: str
     first_name: str
     last_name: str
-    category: str
-
-    id: str = field(default_factory=lambda: str(uuid4()))
+    id: str
 
     def with_header(self) -> str:
         with open(
@@ -172,32 +187,19 @@ class GenerateDocument:
                 f.write(buffer.getvalue())
 
     def with_name(self) -> str:
-        return (
-            f"documents/"
-            f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
-            f"-{self.last_name}"
-            f"-{self.first_name}"
-            f"-{self.category}"
-            f"-{session['user_id']}"
-            f".pdf"
-        )
-
-
-class DocumentCategory(Enum):
-    paid_vacation: str = "paid_vacation"
-    unpaid_vacation: str = "unpaid_vacation"
+        return f"documents/{self.id}.pdf"
 
 
 @dataclass
 class DocumentGenerator:
     dates: str
 
-    def with_category(self, category: DocumentCategory) -> str:
+    def with_category(self, category: str) -> str:
         return self.from_template(category)
 
-    def from_template(self, category: DocumentCategory) -> str:
+    def from_template(self, category: str) -> str:
         with open(
-            f"document_templates/{category.value}_body.txt",
+            f"document_templates/{category}_body.txt",
             "r",
             encoding="utf-8",
         ) as file:
