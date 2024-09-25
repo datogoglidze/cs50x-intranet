@@ -5,11 +5,9 @@ block main %}
         background: #ffffff;
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
-        padding: 40px;
     }
 
     .btn {
-        padding: 10px .25rem;
         font-size: 16px;
         letter-spacing: 2px;
         color: #fff;
@@ -34,7 +32,7 @@ block main %}
 
 <div class="row">
     <div class="col-md-6 mb-md-0">
-        <div class="box">
+        <div class="box p-4">
             <h3 class="mb-5">Edit Details</h3>
             <form class="row g-0" action="/user-details" method="post">
                 <div class="form-floating mb-3">
@@ -111,13 +109,13 @@ block main %}
                     />
                     <label for="floatingPhone">Phone Number</label>
                 </div>
-                <button class="btn mt-3" type="submit">Edit details</button>
+                <button class="btn mt-3 mb-2 p-2" type="submit">Edit details</button>
             </form>
         </div>
     </div>
 
     <div class="col-md-6">
-        <div class="box">
+        <div class="box p-4">
             <h3 class="mb-5">Current Details</h3>
             <p>
                 <strong>First name:</strong> {{ user_details.first_name }}

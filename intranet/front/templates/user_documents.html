@@ -5,26 +5,22 @@ main %}
         background: #ffffff;
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
-        padding: 2.5rem 1.5rem 1.5rem 1.5rem;
-        position: relative;
     }
 
-
-    .box form button {
-        padding: 10px 10px;
+    .btn {
         font-size: 16px;
         letter-spacing: 2px;
         color: #ffffff;
         background: #00b4d8;
     }
 
-    .box form button:hover {
+    .btn:hover {
         background: #0077b6;
         color: #fff;
     }
 </style>
 
-<div class="box mb-5">
+<div class="box position-relative mb-5 p-4">
     <form class="row g-0" action="/documents" method="post">
         <div class="col-md m-md-2 form-floating mb-3">
             <input
@@ -45,12 +41,12 @@ main %}
             </select>
             <label for="floatingCategory">Category</label>
         </div>
-        <button class="btn col-md m-md-2 mb-3" type="submit">Create</button>
+        <button class="btn col-md m-md-2 mt-3 mb-2 p-2" type="submit">Create</button>
     </form>
 </div>
 
 {% if documents %}
-<div class="box">
+<div class="box position-relative p-4">
     <table
         class="table table-responsive table-hover caption-top align-middle text-center"
     >
