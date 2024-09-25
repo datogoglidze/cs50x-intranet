@@ -5,15 +5,11 @@
         background: #ffffff;
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
-        position: relative;
-        padding: 2.5rem 1.5rem 1.5rem 1.5rem;
         width: 400px;
-        margin: 0 auto;
         transform: translateY(25%);
     }
 
     .btn {
-        padding: 10px .25rem;
         font-size: 16px;
         letter-spacing: 2px;
     }
@@ -38,7 +34,7 @@
     }
 </style>
 
-<div class="box">
+<div class="box position-relative mx-auto p-4">
     <h3 class="mb-5">Sign in</h3>
     <form class="row g-0" action="/login" method="post">
         <div class="form-floating mb-3">
@@ -63,9 +59,9 @@
                 required/>
             <label for="floatingPassword">Password</label>
         </div>
-        <button class="login btn mb-3 mt-3" type="submit">Sign in</button>
+        <button class="login btn my-3 p-2" type="submit">Sign in</button>
         <h6 class="text-black-50">- or -</h6>
-        <a class="register btn mt-2" href="/register">Register</a>
+        <a class="register btn my-2 p-2" href="/register">Register</a>
     </form>
 </div>
 {% endblock %}

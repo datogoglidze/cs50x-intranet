@@ -15,19 +15,19 @@
                 Current news
             </caption>
             <thead class="table-dark align-middle">
-                <tr>
-                    <th scope="col" style="padding-left: 1rem">Title</th>
-                    <th scope="col" style="padding-right: 1rem">Content</th>
-                </tr>
+            <tr>
+                <th scope="col" style="padding-left: 1rem">Title</th>
+                <th scope="col" style="padding-right: 1rem">Content</th>
+            </tr>
             </thead>
 
             <tbody class="table-group-divider">
-                {% for news in news %}
-                <tr>
-                    <td>{{ news.title }}</td>
-                    <td>{{ news.content }}</td>
-                </tr>
-                {% endfor %}
+            {% for news in news %}
+            <tr>
+                <td>{{ news.title }}</td>
+                <td>{{ news.content }}</td>
+            </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
@@ -44,44 +44,44 @@
                     Add news
                 </caption>
                 <thead class="table-dark align-middle">
-                    <tr>
-                        <th scope="col" style="padding-left: 1rem">Title</th>
-                        <th scope="col" style="padding-right: 1rem">Content</th>
-                        <th scope="col" style="padding-left: 1rem"></th>
-                    </tr>
+                <tr>
+                    <th scope="col" style="padding-left: 1rem">Title</th>
+                    <th scope="col" style="padding-right: 1rem">Content</th>
+                    <th scope="col" style="padding-left: 1rem"></th>
+                </tr>
                 </thead>
 
                 <tbody class="table-group-divider">
-                    <tr>
-                        <td>
-                            <label>
-                                <input
-                                    autocomplete="off"
-                                    autofocus
-                                    type="text"
-                                    name="title"
-                                />
-                            </label>
-                        </td>
-                        <td>
-                            <label>
-                                <input
-                                    autocomplete="off"
-                                    autofocus
-                                    type="text"
-                                    name="content"
-                                />
-                            </label>
-                        </td>
-                        <td>
-                            <button
-                                class="btn btn-outline-success"
-                                type="submit"
-                            >
-                                Add news
-                            </button>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input
+                                autocomplete="off"
+                                autofocus
+                                type="text"
+                                name="title"
+                            />
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input
+                                autocomplete="off"
+                                autofocus
+                                type="text"
+                                name="content"
+                            />
+                        </label>
+                    </td>
+                    <td>
+                        <button
+                            class="btn btn-outline-success"
+                            type="submit"
+                        >
+                            Add news
+                        </button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </form>

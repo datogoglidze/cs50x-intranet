@@ -5,15 +5,11 @@ main %}
         background: #ffffff;
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
-        position: relative;
-        padding: 2.5rem 1.5rem 1.5rem 1.5rem;
         width: 400px;
-        margin: 0 auto;
         transform: translateY(25%);
     }
 
     .btn {
-        padding: 10px .25rem;
         font-size: 16px;
         letter-spacing: 2px;
     }
@@ -38,7 +34,7 @@ main %}
     }
 </style>
 
-<div class="box">
+<div class="box position-relative mx-auto p-4">
     <h3 class="mb-5">Register</h3>
     <form class="row g-0" action="/register" method="post">
         <div class="form-floating mb-3">
@@ -75,9 +71,9 @@ main %}
                 required/>
             <label for="floatingPasswordConfirmation">Repeat Password</label>
         </div>
-        <button class="register btn mb-3 mt-3" type="submit">Register</button>
+        <button class="register btn my-3 p-2" type="submit">Register</button>
         <h6 class="text-black-50">- or -</h6>
-        <a class="login btn mt-2" href="/login">Login</a>
+        <a class="login btn my-2 p-2" href="/login">Sign in</a>
     </form>
 </div>
 {% endblock %}
