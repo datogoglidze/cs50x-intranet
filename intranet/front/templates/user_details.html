@@ -18,13 +18,9 @@ block main %}
         background: #0077b6;
         color: #fff;
     }
-
-    .box p {
-        margin: 10px 0;
-    }
 </style>
 
-<div class="row">
+<div class="row justify-content-between">
     <div class="col-md-6 mb-5 mb-md-0">
         <div class="box p-4">
             <h3 class="mb-5">Edit Details</h3>
@@ -111,21 +107,34 @@ block main %}
     <div class="col-md-6">
         <div class="box p-4">
             <h3 class="mb-5">Current Details</h3>
-            <p>
-                <strong>First name:</strong> {{ user_details.first_name }}
-            </p>
-            <p><strong>Last name:</strong> {{ user_details.last_name }}</p>
-            <p>
-                <strong>Birthdate:</strong> {{ user_details.birth_date }}
-            </p>
-            <p>
-                <strong>Department:</strong> {{ user_details.department }}
-            </p>
-            <p><strong>Email:</strong> {{ user_details.email }}</p>
-            <p>
-                <strong>Phone number:</strong> {{ user_details.phone_number
-                }}
-            </p>
+            <div class="row mb-3">
+                <div class="col-md-6 text-center text-md-end">First Name</div>
+                <div class="col-md-6 text-center text-md-start text-break text-muted">{{ user_details.first_name }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 text-center text-md-end">Last Name</div>
+                <div class="col-md-6 text-center text-md-start text-break text-muted">{{ user_details.last_name }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 text-center text-md-end">Email</div>
+                <div class="col-md-6 text-center text-md-start text-break text-muted">{{ user_details.email }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 text-center text-md-end">Phone Number</div>
+                <div class="col-md-6 text-center text-md-start text-break text-muted">{{ user_details.phone_number }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 text-center text-md-end">Birthdate</div>
+                <div class="col-md-6 text-center text-md-start text-break text-muted">{{ user_details.birth_date }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 text-center text-md-end">Department</div>
+                <div class="col-md-6 text-center text-md-start text-break text-muted">{{ user_details.department }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
