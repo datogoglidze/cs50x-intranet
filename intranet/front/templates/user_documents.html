@@ -57,34 +57,29 @@ main %}
             <th scope="col">Creation Time</th>
             <th scope="col">Category</th>
             <th scope="col">File</th>
-            <th scope="col" class="px-3">
-                Status
-            </th>
+            <th scope="col" class="px-3">Status</th>
         </tr>
         </thead>
         <tbody class="table-group-divider">
         {% for document in documents %}
         <tr>
-            <th scope="row" class="px-3">{{ loop.index }}</th>
-            <th scope="row">{{ document.creation_date }}</th>
-            <th scope="row">{{ document.category }}</th>
+            <th scope="row" class="px-3 fw-normal">{{ loop.index }}</th>
+            <th scope="row" class="fw-normal">{{ document.creation_date }}</th>
+            <th scope="row" class="fw-normal">{{ document.category }}</th>
             <td>
                 <a
                     class="link-dark link-offset-3 link-underline-opacity-25 link-underline-opacity-100-hover"
                     href="{{ document.directory }}"
                     target="_blank"
-                ><i class="bi bi-link-45deg"></i></a
+                ><i class="bi bi-link-45deg fs-5"></i></a
                 >
             </td>
-            <td class="px-3">
-                <i class="bi bi-circle-fill text-warning"></i>
-            </td>
+            <td class="px-3"><i class="bi bi-circle-fill text-warning"></i></td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
 {% endif %}
-
 
 {% endblock %}
