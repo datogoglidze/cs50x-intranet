@@ -7,31 +7,46 @@ block main %}
         border-radius: 10px;
     }
 
-    .btn {
+    .submit.btn {
         font-size: 16px;
         letter-spacing: 2px;
         color: #fff;
         background: #00b4d8;
     }
 
-    .btn:hover {
+    .submit.btn:hover {
         background: #0077b6;
         color: #fff;
     }
 
-    .box p {
-        margin: 10px 0;
+    .close.btn {
+        color: #1f1f1f;
+        border: 1px solid #838383;
     }
 
-    @media (max-width: 767.98px) {
-        .mb-md-0 {
-            margin-bottom: 2rem !important;
-        }
+    .close.btn:hover {
+        border-color: #151515;
+    }
+
+    .bi-plus-square-fill {
+        color: #00b4d8;
+    }
+
+    .social.btn {
+        color: #00b4d8;
+    }
+
+    .social.btn:hover .bi-plus-square-fill {
+        color: #0077b6;
+    }
+
+    .social.btn:hover {
+        color: #0077b6;
     }
 </style>
 
-<div class="row">
-    <div class="col-md-6 mb-md-0">
+<div class="row justify-content-between">
+    <div class="col-md-6 mb-5 mb-md-0">
         <div class="box p-4">
             <h3 class="mb-5">Edit Details</h3>
             <form class="row g-0" action="/user-details" method="post">
@@ -109,7 +124,7 @@ block main %}
                     />
                     <label for="floatingPhone">Phone Number</label>
                 </div>
-                <button class="btn mt-3 mb-2 p-2" type="submit">Edit details</button>
+                <button class="btn submit mt-3 mb-2 p-2" type="submit">Edit details</button>
             </form>
         </div>
     </div>
@@ -117,21 +132,144 @@ block main %}
     <div class="col-md-6">
         <div class="box p-4">
             <h3 class="mb-5">Current Details</h3>
-            <p>
-                <strong>First name:</strong> {{ user_details.first_name }}
-            </p>
-            <p><strong>Last name:</strong> {{ user_details.last_name }}</p>
-            <p>
-                <strong>Birthdate:</strong> {{ user_details.birth_date }}
-            </p>
-            <p>
-                <strong>Department:</strong> {{ user_details.department }}
-            </p>
-            <p><strong>Email:</strong> {{ user_details.email }}</p>
-            <p>
-                <strong>Phone number:</strong> {{ user_details.phone_number
-                }}
-            </p>
+            <div class="row align-items-center mb-3">
+                <div
+                    class="col-md-6 text-center text-md-end">
+                    First Name
+                </div>
+                <div
+                    class="col-md-6 text-center text-md-start text-break text-muted">
+                    {{ user_details.first_name }}
+                </div>
+            </div>
+            <div class="row align-items-center mb-3">
+                <div
+                    class="col-md-6 text-center text-md-end">
+                    Last Name
+                </div>
+                <div
+                    class="col-md-6 text-center text-md-start text-break text-muted">
+                    {{ user_details.last_name }}
+                </div>
+            </div>
+            <div class="row align-items-center mb-3">
+                <div
+                    class="col-md-6 text-center text-md-end">
+                    Email
+                </div>
+                <div
+                    class="col-md-6 text-center text-md-start text-break text-muted">
+                    {{ user_details.email }}
+                </div>
+            </div>
+            <div class="row align-items-center mb-3">
+                <div
+                    class="col-md-6 text-center text-md-end">
+                    Phone Number
+                </div>
+                <div
+                    class="col-md-6 text-center text-md-start text-break text-muted">
+                    {{ user_details.phone_number }}
+                </div>
+            </div>
+            <div class="row align-items-center mb-3">
+                <div
+                    class="col-md-6 text-center text-md-end">
+                    Birthdate
+                </div>
+                <div
+                    class="col-md-6 text-center text-md-start text-break text-muted">
+                    {{ user_details.birth_date }}
+                </div>
+            </div>
+            <div class="row align-items-center mb-3">
+                <div
+                    class="col-md-6 text-center text-md-end">
+                    Department
+                </div>
+                <div
+                    class="col-md-6 text-center text-md-start text-break text-muted">
+                    {{ user_details.department }}
+                </div>
+            </div>
+            {% for link in user_links %}
+            <div class="row align-items-center mb-3">
+                <div
+                    class="col-md-6 text-center text-md-end">
+                    {{ link.name }}
+                </div>
+                <a
+                    class="col-md-6 text-center text-md-start text-break link-secondary link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover"
+                    href="{{ link.link }}"
+                    target="_blank">
+                    Link <i class="bi bi-link-45deg"></i>
+                </a>
+            </div>
+            {% endfor %}
+            <div class="row align-items-center mb-3">
+                <div
+                    class="col-md-6 text-center text-md-end">
+                    Social
+                </div>
+                <div
+                    class="col-md-6 text-center text-md-start text-break">
+                    <button
+                        class="btn social p-0 border-0 bg-transparent"
+                        data-bs-toggle="modal"
+                        data-bs-target="#socialModal">
+                        <i class="bi bi-plus-square-fill fs-5"></i> Add Social Link
+                    </button>
+                </div>
+
+                <div
+                    class="modal fade"
+                    id="socialModal"
+                    tabindex="-1"
+                    aria-labelledby="socialModalModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="socialModalModalLabel">Add Social</h1>
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/user_links" method="post">
+                                    <div class="mb-3">
+                                        <label for="social-name" class="col-form-label">Social Network Name</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="social-name"
+                                               name="social_name"
+                                               autofocus
+                                               autocomplete="off"
+                                               required/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="social-link" class="col-form-label">Profile Link</label>
+                                        <textarea
+                                            class="form-control"
+                                            id="social-link"
+                                            name="social_link">
+                                        </textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn close me-3" data-bs-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="submit" class="btn submit">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

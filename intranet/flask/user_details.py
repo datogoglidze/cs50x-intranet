@@ -3,6 +3,7 @@ from flask import Blueprint, redirect, render_template, request, session
 from werkzeug import Response
 
 from intranet.core.user_details import UserDetails, UserDetailsRepository
+from intranet.core.user_link import UserLinksRepository
 from intranet.error import login_required
 from intranet.flask.dependable import Container
 
@@ -14,10 +15,16 @@ user_details = Blueprint("user_details", __name__, template_folder="../front/tem
 @login_required
 def user_details_page(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
+    links: UserLinksRepository = Provide[Container.user_links_repository],
 ) -> str:
     _user_details = details.read(session["user_id"])
+    _user_links = [link for link in links if link.user_id == session["user_id"]]
 
-    return render_template("user_details.html", user_details=_user_details)
+    return render_template(
+        "user_details.html",
+        user_details=_user_details,
+        user_links=_user_links,
+    )
 
 
 @user_details.post("/user-details")

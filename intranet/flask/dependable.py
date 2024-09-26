@@ -6,11 +6,13 @@ from dotenv import load_dotenv
 
 from intranet.in_memory.documents import DocumentInMemoryRepository
 from intranet.in_memory.news import NewsInMemoryRepository
+from intranet.in_memory.user_links import UserLinksInMemoryRepository
 from intranet.in_memory.users import UserInMemoryRepository
 from intranet.in_memory.users_details import UsersDetailsInMemoryRepository
 from intranet.mssql.documents import DocumentMssqlRepository
 from intranet.mssql.news import NewsMssqlRepository
 from intranet.mssql.user_details import UserDetailsMssqlRepository
+from intranet.mssql.user_links import UserLinksMssqlRepository
 from intranet.mssql.users import UserMssqlRepository
 
 
@@ -32,6 +34,12 @@ class Container(containers.DeclarativeContainer):
         lambda: UserDetailsMssqlRepository()
         if "DB_HOST" in os.environ
         else UsersDetailsInMemoryRepository()
+    )
+
+    user_links_repository = providers.Singleton(
+        lambda: UserLinksMssqlRepository()
+        if "DB_HOST" in os.environ
+        else UserLinksInMemoryRepository()
     )
 
     news_repository = providers.Singleton(

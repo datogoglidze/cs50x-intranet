@@ -12,6 +12,7 @@ from intranet.flask.dependable import Container
 from intranet.flask.documents import documents
 from intranet.flask.news import news
 from intranet.flask.user_details import user_details
+from intranet.flask.user_links import user_links
 
 
 def no_cache_after_request(response: Any) -> Any:
@@ -46,6 +47,7 @@ def setup() -> Flask:
 
     app.register_blueprint(authorization)
     app.register_blueprint(user_details)
+    app.register_blueprint(user_links)
     app.register_blueprint(news)
     app.register_blueprint(documents)
     app.register_blueprint(about)
@@ -54,6 +56,7 @@ def setup() -> Flask:
         modules=[
             flask.authorization,
             flask.user_details,
+            flask.user_links,
             flask.news,
             flask.documents,
         ]
