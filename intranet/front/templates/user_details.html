@@ -200,7 +200,7 @@ block main %}
                 </div>
                 <a
                     class="col-md-6 text-center text-md-start text-break link-secondary link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover"
-                    href="{{ link.link }}"
+                    href="{{ 'http://' + link.link if not (link.link.startswith('http') or link.link.startswith('https')) else link.link }}"
                     target="_blank">
                     Link <i class="bi bi-link-45deg"></i>
                 </a>
