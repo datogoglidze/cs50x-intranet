@@ -246,17 +246,18 @@ block main %}
                                                class="form-control"
                                                id="social-name"
                                                name="social_name"
-                                               autofocus
                                                autocomplete="off"
                                                required/>
                                     </div>
                                     <div class="mb-3">
                                         <label for="social-link" class="col-form-label">Profile Link</label>
-                                        <textarea
+                                        <input
+                                            type="text"
                                             class="form-control"
                                             id="social-link"
-                                            name="social_link">
-                                        </textarea>
+                                            name="social_link"
+                                            autocomplete="off"
+                                            required/>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn close me-3" data-bs-dismiss="modal">
