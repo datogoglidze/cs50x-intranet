@@ -70,7 +70,6 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
             cursor = connection.cursor()
             cursor.execute("""
                 SELECT
-                    position,
                     id,
                     user_id,
                     creation_date,
@@ -78,7 +77,7 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
                     directory,
                     status
                 FROM documents
-                ORDER BY position DESC
+                ORDER BY creation_date DESC
             """)
             rows = cursor.fetchall()
 
