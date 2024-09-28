@@ -32,68 +32,67 @@
     }
 </style>
 
+<div>
+    <button
+        type="button"
+        class="btn news mb-3"
+        data-bs-toggle="modal"
+        data-bs-target="#newsModal">
+        Add News
+    </button>
 
-<div class="box table-responsive position-relative p-4">
-    <div>
-        <button
-            type="button"
-            class="btn news"
-            data-bs-toggle="modal"
-            data-bs-target="#newsModal">
-            Add News
-        </button>
-
-        <div
-            class="modal fade"
-            id="newsModal"
-            tabindex="-1"
-            aria-labelledby="newsModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="newsModalLabel">Fill the Form</h1>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="/news" method="post">
-                            <div class="mb-3">
-                                <label for="title" class="col-form-label">Title</label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="title"
-                                       name="title"
-                                       autocomplete="off"
-                                       required/>
-                            </div>
-                            <div class="mb-3">
-                                <label for="content" class="col-form-label">Content</label>
-                                <textarea
-                                    type="text"
-                                    class="form-control"
-                                    id="content"
-                                    name="content"
-                                    autocomplete="off"
-                                    required></textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn close me-3" data-bs-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="submit" class="btn submit">Submit</button>
-                            </div>
-                        </form>
-                    </div>
+    <div
+        class="modal fade"
+        id="newsModal"
+        tabindex="-1"
+        aria-labelledby="newsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newsModalLabel">Fill the Form</h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/news" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="col-form-label">Title</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="title"
+                                   name="title"
+                                   autocomplete="off"
+                                   required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="col-form-label">Content</label>
+                            <textarea
+                                type="text"
+                                class="form-control"
+                                id="content"
+                                name="content"
+                                autocomplete="off"
+                                required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn close me-3" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn submit">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
+<div class="box table-responsive position-relative p-4">
     {% if news %}
     <table
         class="table table-hover caption-top align-middle text-center"
