@@ -27,7 +27,6 @@ def test_should_persist(news: NewsInMemoryRepository) -> None:
         creation_date=_news.creation_date,
         title=_news.title,
         content=_news.content,
-        status=_news.status,
     )
 
 
@@ -40,13 +39,11 @@ def test_should_persist_many(news: NewsInMemoryRepository) -> None:
             creation_date=news_1.creation_date,
             title=news_1.title,
             content=news_1.content,
-            status=news_1.status,
         ),
         News(
             id=ANY,
             creation_date=news_2.creation_date,
             title=news_2.title,
             content=news_2.content,
-            status=news_2.status,
         ),
     ]
