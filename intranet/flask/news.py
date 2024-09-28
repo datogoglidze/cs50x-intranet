@@ -1,3 +1,6 @@
+import datetime
+from uuid import uuid4
+
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, redirect, render_template, request
 from werkzeug import Response
@@ -27,8 +30,11 @@ def create_news(
     news_repository: NewsRepository = Provide[Container.news_repository],
 ) -> Response | tuple[str, int]:
     _news = News(
+        id=str(uuid4()),
+        creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
         title=request.form.get("title", ""),
         content=request.form.get("content", ""),
+        status=None,
     )
 
     news_repository.create(_news)

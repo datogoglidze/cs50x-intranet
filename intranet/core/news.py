@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Iterator, Protocol
-from uuid import uuid4
 
 
 class NewsRepository(Protocol):  # pragma: no cover
@@ -18,7 +17,8 @@ class NewsRepository(Protocol):  # pragma: no cover
 
 @dataclass
 class News:
+    id: str
+    creation_date: str
     title: str
     content: str
-
-    id: str = field(default_factory=lambda: str(uuid4()))
+    status: str | None = field(default_factory=lambda: None)

@@ -1,7 +1,8 @@
 CREATE TABLE news
-  (
-     [position] INT IDENTITY(1, 1)  NOT NULL PRIMARY KEY,
-     [id]       NVARCHAR(36)        NOT NULL UNIQUE,
-     [title]    NVARCHAR(MAX),
-     [content]  NVARCHAR(MAX),
-  )
+(
+    [id]            [NVARCHAR](36)  NOT NULL PRIMARY KEY,
+    [creation_date] [NVARCHAR](50)  NOT NULL,
+    [title]         [NVARCHAR](500) NOT NULL,
+    [content]       [NVARCHAR](MAX) NOT NULL,
+    [status]        [NVARCHAR](10)
+)

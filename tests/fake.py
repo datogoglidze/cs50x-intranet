@@ -1,5 +1,7 @@
+import datetime
 from dataclasses import dataclass, field
 from functools import cached_property
+from uuid import uuid4
 
 from faker import Faker
 
@@ -62,6 +64,8 @@ class FakeNews:
     @cached_property
     def entity(self) -> News:
         return News(
+            id=str(uuid4()),
+            creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
             title=self.fake.text(length=5),
             content=self.fake.text(length=5),
         )
