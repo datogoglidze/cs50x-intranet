@@ -105,7 +105,7 @@
             <th scope="col">Date</th>
             <th scope="col">Title</th>
             <th scope="col">Content</th>
-            <th scope="col" class="px-3">Status</th>
+            <th scope="col" class="px-3">Read More</th>
         </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -114,8 +114,48 @@
             <th scope="row" class="px-3 fw-normal">{{ loop.index }}</th>
             <th scope="row" class="fw-normal">{{ news.creation_date }}</th>
             <th scope="row" class="fw-normal">{{ news.title }}</th>
-            <th scope="row" class="fw-normal">{{ news.content }}</th>
-            <th scope="row" class="fw-normal">{% if news.status %} {{ news.status }} {% endif %}</th>
+            <th scope="row" class="fw-normal">
+                {% set content_words = news.content.split() %}
+                {% if content_words|length > 20 %}
+                {{ content_words[:20]|join(' ') }}...
+                {% else %}
+                {{ news.content }}
+                {% endif %}
+            </th>
+            <th scope="row" class="fw-normal">
+                <button
+                    class="btn p-0 border-0 bg-transparent"
+                    data-bs-toggle="modal"
+                    data-bs-target="#readModal">
+                    <i class="bi bi-three-dots fs-5"></i> Read More
+                </button>
+
+                <div
+                    class="modal fade"
+                    id="readModal"
+                    tabindex="-1"
+                    aria-labelledby="readModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="readModalLabel">{{ news.title }}</h1>
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    {{ news.content }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
         </tr>
         {% endfor %}
         </tbody>
