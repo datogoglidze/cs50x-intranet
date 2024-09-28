@@ -14,13 +14,15 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 """
                 INSERT INTO news (
                     id,
+                    creation_date,
                     title,
                     content
                 )
-                VALUES (%s, %s, %s)
+                VALUES (%s, %s, %s, %s)
                 """,
                 (
                     news.id,
+                    news.creation_date,
                     news.title,
                     news.content,
                 ),
@@ -35,6 +37,7 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 """
                 SELECT
                     id,
+                    creation_date,
                     title,
                     content
                 FROM news
@@ -46,9 +49,10 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
 
             if row is not None:
                 return News(
+                    row["id"],
+                    row["creation_date"],
                     row["title"],
                     row["content"],
-                    row["id"],
                 )
 
         raise KeyError(f"News with id '{news_id}' not found.")
@@ -58,18 +62,30 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
             cursor = connection.cursor()
             cursor.execute("""
                 SELECT
-                    position,
                     id,
+                    creation_date,
                     title,
                     content
                 FROM news
-                ORDER BY position DESC
+                ORDER BY creation_date DESC
             """)
             rows = cursor.fetchall()
 
         for row in rows:
             yield News(
+                row["id"],
+                row["creation_date"],
                 row["title"],
                 row["content"],
-                row["id"],
+            )
+
+    def delete(self, news_id: str) -> None:
+        with MsSqlConnector().connect() as connection:
+            cursor = connection.cursor()
+            cursor.execute(
+                """
+                DELETE FROM news
+                WHERE id = %s
+                """,
+                (news_id,),
             )

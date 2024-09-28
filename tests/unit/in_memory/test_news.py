@@ -24,6 +24,7 @@ def test_should_persist(news: NewsInMemoryRepository) -> None:
 
     assert news.read(_news.id) == News(
         id=ANY,
+        creation_date=_news.creation_date,
         title=_news.title,
         content=_news.content,
     )
@@ -35,11 +36,13 @@ def test_should_persist_many(news: NewsInMemoryRepository) -> None:
     assert news.read_all() == [
         News(
             id=ANY,
+            creation_date=news_1.creation_date,
             title=news_1.title,
             content=news_1.content,
         ),
         News(
             id=ANY,
+            creation_date=news_2.creation_date,
             title=news_2.title,
             content=news_2.content,
         ),

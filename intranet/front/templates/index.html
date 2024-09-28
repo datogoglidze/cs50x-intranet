@@ -1,91 +1,164 @@
 {% extends "layout.html" %} {% block title %}Home {% endblock %} {% block main
 %}
 
-<div class="row d-flex flex-column container-fluid mx-auto">
-    <h2 class="text-center" style="color: #e8e8e8">News</h2>
+<style>
+    .box {
+        background: #ffffff;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+    }
+
+    .submit.btn,
+    .news.btn {
+        font-size: 16px;
+        letter-spacing: 2px;
+        color: #fff;
+        background: #00b4d8;
+    }
+
+    .submit.btn:hover,
+    .news.btn:hover {
+        background: #0077b6;
+        color: #fff;
+    }
+
+    .close.btn {
+        color: #1f1f1f;
+        border: 1px solid #838383;
+    }
+
+    .close.btn:hover {
+        border-color: #151515;
+    }
+</style>
+
+<div>
+    <button
+        type="button"
+        class="btn news mb-3"
+        data-bs-toggle="modal"
+        data-bs-target="#newsModal">
+        Add News
+    </button>
 
     <div
-        class="col-12 col-md-11 col-lg-10 col-xl-9 mt-4 mx-auto py-5 px-2 px-md-4 border border-3 rounded"
-        id="news"
-    >
-        <table
-            class="table table-responsive table-hover caption-top align-middle text-center"
-        >
-            <caption class="fw-bold text-white">
-                Current news
-            </caption>
-            <thead class="table-dark align-middle">
-            <tr>
-                <th scope="col" style="padding-left: 1rem">Title</th>
-                <th scope="col" style="padding-right: 1rem">Content</th>
-            </tr>
-            </thead>
-
-            <tbody class="table-group-divider">
-            {% for news in news %}
-            <tr>
-                <td>{{ news.title }}</td>
-                <td>{{ news.content }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <div
-        class="col-12 col-md-11 col-lg-10 col-xl-9 mt-4 mx-auto py-5 px-2 px-md-4 border border-3 rounded"
-        id="create-news"
-    >
-        <form action="/news" method="post">
-            <table
-                class="table table-responsive caption-top align-middle text-center"
-            >
-                <caption class="fw-bold text-white">
-                    Add news
-                </caption>
-                <thead class="table-dark align-middle">
-                <tr>
-                    <th scope="col" style="padding-left: 1rem">Title</th>
-                    <th scope="col" style="padding-right: 1rem">Content</th>
-                    <th scope="col" style="padding-left: 1rem"></th>
-                </tr>
-                </thead>
-
-                <tbody class="table-group-divider">
-                <tr>
-                    <td>
-                        <label>
-                            <input
-                                autocomplete="off"
-                                autofocus
+        class="modal fade"
+        id="newsModal"
+        tabindex="-1"
+        aria-labelledby="newsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newsModalLabel">Fill the Form</h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/news" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="col-form-label">Title</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="title"
+                                   name="title"
+                                   autocomplete="off"
+                                   required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="col-form-label">Content</label>
+                            <textarea
                                 type="text"
-                                name="title"
-                            />
-                        </label>
-                    </td>
-                    <td>
-                        <label>
-                            <input
-                                autocomplete="off"
-                                autofocus
-                                type="text"
+                                class="form-control"
+                                id="content"
                                 name="content"
-                            />
-                        </label>
-                    </td>
-                    <td>
-                        <button
-                            class="btn btn-outline-success"
-                            type="submit"
-                        >
-                            Add news
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
+                                autocomplete="off"
+                                required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn close me-3" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<div class="box table-responsive position-relative p-4">
+    {% if news %}
+    <table
+        class="table table-hover caption-top align-middle text-center"
+    >
+        <caption class="fw-bold">Current News</caption>
+        <thead class="table-dark align-middle">
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Title</th>
+            <th scope="col">Content</th>
+            <th scope="col" class="px-3">Read More</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        {% for news in news %}
+        <tr>
+            <th scope="row" class="fw-normal">{{ news.creation_date }}</th>
+            <th scope="row" class="fw-normal">{{ news.title }}</th>
+            <th scope="row" class="fw-normal">
+                {% set content_words = news.content.split() %}
+                {% if content_words|length > 20 %}
+                {{ content_words[:20]|join(' ') }}...
+                {% else %}
+                {{ news.content }}
+                {% endif %}
+            </th>
+            <th scope="row" class="fw-normal">
+                <button
+                    class="btn p-0 border-0 bg-transparent"
+                    data-bs-toggle="modal"
+                    data-bs-target="#readModal">
+                    <i class="bi bi-three-dots fs-5"></i> Read More
+                </button>
+
+                <div
+                    class="modal fade"
+                    id="readModal"
+                    tabindex="-1"
+                    aria-labelledby="readModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="readModalLabel">{{ news.title }}</h1>
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    {{ news.content }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
 
 {% endblock %}
