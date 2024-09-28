@@ -100,7 +100,6 @@
         <caption class="fw-bold">Current News</caption>
         <thead class="table-dark align-middle">
         <tr>
-            <th scope="col" class="px-3">#</th>
             <th scope="col">Date</th>
             <th scope="col">Title</th>
             <th scope="col">Content</th>
@@ -110,7 +109,6 @@
         <tbody class="table-group-divider">
         {% for news in news %}
         <tr>
-            <th scope="row" class="px-3 fw-normal">{{ loop.index }}</th>
             <th scope="row" class="fw-normal">{{ news.creation_date }}</th>
             <th scope="row" class="fw-normal">{{ news.title }}</th>
             <th scope="row" class="fw-normal">
