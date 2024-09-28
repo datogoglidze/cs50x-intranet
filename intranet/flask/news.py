@@ -34,7 +34,6 @@ def create_news(
         creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
         title=request.form.get("title", ""),
         content=request.form.get("content", ""),
-        status=None,
     )
 
     news_repository.create(_news)

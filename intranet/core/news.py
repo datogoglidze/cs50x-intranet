@@ -21,4 +21,3 @@ class News:
     creation_date: str
     title: str
     content: str
-    status: str | None = field(default_factory=lambda: None)

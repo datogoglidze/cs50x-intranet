@@ -16,17 +16,15 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                     id,
                     creation_date,
                     title,
-                    content,
-                    status
+                    content
                 )
-                VALUES (%s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s)
                 """,
                 (
                     news.id,
                     news.creation_date,
                     news.title,
                     news.content,
-                    news.status,
                 ),
             )
 
@@ -41,8 +39,7 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                     id,
                     creation_date,
                     title,
-                    content,
-                    status
+                    content
                 FROM news
                 WHERE id = %s
                 """,
@@ -56,7 +53,6 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                     row["creation_date"],
                     row["title"],
                     row["content"],
-                    row["status"],
                 )
 
         raise KeyError(f"News with id '{news_id}' not found.")
@@ -69,8 +65,7 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                     id,
                     creation_date,
                     title,
-                    content,
-                    status
+                    content
                 FROM news
                 ORDER BY creation_date DESC
             """)
@@ -82,7 +77,6 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 row["creation_date"],
                 row["title"],
                 row["content"],
-                row["status"],
             )
 
     def delete(self, news_id: str) -> None:
