@@ -94,7 +94,7 @@ def test_should_not_add_without_dates(app: FlaskClient) -> None:
             "first_name": user_details.first_name,
             "last_name": user_details.last_name,
             "birth_date": user_details.birth_date,
-            "department": user_details.department,
+            "department": user_details.department.name,
             "email": user_details.email,
             "phone_number": user_details.phone_number,
         },

@@ -68,7 +68,7 @@ def test_should_add_details(app: FlaskClient) -> None:
             "first_name": user_details.first_name,
             "last_name": user_details.last_name,
             "birth_date": user_details.birth_date,
-            "department": user_details.department,
+            "department": user_details.department.name,
             "email": user_details.email,
             "phone_number": user_details.phone_number,
         },
@@ -80,7 +80,7 @@ def test_should_add_details(app: FlaskClient) -> None:
     assert f"{user_details.first_name}" in response.get_data(as_text=True)
     assert f"{user_details.last_name}" in response.get_data(as_text=True)
     assert f"{user_details.birth_date}" in response.get_data(as_text=True)
-    assert f"{user_details.department}" in response.get_data(as_text=True)
+    assert f"{user_details.department.value}" in response.get_data(as_text=True)
     assert f"{user_details.email}" in response.get_data(as_text=True)
     assert f"{user_details.phone_number}" in response.get_data(as_text=True)
 
