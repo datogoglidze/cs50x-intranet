@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Iterator
 
-from intranet.core.user_details import UserDetails, UserDetailsRepository
+from intranet.core.user_details import Department, UserDetails, UserDetailsRepository
 from intranet.mssql.connector import MsSqlConnector
 
 
@@ -30,7 +30,7 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
                     user_details.first_name,
                     user_details.last_name,
                     user_details.birth_date,
-                    user_details.department,
+                    user_details.department.value,
                     user_details.email,
                     user_details.phone_number,
                 ),
@@ -60,10 +60,10 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
                 """
                 SELECT
                     id,
+                    department,
                     first_name,
                     last_name,
                     birth_date,
-                    department,
                     email,
                     phone_number
                 FROM user_details
@@ -76,10 +76,10 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
             if row is not None:
                 return UserDetails(
                     row["id"],
+                    row["department"],
                     row["first_name"],
                     row["last_name"],
                     row["birth_date"],
-                    row["department"],
                     row["email"],
                     row["phone_number"],
                 )
@@ -107,11 +107,12 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
                 """
                 SELECT
                     id,
+                    department,
                     first_name,
                     last_name,
                     birth_date,
-                    department,
-                    email, phone_number
+                    email,
+                    phone_number
                 FROM user_details
                 """
             )
@@ -120,10 +121,10 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
         for row in rows:
             yield UserDetails(
                 row["id"],
+                Department[row["department"]],
                 row["first_name"],
                 row["last_name"],
                 row["birth_date"],
-                row["department"],
                 row["email"],
                 row["phone_number"],
             )

@@ -8,7 +8,7 @@ from faker import Faker
 from intranet.core.document import Category, Document
 from intranet.core.news import News
 from intranet.core.user import User
-from intranet.core.user_details import UserDetails
+from intranet.core.user_details import Department, UserDetails
 
 
 @dataclass
@@ -48,7 +48,7 @@ class FakeUserDetails:
             first_name=self.fake.text(length=5),
             last_name=self.fake.text(length=10),
             birth_date=self.fake.text(length=10),
-            department=self.fake.text(length=10),
+            department=Department["it"],
             email=self.fake.text(length=5),
             phone_number=self.fake.text(length=5),
         )
