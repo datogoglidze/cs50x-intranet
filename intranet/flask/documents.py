@@ -44,7 +44,16 @@ def user_details_page(
         item for item in document_repository if item.user_id == session["user_id"]
     ]
 
-    return render_template("user_documents.html", documents=user_documents)
+    category_map = {
+        "paid_vacation": DocumentCategory.paid_vacation.value,
+        "unpaid_vacation": DocumentCategory.unpaid_vacation.value,
+    }
+
+    return render_template(
+        "user_documents.html",
+        documents=user_documents,
+        categories=category_map.items(),
+    )
 
 
 @documents.get("/documents/<filename>")
