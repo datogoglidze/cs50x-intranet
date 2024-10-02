@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from faker import Faker
 
-from intranet.core.document import Document
+from intranet.core.document import Category, Document
 from intranet.core.news import News
 from intranet.core.user import User
 from intranet.core.user_details import UserDetails
@@ -81,7 +81,7 @@ class FakeDocument:
             id=self.fake.text(length=5),
             user_id=self.fake.text(length=5),
             creation_date=self.fake.text(length=5),
-            category="paid_vacation",
+            category=Category["paid_vacation"],
             directory=self.fake.text(length=5),
             status="warning",
         )

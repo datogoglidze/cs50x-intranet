@@ -36,8 +36,9 @@ main %}
         <div class="col-md m-md-2 form-floating mb-3">
             <select class="form-select" id="floatingCategory" name="category" required>
                 <option value="" disabled selected></option>
-                <option value="paid_vacation">Paid Vacation</option>
-                <option value="unpaid_vacation">Unpaid Vacation</option>
+                {% for k, v in categories %}
+                    <option value="{{ k }}">{{ v }}</option>
+                {% endfor %}
             </select>
             <label for="floatingCategory">Category</label>
         </div>

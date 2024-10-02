@@ -22,9 +22,8 @@ from reportlab.pdfgen import canvas
 from werkzeug import Response
 
 from intranet.core.document import (
+    Category,
     Document,
-    DocumentCategory,
-    DocumentForm,
     DocumentRepository,
 )
 from intranet.core.user_details import UserDetailsRepository
@@ -32,6 +31,12 @@ from intranet.error import apology, login_required
 from intranet.flask.dependable import Container
 
 documents = Blueprint("documents", __name__, template_folder="../front/templates")
+
+
+@dataclass
+class DocumentForm:
+    dates: str
+    category: str
 
 
 @documents.get("/documents")
@@ -44,7 +49,16 @@ def user_details_page(
         item for item in document_repository if item.user_id == session["user_id"]
     ]
 
-    return render_template("user_documents.html", documents=user_documents)
+    category_map = {
+        "paid_vacation": Category.paid_vacation.value,
+        "unpaid_vacation": Category.unpaid_vacation.value,
+    }.items()
+
+    return render_template(
+        "user_documents.html",
+        documents=user_documents,
+        categories=category_map,
+    )
 
 
 @documents.get("/documents/<filename>")
@@ -81,7 +95,7 @@ def create_document(
         id=document_id,
         user_id=session["user_id"],
         creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
-        category=form.category,
+        category=Category[form.category],
         directory=f"/documents/{document_id}.pdf",
         status="warning",
     )
@@ -89,7 +103,7 @@ def create_document(
     (
         GenerateDocument()
         .with_id(document.id)
-        .with_form(DocumentCategory[form.category].name, form.dates)
+        .with_form(Category[form.category].name, form.dates)
         .with_name(user.first_name)
         .with_lastname(user.last_name)
         .with_layout(
