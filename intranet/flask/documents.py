@@ -23,7 +23,7 @@ from werkzeug import Response
 
 from intranet.core.document import (
     Document,
-    DocumentCategory,
+    Category,
     DocumentForm,
     DocumentRepository,
 )
@@ -45,8 +45,8 @@ def user_details_page(
     ]
 
     category_map = {
-        "paid_vacation": DocumentCategory.paid_vacation.value,
-        "unpaid_vacation": DocumentCategory.unpaid_vacation.value,
+        "paid_vacation": Category.paid_vacation.value,
+        "unpaid_vacation": Category.unpaid_vacation.value,
     }
 
     return render_template(
@@ -98,7 +98,7 @@ def create_document(
     (
         GenerateDocument()
         .with_id(document.id)
-        .with_form(DocumentCategory[form.category].name, form.dates)
+        .with_form(Category[form.category].name, form.dates)
         .with_name(user.first_name)
         .with_lastname(user.last_name)
         .with_layout(

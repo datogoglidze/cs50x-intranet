@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Iterator
 
-from intranet.core.document import Document, DocumentCategory, DocumentRepository
+from intranet.core.document import Document, Category, DocumentRepository
 from intranet.mssql.connector import MsSqlConnector
 
 
@@ -26,7 +26,7 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
                     document.id,
                     document.user_id,
                     document.creation_date,
-                    DocumentCategory[document.category].value,
+                    Category[document.category].value,
                     document.directory,
                     document.status,
                 ),
