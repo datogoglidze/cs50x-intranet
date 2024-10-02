@@ -49,10 +49,7 @@ def user_details_page(
         item for item in document_repository if item.user_id == session["user_id"]
     ]
 
-    category_map = {
-        "paid_vacation": Category.paid_vacation.value,
-        "unpaid_vacation": Category.unpaid_vacation.value,
-    }.items()
+    category_map = [(category.name, category.value) for category in Category]
 
     return render_template(
         "user_documents.html",
