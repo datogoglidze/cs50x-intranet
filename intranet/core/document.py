@@ -21,15 +21,9 @@ class Document:
     id: str
     user_id: str
     creation_date: str
-    category: str
+    category: Category
     directory: str
     status: str
-
-
-@dataclass
-class DocumentForm:
-    dates: str
-    category: str
 
 
 class Category(Enum):

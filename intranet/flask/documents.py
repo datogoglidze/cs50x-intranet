@@ -22,9 +22,8 @@ from reportlab.pdfgen import canvas
 from werkzeug import Response
 
 from intranet.core.document import (
-    Document,
     Category,
-    DocumentForm,
+    Document,
     DocumentRepository,
 )
 from intranet.core.user_details import UserDetailsRepository
@@ -32,6 +31,12 @@ from intranet.error import apology, login_required
 from intranet.flask.dependable import Container
 
 documents = Blueprint("documents", __name__, template_folder="../front/templates")
+
+
+@dataclass
+class DocumentForm:
+    dates: str
+    category: str
 
 
 @documents.get("/documents")
@@ -47,12 +52,12 @@ def user_details_page(
     category_map = {
         "paid_vacation": Category.paid_vacation.value,
         "unpaid_vacation": Category.unpaid_vacation.value,
-    }
+    }.items()
 
     return render_template(
         "user_documents.html",
         documents=user_documents,
-        categories=category_map.items(),
+        categories=category_map,
     )
 
 
@@ -90,7 +95,7 @@ def create_document(
         id=document_id,
         user_id=session["user_id"],
         creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
-        category=form.category,
+        category=Category[form.category],
         directory=f"/documents/{document_id}.pdf",
         status="warning",
     )
