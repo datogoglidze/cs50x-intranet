@@ -89,15 +89,12 @@ block main %}
                     <label for="dateInput">BirthDate</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input
-                        class="form-control"
-                        id="floatingDepartment"
-                        autocomplete="organization-title"
-                        type="text"
-                        name="department"
-                        placeholder="Department"
-                        required
-                    />
+                    <select class="form-select" id="floatingDepartment" name="department" required>
+                        <option value="" disabled selected></option>
+                        {% for k, v in departments %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
                     <label for="floatingDepartment">Department</label>
                 </div>
                 <div class="form-floating mb-3">
@@ -189,7 +186,9 @@ block main %}
                 </div>
                 <div
                     class="col-md-6 text-center text-md-start text-break text-muted">
+                    {% if user_details.department != "no_department" %}
                     {{ user_details.department }}
+                    {% endif %}
                 </div>
             </div>
             {% for link in user_links %}

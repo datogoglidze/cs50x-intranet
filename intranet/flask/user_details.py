@@ -2,7 +2,7 @@ from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, redirect, render_template, request, session
 from werkzeug import Response
 
-from intranet.core.user_details import UserDetails, UserDetailsRepository
+from intranet.core.user_details import Department, UserDetails, UserDetailsRepository
 from intranet.core.user_link import UserLinksRepository
 from intranet.error import login_required
 from intranet.flask.dependable import Container
@@ -20,10 +20,17 @@ def user_details_page(
     _user_details = details.read(session["user_id"])
     _user_links = [link for link in links if link.user_id == session["user_id"]]
 
+    department_map = [
+        (department.name, department.value)
+        for department in Department
+        if department.name != "no_department"
+    ]
+
     return render_template(
         "user_details.html",
         user_details=_user_details,
         user_links=_user_links,
+        departments=department_map,
     )
 
 
@@ -38,7 +45,7 @@ def create_user_details(
         first_name=request.form.get("first_name", ""),
         last_name=request.form.get("last_name", ""),
         birth_date=request.form.get("birth_date", ""),
-        department=request.form.get("department", ""),
+        department=Department[request.form.get("department", "")],
         email=request.form.get("email", ""),
         phone_number=request.form.get("phone_number", ""),
     )
