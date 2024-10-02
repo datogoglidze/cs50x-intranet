@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import Enum
 from typing import Iterator, Protocol
 
 
@@ -21,9 +22,19 @@ class UserDetailsRepository(Protocol):  # pragma: no cover
 @dataclass
 class UserDetails:
     id: str
+    department: Department
     first_name: str = ""
     last_name: str = ""
     birth_date: str = ""
-    department: str = ""
     email: str = ""
     phone_number: str = ""
+
+
+class Department(Enum):
+    no_department: str = "no_department"
+    it: str = "IT"
+    hr: str = "Human Resources"
+    support: str = "Customer Support"
+    finance: str = "Finance"
+    logistics: str = "Logistics"
+    project_manager: str = "Project Manager"
