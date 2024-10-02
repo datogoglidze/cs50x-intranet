@@ -123,20 +123,20 @@
                 <button
                     class="btn p-0 border-0 bg-transparent"
                     data-bs-toggle="modal"
-                    data-bs-target="#readModal">
+                    data-bs-target="#{{ news.id }}Modal">
                     <i class="bi bi-three-dots fs-5"></i> Read More
                 </button>
 
                 <div
                     class="modal fade"
-                    id="readModal"
+                    id="{{ news.id }}Modal"
                     tabindex="-1"
-                    aria-labelledby="readModalLabel"
+                    aria-labelledby="{{ news.id }}ModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="readModalLabel">{{ news.title }}</h1>
+                                <h1 class="modal-title fs-5" id="{{ news.id }}ModalLabel">{{ news.title }}</h1>
                                 <button
                                     type="button"
                                     class="btn-close"
