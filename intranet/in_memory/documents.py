@@ -23,5 +23,12 @@ class DocumentInMemoryRepository(DocumentRepository):  # pragma: no cover
     def read_all(self) -> list[Document]:
         return self.documents
 
+    def update(self, _id: str, new_status: str) -> None:
+        for document in self.documents:
+            if document.id == _id:
+                document.status = new_status
+                return
+        raise KeyError(f"Document with id '{_id}' not found.")
+
     def __iter__(self) -> Iterator[Document]:
         yield from self.documents

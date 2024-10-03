@@ -26,6 +26,7 @@ from intranet.core.document import (
     Document,
     DocumentRepository,
 )
+from intranet.core.user import UserRepository
 from intranet.core.user_details import UserDetailsRepository
 from intranet.error import apology, login_required
 from intranet.flask.dependable import Container
@@ -44,18 +45,44 @@ class DocumentForm:
 @login_required
 def user_details_page(
     document_repository: DocumentRepository = Provide[Container.document_repository],
+    users: UserRepository = Provide[Container.user_repository],
 ) -> str:
-    user_documents = [
-        item for item in document_repository if item.user_id == session["user_id"]
-    ]
+    is_admin = True if users.read(session["user_id"]).username == "admin" else False
 
     category_map = [(category.name, category.value) for category in Category]
+
+    user_documents = (
+        document_repository
+        if is_admin
+        else [
+            item for item in document_repository if item.user_id == session["user_id"]
+        ]
+    )
 
     return render_template(
         "user_documents.html",
         documents=user_documents,
         categories=category_map,
+        is_admin=is_admin,
     )
+
+
+@documents.post("/update_document")
+@inject
+@login_required
+def update_document(
+    document_repository: DocumentRepository = Provide[Container.document_repository],
+    users: UserRepository = Provide[Container.user_repository],
+) -> Response | tuple[str, int]:
+    is_admin = True if users.read(session["user_id"]).username == "admin" else False
+
+    if is_admin:
+        document_repository.update(
+            request.form.get("document_id", ""),
+            request.form.get("new_category", ""),
+        )
+
+    return redirect("/documents")
 
 
 @documents.get("/documents/<filename>")
