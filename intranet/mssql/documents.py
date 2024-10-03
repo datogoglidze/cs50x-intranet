@@ -65,6 +65,18 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
 
         raise KeyError(f"Document with id '{document_id}' not found.")
 
+    def update(self, _id: str, new_status: str) -> None:
+        with MsSqlConnector().connect() as connection:
+            cursor = connection.cursor()
+            cursor.execute(
+                """
+                UPDATE documents
+                SET status = %s
+                WHERE id = %s
+                """,
+                (new_status, _id),
+            )
+
     def __iter__(self) -> Iterator[Document]:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()

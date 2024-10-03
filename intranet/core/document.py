@@ -12,6 +12,9 @@ class DocumentRepository(Protocol):  # pragma: no cover
     def read(self, document_id: str) -> Document:
         pass
 
+    def update(self, document_id: str, new_status: str) -> None:
+        pass
+
     def __iter__(self) -> Iterator[Document]:
         pass
 

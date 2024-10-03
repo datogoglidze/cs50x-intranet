@@ -7,44 +7,46 @@ main %}
         border-radius: 10px;
     }
 
-    .btn {
+    .btn.create {
         font-size: 16px;
         letter-spacing: 2px;
         color: #ffffff;
         background: #00b4d8;
     }
 
-    .btn:hover {
+    .btn.create:hover {
         background: #0077b6;
         color: #fff;
     }
 </style>
 
-<div class="box position-relative mb-5 p-4">
-    <form class="row g-0" action="/documents" method="post">
-        <div class="col-md m-md-2 form-floating mb-3">
-            <input
-                class="form-control"
-                id="floatingDate"
-                autocomplete="off"
-                autofocus type="text"
-                name="dates"
-                placeholder="Dates"
-                required/>
-            <label for="floatingDate">Dates</label>
-        </div>
-        <div class="col-md m-md-2 form-floating mb-3">
-            <select class="form-select" id="floatingCategory" name="category" required>
-                <option value="" disabled selected></option>
-                {% for k, v in categories %}
-                    <option value="{{ k }}">{{ v }}</option>
-                {% endfor %}
-            </select>
-            <label for="floatingCategory">Category</label>
-        </div>
-        <button class="btn col-md m-md-2 mt-3 mb-2 p-2" type="submit">Create</button>
-    </form>
-</div>
+{% if is_admin != True %}
+    <div class="box position-relative mb-5 p-4">
+        <form class="row g-0" action="/documents" method="post">
+            <div class="col-md m-md-2 form-floating mb-3">
+                <input
+                    class="form-control"
+                    id="floatingDate"
+                    autocomplete="off"
+                    autofocus type="text"
+                    name="dates"
+                    placeholder="Dates"
+                    required/>
+                <label for="floatingDate">Dates</label>
+            </div>
+            <div class="col-md m-md-2 form-floating mb-3">
+                <select class="form-select" id="floatingCategory" name="category" required>
+                    <option value="" disabled selected></option>
+                    {% for k, v in categories %}
+                        <option value="{{ k }}">{{ v }}</option>
+                    {% endfor %}
+                </select>
+                <label for="floatingCategory">Category</label>
+            </div>
+            <button class="btn create col-md m-md-2 mt-3 mb-2 p-2" type="submit">Create</button>
+        </form>
+    </div>
+{% endif %}
 
 {% if documents %}
 <div class="box table-responsive position-relative p-4">
@@ -58,7 +60,12 @@ main %}
             <th scope="col">Creation Time</th>
             <th scope="col">Category</th>
             <th scope="col">File</th>
-            <th scope="col" class="px-3">Status</th>
+            {% if is_admin != True %}
+                <th scope="col" class="px-3">Status</th>
+            {% else %}
+                <th scope="col">Status</th>
+                <th scope="col" class="px-3">Action</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -75,7 +82,22 @@ main %}
                 ><i class="bi bi-link-45deg fs-5"></i></a
                 >
             </td>
-            <td class="px-3"><i class="bi bi-circle-fill text-warning"></i></td>
+            {% if is_admin != True %}
+                <td class="px-3"><i class="bi bi-circle-fill text-{{ document.status }}"></i></td>
+            {% else %}
+                <td><i class="bi bi-circle-fill text-{{ document.status }}"></i></td>
+                <td class="px-3">
+                    <form class="row g-0" action="/update_document" method="post">
+                        <input
+                            name="document_id"
+                            type="hidden"
+                            value="{{ document.id }}"
+                        />
+                        <button class="col-md m-2 btn btn-success" type="submit" name="new_category" value="success">Approve</button>
+                        <button class="col-md m-2 btn btn-danger" type="submit" name="new_category" value="danger">Reject</button>
+                    </form>
+                </td>
+            {% endif %}
         </tr>
         {% endfor %}
         </tbody>
