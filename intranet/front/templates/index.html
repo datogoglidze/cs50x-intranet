@@ -9,11 +9,11 @@
         border-radius: 10px;
         transition: box-shadow 0.3s ease-in-out;
     }
-    
+
     .card {
         width: auto;
     }
-    
+
     .card:hover {
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
     }
@@ -47,6 +47,7 @@
     }
 </style>
 
+{% if is_admin %}
 <div>
     <button
         type="button"
@@ -106,6 +107,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <div class="box table-responsive position-relative p-4 mb-5">
     {% if news %}
@@ -172,6 +174,8 @@
         {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <h5>News is empty</h5>
     {% endif %}
 </div>
 
