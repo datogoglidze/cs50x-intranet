@@ -2,10 +2,25 @@
 %}
 
 <style>
-    .box {
+    .box,
+    .card {
         background: #ffffff;
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+    
+    .card {
+        width: auto;
+    }
+    
+    .card:hover {
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .card:active {
+        transform: translate(.10rem, .25rem);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
     }
 
     .submit.btn,
@@ -92,7 +107,7 @@
     </div>
 </div>
 
-<div class="box table-responsive position-relative p-4">
+<div class="box table-responsive position-relative p-4 mb-5">
     {% if news %}
     <table
         class="table table-hover caption-top align-middle text-center"
@@ -160,5 +175,164 @@
     {% endif %}
 </div>
 
-
+<div class="pt-5">
+    <h3 class="mb-4">Workspace</h3>
+    <div class="row justify-content-between row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+        <a href="https://eservices.rs.ge/Login.aspx"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://netgazeti.ge/wp-content/uploads/2022/12/Untitled-design-39.jpg"
+                         class="card-img-top"
+                         alt="revenue service">
+                    <div class="card-body">
+                        <h6 class="card-title">Revenue Service</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://trello.com/home"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://i.ytimg.com/vi/FMETUJ7u3U4/maxresdefault.jpg"
+                         class="card-img-top"
+                         alt="trello">
+                    <div class="card-body">
+                        <h6 class="card-title">Trello</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://anydesk.com/en"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://i.ytimg.com/vi/uMw47hXl6i8/maxresdefault.jpg"
+                         class="card-img-top"
+                         alt="anydesk">
+                    <div class="card-body">
+                        <h6 class="card-title">Anydesk</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://slack.com/"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://i.ytimg.com/vi/ECl9xKInJ5o/maxresdefault.jpg"
+                         class="card-img-top"
+                         alt="slack">
+                    <div class="card-body">
+                        <h6 class="card-title">Slack Web</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://mail.google.com/"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://cdn.gtricks.com/2020/04/how-to-change-your-name-in-gmail-1280x720.jpg"
+                         class="card-img-top"
+                         alt="gmail">
+                    <div class="card-body">
+                        <h6 class="card-title">Gmail</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://meet.google.com/landing"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://sm.pcmag.com/pcmag_au/review/g/google-mee/google-meet_1rx2.jpg"
+                         class="card-img-top"
+                         alt="google meet">
+                    <div class="card-body">
+                        <h6 class="card-title">Google Meet</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://docs.google.com/document/"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img
+                        src="https://cdn.gtricks.com/2016/09/2-Simple-Ways-To-Add-Your-Signature-in-Google-Docs-1280x720.jpg"
+                        class="card-img-top"
+                        alt="google docs">
+                    <div class="card-body">
+                        <h6 class="card-title">Google Docs</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://docs.google.com/spreadsheets/"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://i.ytimg.com/vi/9AyoRkr4I3U/maxresdefault.jpg"
+                         class="card-img-top"
+                         alt="google sheets">
+                    <div class="card-body">
+                        <h6 class="card-title">Google Sheets</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://github.com/"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://miro.medium.com/v2/resize:fit:1400/1*Uij6PPEBlJXiR9nZelgInw.jpeg"
+                         class="card-img-top"
+                         alt="github">
+                    <div class="card-body">
+                        <h6 class="card-title">Github</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://aka.ms/ssmsfullsetup"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://i.ytimg.com/vi/s3Q107_6Ji8/maxresdefault.jpg"
+                         class="card-img-top"
+                         alt="mssql">
+                    <div class="card-body">
+                        <h6 class="card-title">MsSQL Management</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="https://www.jetbrains.com/ides/"
+           class="link-dark link-offset-3 link-underline-opacity-0"
+           target="_blank">
+            <div class="col">
+                <div class="card">
+                    <img src="https://resources.jetbrains.com/storage/products/ai/img/meta/preview.png"
+                         class="card-img-top"
+                         alt="jetbrains">
+                    <div class="card-body">
+                        <h6 class="card-title">Jetbrains</h6>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
 {% endblock %}
