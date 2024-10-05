@@ -32,4 +32,4 @@ class Document:
 class Category(Enum):
     paid_vacation: str = "Paid Vacation"
     unpaid_vacation: str = "Unpaid Vacation"
-    resign: str = "Resign"
+    resignation: str = "Resignation"
