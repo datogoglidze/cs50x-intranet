@@ -45,7 +45,7 @@
     .close.btn:hover {
         border-color: #151515;
     }
-    
+
     .btn.read-more:hover {
         color: #0077b6;
     }
@@ -147,7 +147,12 @@
             <th scope="col">Date</th>
             <th scope="col">Title</th>
             <th scope="col">Content</th>
+            {% if is_admin != True %}
             <th scope="col" class="px-3">Read More</th>
+            {% else %}
+            <th scope="col">Read More</th>
+            <th scope="col" class="px-3">Delete</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -163,6 +168,42 @@
                 {{ news.content }}
                 {% endif %}
             </th>
+            {% if is_admin != True %}
+            <th scope="row" class="fw-normal px-3">
+                <button
+                    class="btn read-more p-0 border-0 bg-transparent"
+                    data-bs-toggle="modal"
+                    data-bs-target="#{{ news.id }}Modal">
+                    <i class="bi bi-three-dots fs-5"></i> Read More
+                </button>
+
+                <div
+                    class="modal fade"
+                    id="{{ news.id }}Modal"
+                    tabindex="-1"
+                    aria-labelledby="{{ news.id }}ModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="{{ news.id }}ModalLabel">{{ news.title }}</h1>
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    {{ news.content }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+            {% else %}
             <th scope="row" class="fw-normal">
                 <button
                     class="btn read-more p-0 border-0 bg-transparent"
@@ -197,6 +238,20 @@
                     </div>
                 </div>
             </th>
+            <th scope="row" class="fw-normal px-3">
+                <form class="row g-0" action="/delete-news" method="post">
+                    <input
+                        name="news_id"
+                        type="hidden"
+                        value="{{ news.id }}"
+                    />
+                    <button class="btn btn-danger p-0 border-0" type="submit">
+                        Delete
+                    </button>
+                </form>
+            </th>
+            {% endif %}
+
         </tr>
         {% endfor %}
         </tbody>
