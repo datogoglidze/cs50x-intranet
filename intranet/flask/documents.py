@@ -68,7 +68,7 @@ def documents_page(
     )
 
 
-@documents.post("/update_document")
+@documents.post("/update-document")
 @inject
 @login_required
 def update_document(

@@ -11,7 +11,7 @@ from intranet.flask.dependable import Container
 user_links = Blueprint("user_links", __name__, template_folder="../front/templates")
 
 
-@user_links.post("/user_links")
+@user_links.post("/user-links")
 @inject
 @login_required
 def create_user_links(
