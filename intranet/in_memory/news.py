@@ -26,7 +26,7 @@ class NewsInMemoryRepository(NewsRepository):  # pragma: no cover
         return self.news
 
     def __iter__(self) -> Iterator[News]:
-        yield from self.news
+        yield from reversed(self.news)
 
     def delete(self, item_id: Any) -> None:
         for i, news in enumerate(self.news):
