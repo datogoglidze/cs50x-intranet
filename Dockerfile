@@ -6,7 +6,5 @@ COPY ./requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY intranet ./intranet
-COPY documents ./documents
-COPY document_templates ./document_templates
 
 CMD ["python", "-m", "intranet.runner", "--host", "0.0.0.0", "--port", "8001"]

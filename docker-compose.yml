@@ -7,6 +7,9 @@ services:
     ports:
       - "8001:8001"
     restart: unless-stopped
+    volumes:
+      - ./documents:/code/documents
+      - ./document_templates:/code/document_templates
     environment:
       DB_HOST: intranet-mssql
       DB_USER: sa
