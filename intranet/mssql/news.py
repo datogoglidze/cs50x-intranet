@@ -28,7 +28,7 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
 
             return news
 
-    def read(self, news_id: str) -> News:
+    def read(self, _id: str) -> News:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -41,7 +41,7 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 FROM news
                 WHERE id = %s
                 """,
-                (news_id,),
+                (_id,),
             )
             row = cursor.fetchone()
 
@@ -53,7 +53,7 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                     row["content"],
                 )
 
-        raise KeyError(f"News with id '{news_id}' not found.")
+        raise KeyError(f"News with id '{_id}' not found.")
 
     def __iter__(self) -> Iterator[News]:
         with MsSqlConnector().connect() as connection:
@@ -80,7 +80,7 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 content=row["content"],
             )
 
-    def delete(self, news_id: str) -> None:
+    def delete(self, _id: str) -> None:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -88,5 +88,5 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 DELETE FROM news
                 WHERE id = %s
                 """,
-                (news_id,),
+                (_id,),
             )

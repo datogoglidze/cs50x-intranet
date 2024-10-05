@@ -32,7 +32,7 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
 
             return document
 
-    def read(self, document_id: str) -> Document:
+    def read(self, _id: str) -> Document:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -47,7 +47,7 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
                 FROM documents
                 WHERE id = %s
                 """,
-                (document_id,),
+                (_id,),
             )
             row = cursor.fetchone()
 
@@ -61,7 +61,7 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
                     row["status"],
                 )
 
-        raise KeyError(f"Document with id '{document_id}' not found.")
+        raise KeyError(f"Document with id '{_id}' not found.")
 
     def update(self, _id: str, new_status: str) -> None:
         with MsSqlConnector().connect() as connection:

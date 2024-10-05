@@ -68,7 +68,7 @@ def test_should_not_add_without_user_details(app: FlaskClient) -> None:
     )
 
     assert response.status_code == 403
-    assert "must-fill-details" in response.get_data(as_text=True)
+    assert "must-fill-user-details" in response.get_data(as_text=True)
 
 
 @pytest.mark.skip(reason="Not testable right now")

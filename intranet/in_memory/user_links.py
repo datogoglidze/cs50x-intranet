@@ -22,7 +22,7 @@ class UserLinksInMemoryRepository(UserLinksRepository):  # pragma: no cover
 
     def delete(self, _id: str) -> None:
         for i, link in enumerate(self.user_links):
-            if link.id == str(_id):
+            if link.id == _id:
                 del self.user_links[i]
                 return
 

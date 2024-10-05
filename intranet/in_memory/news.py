@@ -28,13 +28,13 @@ class NewsInMemoryRepository(NewsRepository):  # pragma: no cover
     def __iter__(self) -> Iterator[News]:
         yield from reversed(self.news)
 
-    def delete(self, item_id: Any) -> None:
+    def delete(self, _id: str) -> None:
         for i, news in enumerate(self.news):
-            if news.id == str(item_id):
+            if news.id == _id:
                 del self.news[i]
                 return
 
-        raise DoesNotExistError(item_id)
+        raise DoesNotExistError(_id)
 
 
 @dataclass

@@ -86,19 +86,19 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
 
         raise KeyError(f"UserDetails with id '{_id}' not found.")
 
-    def delete(self, item_id: Any) -> None:
+    def delete(self, _id: Any) -> None:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
                 """
                 DELETE FROM user_details WHERE id = %s
                 """,
-                (item_id),
+                (_id),
             )
 
-    def update(self, item: UserDetails) -> None:
-        self.delete(item.id)
-        self.create(item)
+    def update(self, user_details: UserDetails) -> None:
+        self.delete(user_details.id)
+        self.create(user_details)
 
     def __iter__(self) -> Iterator[UserDetails]:
         with MsSqlConnector().connect() as connection:

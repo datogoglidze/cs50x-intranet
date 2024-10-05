@@ -33,17 +33,17 @@ class UsersDetailsInMemoryRepository(UserDetailsRepository):  # pragma: no cover
     def __iter__(self) -> Iterator[UserDetails]:
         yield from self.user_details
 
-    def delete(self, item_id: Any) -> None:
+    def delete(self, _id: Any) -> None:
         for i, user in enumerate(self.user_details):
-            if user.id == str(item_id):
+            if user.id == str(_id):
                 del self.user_details[i]
                 return
 
-        raise DoesNotExistError(item_id)
+        raise DoesNotExistError(_id)
 
-    def update(self, item: UserDetails) -> None:
-        self.delete(item.id)
-        self.create(item)
+    def update(self, user_details: UserDetails) -> None:
+        self.delete(user_details.id)
+        self.create(user_details)
 
 
 @dataclass
