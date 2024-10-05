@@ -15,6 +15,7 @@ services:
       DB_USER: sa
       DB_NAME: Intranet
       DB_PASSWORD: Pass12345
+      TZ: Asia/Tbilisi
     networks:
       - intranet
 
