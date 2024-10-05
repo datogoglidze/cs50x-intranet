@@ -62,7 +62,7 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 SELECT
                     id,
                     FORMAT(
-                        creation_date, 'yyyy/MM/dd, HH:mm'
+                        creation_date, 'yyyy/MM/dd'
                     ) AS formatted_creation_date,
                     title,
                     content,
