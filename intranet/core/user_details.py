@@ -23,11 +23,11 @@ class UserDetailsRepository(Protocol):  # pragma: no cover
 class UserDetails:
     id: str
     department: Department
-    first_name: str = ""
-    last_name: str = ""
-    birth_date: str = ""
-    email: str = ""
-    phone_number: str = ""
+    first_name: str
+    last_name: str
+    birth_date: str
+    email: str
+    phone_number: str
 
 
 class Department(Enum):

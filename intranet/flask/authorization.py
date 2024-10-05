@@ -101,7 +101,17 @@ def register(
     except ValueError:
         return apology("username already exists", 403)
 
-    details.create(UserDetails(id=user.id, department=Department["no_department"]))
+    details.create(
+        UserDetails(
+            id=user.id,
+            department=Department["no_department"],
+            first_name="",
+            last_name="",
+            birth_date="",
+            email="",
+            phone_number="",
+        )
+    )
 
     session.clear()
 
