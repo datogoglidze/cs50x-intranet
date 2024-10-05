@@ -7,7 +7,7 @@ from intranet.mssql.connector import MsSqlConnector
 
 @dataclass
 class UserLinksMssqlRepository(UserLinksRepository):  # pragma: no cover
-    def create(self, user_links: UserLink) -> UserLink:
+    def create(self, user_link: UserLink) -> UserLink:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -21,14 +21,14 @@ class UserLinksMssqlRepository(UserLinksRepository):  # pragma: no cover
                 VALUES (%s, %s, %s, %s)
                 """,
                 (
-                    user_links.id,
-                    user_links.user_id,
-                    user_links.name,
-                    user_links.link,
+                    user_link.id,
+                    user_link.user_id,
+                    user_link.name,
+                    user_link.link,
                 ),
             )
 
-            return user_links
+            return user_link
 
     def read(self, _id: str) -> UserLink:
         with MsSqlConnector().connect() as connection:

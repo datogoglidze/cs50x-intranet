@@ -15,7 +15,7 @@ user_details = Blueprint("user_details", __name__, template_folder="../front/tem
 @login_required
 def user_details_page(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
-    links: UserLinksRepository = Provide[Container.user_links_repository],
+    links: UserLinksRepository = Provide[Container.user_link_repository],
 ) -> str:
     _user_details = details.read(session["user_id"])
     _user_links = [link for link in links if link.user_id == session["user_id"]]

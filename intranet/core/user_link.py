@@ -5,7 +5,7 @@ from typing import Iterator, Protocol
 
 
 class UserLinksRepository(Protocol):  # pragma: no cover
-    def create(self, user_links: UserLink) -> UserLink:
+    def create(self, user_link: UserLink) -> UserLink:
         pass
 
     def read(self, user_id: str) -> UserLink:

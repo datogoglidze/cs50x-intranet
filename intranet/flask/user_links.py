@@ -14,8 +14,8 @@ user_links = Blueprint("user_links", __name__, template_folder="../front/templat
 @user_links.post("/user-links")
 @inject
 @login_required
-def create_user_links(
-    links: UserLinksRepository = Provide[Container.user_links_repository],
+def create_user_link(
+    links: UserLinksRepository = Provide[Container.user_link_repository],
 ) -> Response | tuple[str, int]:
     link = UserLink(
         id=str(uuid4()),
