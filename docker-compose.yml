@@ -1,0 +1,21 @@
+---
+services:
+  intranet:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    environment:
+      DB_HOST: intranet-mssql
+      DB_USER: sa
+      DB_NAME: Intranet
+      DB_PASSWORD: Pass12345
+    networks:
+      - intranet
+
+
+networks:
+  intranet:
+    external: true

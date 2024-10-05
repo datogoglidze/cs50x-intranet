@@ -32,3 +32,11 @@ run:
 #docker network create -d bridge intranet
 db:
 	docker run --network=intranet -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Pass12345" -p 1433:1433 --name intranet-mssql --hostname intranet-mssql -d mcr.microsoft.com/mssql/server:2022-latest
+
+up:
+	poetry export --without-hashes --format=requirements.txt > requirements.txt
+	docker compose up --build --detach
+	rm requirements.txt
+
+down:
+	docker compose down
