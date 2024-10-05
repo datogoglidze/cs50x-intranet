@@ -18,7 +18,7 @@ main %}
         background: #0077b6;
         color: #fff;
     }
-    
+
     .hidden {
         display: none;
     }
@@ -36,6 +36,26 @@ main %}
                 name="dates"
                 placeholder="Dates"/>
             <label for="floatingDate">Dates</label>
+        </div>
+        <div id="courseNameInputContainer" class="col-md m-md-2 form-floating mb-3 hidden">
+            <input
+                class="form-control"
+                id="floatingCourseName"
+                autocomplete="off"
+                autofocus type="text"
+                name="course_name"
+                placeholder="Course Name"/>
+            <label for="floatingCourseName">Course Name</label>
+        </div>
+        <div id="coursePriceInputContainer" class="col-md m-md-2 form-floating mb-3 hidden">
+            <input
+                class="form-control"
+                id="floatingCoursePrice"
+                autocomplete="off"
+                autofocus type="text"
+                name="course_price"
+                placeholder="Course Price"/>
+            <label for="floatingCoursePrice">Course Price</label>
         </div>
         <div class="col-md m-md-2 form-floating mb-3">
             <select class="form-select" id="floatingCategory" name="category" required>
@@ -112,22 +132,38 @@ main %}
 {% endif %}
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const categorySelect = document.getElementById('floatingCategory');
-    const dateInputContainer = document.getElementById('dateInputContainer');
-    const dateInput = document.getElementById('floatingDate');
+    document.addEventListener('DOMContentLoaded', function () {
+        const categorySelect = document.getElementById('floatingCategory');
+        const dateInputContainer = document.getElementById('dateInputContainer');
+        const dateInput = document.getElementById('floatingDate');
+        const courseNameInputContainer = document.getElementById('courseNameInputContainer');
+        const courseNameInput = document.getElementById('floatingCourseName');
+        const coursePriceInputContainer = document.getElementById('coursePriceInputContainer');
+        const coursePriceInput = document.getElementById('floatingCoursePrice');
 
-    categorySelect.addEventListener('change', function() {
-        if (this.value === 'resignation') {
+        categorySelect.addEventListener('change', function () {
             dateInputContainer.classList.add('hidden');
-            dateInput.value = '';
+            courseNameInputContainer.classList.add('hidden');
+            coursePriceInputContainer.classList.add('hidden');
             dateInput.removeAttribute('required');
-        } else {
-            dateInputContainer.classList.remove('hidden');
-            dateInput.setAttribute('required', '');
-        }
+            courseNameInput.removeAttribute('required');
+            coursePriceInput.removeAttribute('required');
+            dateInput.value = '';
+            courseNameInput.value = '';
+            coursePriceInput.value = '';
+
+            if (this.value === 'resignation') {
+            } else if (this.value === 'development') {
+                courseNameInputContainer.classList.remove('hidden');
+                coursePriceInputContainer.classList.remove('hidden');
+                courseNameInput.setAttribute('required', '');
+                coursePriceInput.setAttribute('required', '');
+            } else {
+                dateInputContainer.classList.remove('hidden');
+                dateInput.setAttribute('required', '');
+            }
+        });
     });
-});
 </script>
 
 {% endblock %}
