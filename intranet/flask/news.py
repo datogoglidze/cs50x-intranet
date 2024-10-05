@@ -1,4 +1,3 @@
-import datetime
 from math import ceil
 from uuid import uuid4
 
@@ -52,7 +51,6 @@ def create_news(
 ) -> Response | tuple[str, int]:
     _news = News(
         id=str(uuid4()),
-        creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
         title=request.form.get("title", ""),
         content=request.form.get("content", ""),
     )

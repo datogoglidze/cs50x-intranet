@@ -1,3 +1,4 @@
+import datetime
 from dataclasses import dataclass, field
 from typing import Any, Iterator
 
@@ -9,6 +10,7 @@ class NewsInMemoryRepository(NewsRepository):  # pragma: no cover
     news: list[News] = field(default_factory=list)
 
     def create(self, news: News) -> News:
+        news.creation_date = datetime.datetime.now().strftime("%Y/%m/%d, %H:%M")
         self.news.append(news)
 
         return news

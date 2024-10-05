@@ -14,15 +14,13 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 """
                 INSERT INTO news (
                     id,
-                    creation_date,
                     title,
                     content
                 )
-                VALUES (%s, %s, %s, %s)
+                VALUES (%s, %s, %s)
                 """,
                 (
                     news.id,
-                    news.creation_date,
                     news.title,
                     news.content,
                 ),
@@ -63,9 +61,12 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
             cursor.execute("""
                 SELECT
                     id,
-                    creation_date,
+                    FORMAT(
+                        creation_date, 'yyyy/MM/dd, HH:mm'
+                    ) AS formatted_creation_date,
                     title,
-                    content
+                    content,
+                    creation_date
                 FROM news
                 ORDER BY creation_date DESC
             """)
@@ -73,10 +74,10 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
 
         for row in rows:
             yield News(
-                row["id"],
-                row["creation_date"],
-                row["title"],
-                row["content"],
+                id=row["id"],
+                creation_date=row["formatted_creation_date"],
+                title=row["title"],
+                content=row["content"],
             )
 
     def delete(self, news_id: str) -> None:
