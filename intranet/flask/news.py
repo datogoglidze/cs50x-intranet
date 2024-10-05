@@ -60,3 +60,18 @@ def create_news(
     news_repository.create(_news)
 
     return redirect("/")
+
+
+@news.post("/delete-news")
+@inject
+@login_required
+def delete_news(
+    news_repository: NewsRepository = Provide[Container.news_repository],
+    users: UserRepository = Provide[Container.user_repository],
+) -> Response | tuple[str, int]:
+    is_admin = True if users.read(session["user_id"]).username == "admin" else False
+
+    if is_admin:
+        news_repository.delete(request.form.get("news_id", ""))
+
+    return redirect("/")

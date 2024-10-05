@@ -11,6 +11,9 @@ class NewsRepository(Protocol):  # pragma: no cover
     def read(self, news_id: str) -> News:
         pass
 
+    def delete(self, news_id: str) -> None:
+        pass
+
     def __iter__(self) -> Iterator[News]:
         pass
 
