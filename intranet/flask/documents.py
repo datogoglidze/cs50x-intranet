@@ -38,6 +38,8 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 @dataclass
 class DocumentForm:
     dates: str
+    course_name: str
+    course_price: str
     category: str
 
 
@@ -103,6 +105,8 @@ def create_document(
 
     form = DocumentForm(
         dates=request.form.get("dates", ""),
+        course_name=request.form.get("course_name", ""),
+        course_price=request.form.get("course_price", ""),
         category=request.form.get("category", ""),
     )
 
@@ -125,7 +129,12 @@ def create_document(
     (
         GenerateDocument()
         .with_id(document.id)
-        .with_form(Category[form.category].name, form.dates)
+        .with_form(
+            Category[form.category].name,
+            form.dates,
+            form.course_name,
+            form.course_price,
+        )
         .with_name(user.first_name)
         .with_lastname(user.last_name)
         .with_layout(
@@ -158,8 +167,14 @@ class GenerateDocument:
 
         return self
 
-    def with_form(self, category: str, dates: str) -> GenerateDocument:
-        self.body = self.body_using(category, dates)
+    def with_form(
+        self,
+        category: str,
+        dates: str,
+        course_name: str,
+        course_price: str,
+    ) -> GenerateDocument:
+        self.body = self.body_using(category, dates, course_name, course_price)
 
         return self
 
@@ -180,10 +195,20 @@ class GenerateDocument:
             "!<<LAST_NAME>>", self.last_name
         )
 
-    def body_using(self, category: str, dates: str) -> str:
+    def body_using(
+        self,
+        category: str,
+        dates: str,
+        course_name: str,
+        course_price: str,
+    ) -> str:
         body_template = self.read_template(f"document_templates/{category}_body.txt")
 
-        return body_template.replace("!<<DATE>>", dates)
+        return (
+            body_template.replace("!<<DATE>>", dates)
+            .replace("!<<COURSE_NAME>>", course_name)
+            .replace("!<<COURSE_PRICE>>", course_price)
+        )
 
     def footer(self) -> str:
         return self.read_template("document_templates/foot.txt")
