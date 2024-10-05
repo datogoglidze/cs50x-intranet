@@ -109,9 +109,6 @@ def create_document(
     if not user.first_name or not user.last_name:
         return apology("must fill details", 403)
 
-    if not form.dates:
-        return apology("must specify date", 403)
-
     if not form.category:
         return apology("must choose category", 403)
 

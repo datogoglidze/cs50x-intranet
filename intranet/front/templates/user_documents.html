@@ -108,4 +108,22 @@ main %}
 </div>
 {% endif %}
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('floatingCategory');
+    const dateInput = document.getElementById('floatingDate');
+
+    categorySelect.addEventListener('change', function() {
+        if (this.value === 'resign') {
+            dateInput.disabled = true;
+            dateInput.value = '';
+            dateInput.removeAttribute('required');
+        } else {
+            dateInput.disabled = false;
+            dateInput.setAttribute('required', '');
+        }
+    });
+});
+</script>
+
 {% endblock %}
