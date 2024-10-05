@@ -22,6 +22,17 @@ main %}
     .hidden {
         display: none;
     }
+
+    /*https://www.w3schools.com/howto/howto_css_hide_arrow_number.asp*/
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
 </style>
 
 {% if is_admin != True %}
@@ -32,7 +43,8 @@ main %}
                 class="form-control"
                 id="floatingDate"
                 autocomplete="off"
-                autofocus type="text"
+                autofocus
+                type="text"
                 name="dates"
                 placeholder="Dates"/>
             <label for="floatingDate">Dates</label>
@@ -42,7 +54,8 @@ main %}
                 class="form-control"
                 id="floatingCourseName"
                 autocomplete="off"
-                autofocus type="text"
+                autofocus
+                type="text"
                 name="course_name"
                 placeholder="Course Name"/>
             <label for="floatingCourseName">Course Name</label>
@@ -52,7 +65,9 @@ main %}
                 class="form-control"
                 id="floatingCoursePrice"
                 autocomplete="off"
-                autofocus type="text"
+                autofocus
+                type="number"
+                step="0.01"
                 name="course_price"
                 placeholder="Course Price"/>
             <label for="floatingCoursePrice">Course Price</label>
