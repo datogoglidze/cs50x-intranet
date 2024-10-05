@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, redirect, render_template, request, session, url_for
 from werkzeug import Response
@@ -35,6 +37,7 @@ def login(
     session.clear()
 
     user = User(
+        id=str(uuid4()),
         username=request.form.get("username", "").lower(),
         password=request.form.get("password", ""),
     )
@@ -73,6 +76,7 @@ def register(
     session.clear()
 
     user = User(
+        id=str(uuid4()),
         username=request.form.get("username", "").lower(),
         password=request.form.get("password", ""),
     )
