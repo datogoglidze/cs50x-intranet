@@ -18,20 +18,23 @@ main %}
         background: #0077b6;
         color: #fff;
     }
+    
+    .hidden {
+        display: none;
+    }
 </style>
 
 {% if is_admin != True %}
 <div class="box position-relative mb-5 p-4">
     <form class="row g-0" action="/documents" method="post">
-        <div class="col-md m-md-2 form-floating mb-3">
+        <div id="dateInputContainer" class="col-md m-md-2 form-floating mb-3 hidden">
             <input
                 class="form-control"
                 id="floatingDate"
                 autocomplete="off"
                 autofocus type="text"
                 name="dates"
-                placeholder="Dates"
-                required/>
+                placeholder="Dates"/>
             <label for="floatingDate">Dates</label>
         </div>
         <div class="col-md m-md-2 form-floating mb-3">
@@ -111,15 +114,16 @@ main %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const categorySelect = document.getElementById('floatingCategory');
+    const dateInputContainer = document.getElementById('dateInputContainer');
     const dateInput = document.getElementById('floatingDate');
 
     categorySelect.addEventListener('change', function() {
         if (this.value === 'resignation') {
-            dateInput.disabled = true;
+            dateInputContainer.classList.add('hidden');
             dateInput.value = '';
             dateInput.removeAttribute('required');
         } else {
-            dateInput.disabled = false;
+            dateInputContainer.classList.remove('hidden');
             dateInput.setAttribute('required', '');
         }
     });
