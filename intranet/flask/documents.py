@@ -110,10 +110,7 @@ def create_document(
     )
 
     if not user.first_name or not user.last_name:
-        return apology("must fill details", 403)
-
-    if not form.category:
-        return apology("must choose category", 403)
+        return apology("must fill user details", 403)
 
     document_id = str(uuid4())
     document = Document(

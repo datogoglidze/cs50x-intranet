@@ -42,12 +42,6 @@ def login(
         password=request.form.get("password", ""),
     )
 
-    if not user.username:
-        return apology("must provide username", 403)
-
-    if not user.password:
-        return apology("must provide password", 403)
-
     for existing in users:
         if user.username == existing.username and check_password_hash(
             existing.password, user.password
@@ -80,12 +74,6 @@ def register(
         username=request.form.get("username", "").lower(),
         password=request.form.get("password", ""),
     )
-
-    if not user.username:
-        return apology("must provide username", 403)
-
-    if not user.password:
-        return apology("must provide password", 403)
 
     if user.password != request.form.get("confirmation", ""):
         return apology("password didn't match", 403)
