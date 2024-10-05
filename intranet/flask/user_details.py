@@ -1,5 +1,5 @@
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, redirect, render_template, request, session
+from flask import Blueprint, redirect, render_template, request, session, url_for
 from werkzeug import Response
 
 from intranet.core.user_details import Department, UserDetails, UserDetailsRepository
@@ -52,4 +52,4 @@ def create_user_details(
 
     details.update(_details)
 
-    return redirect("/user-details")
+    return redirect(url_for("user_details.user_details_page"))

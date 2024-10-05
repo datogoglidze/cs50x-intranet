@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, redirect, request, session
+from flask import Blueprint, redirect, request, session, url_for
 from werkzeug import Response
 
 from intranet.core.user_link import UserLink, UserLinksRepository
@@ -26,4 +26,4 @@ def create_user_links(
 
     links.create(link)
 
-    return redirect("/user-details")
+    return redirect(url_for("user_details.user_details_page"))

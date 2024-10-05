@@ -1,5 +1,5 @@
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, redirect, render_template, request, session
+from flask import Blueprint, redirect, render_template, request, session, url_for
 from werkzeug import Response
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -52,7 +52,7 @@ def login(
             session["user_id"] = existing.id
             session["username"] = existing.username
 
-            return redirect("/")
+            return redirect(url_for("news.read_news"))
 
     return apology("invalid username and/or password", 403)
 
@@ -61,7 +61,7 @@ def login(
 def logout() -> Response:
     session.clear()
 
-    return redirect("/")
+    return redirect(url_for("authorization.login_page"))
 
 
 @authorization.post("/register")
@@ -105,4 +105,4 @@ def register(
 
     session.clear()
 
-    return redirect("/login")
+    return redirect(url_for("authorization.login_page"))

@@ -13,6 +13,7 @@ from flask import (
     request,
     send_from_directory,
     session,
+    url_for,
 )
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
@@ -43,7 +44,7 @@ class DocumentForm:
 @documents.get("/documents")
 @inject
 @login_required
-def user_details_page(
+def documents_page(
     document_repository: DocumentRepository = Provide[Container.document_repository],
     users: UserRepository = Provide[Container.user_repository],
 ) -> str:
@@ -82,7 +83,7 @@ def update_document(
             request.form.get("new_category", ""),
         )
 
-    return redirect("/documents")
+    return redirect(url_for("documents.documents_page"))
 
 
 @documents.get("/documents/<filename>")
@@ -140,7 +141,7 @@ def create_document(
 
     document_repository.create(document)
 
-    return redirect("/documents")
+    return redirect(url_for("documents.documents_page"))
 
 
 @dataclass
