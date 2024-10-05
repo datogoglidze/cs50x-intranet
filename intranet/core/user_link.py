@@ -11,6 +11,9 @@ class UserLinksRepository(Protocol):  # pragma: no cover
     def read(self, user_id: str) -> UserLink:
         pass
 
+    def delete(self, link_id: str) -> None:
+        pass
+
     def __iter__(self) -> Iterator[UserLink]:
         pass
 

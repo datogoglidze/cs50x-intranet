@@ -57,6 +57,17 @@ class UserLinksMssqlRepository(UserLinksRepository):  # pragma: no cover
 
         raise KeyError(f"User Link with id '{_id}' not found.")
 
+    def delete(self, _id: str) -> None:
+        with MsSqlConnector().connect() as connection:
+            cursor = connection.cursor()
+            cursor.execute(
+                """
+                DELETE FROM user_links
+                WHERE id = %s
+                """,
+                (_id,),
+            )
+
     def __iter__(self) -> Iterator[UserLink]:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()

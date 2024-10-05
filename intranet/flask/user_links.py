@@ -27,3 +27,14 @@ def create_user_link(
     links.create(link)
 
     return redirect(url_for("user_details.user_details_page"))
+
+
+@user_links.post("/delete-link")
+@inject
+@login_required
+def delete_user_link(
+    links: UserLinksRepository = Provide[Container.user_link_repository],
+) -> Response | tuple[str, int]:
+    links.delete(request.form.get("link_id", ""))
+
+    return redirect(url_for("user_details.user_details_page"))
