@@ -18,6 +18,6 @@ class UserLinksRepository(Protocol):  # pragma: no cover
 @dataclass
 class UserLink:
     id: str
-    user_id: str = ""
-    name: str = ""
-    link: str = ""
+    user_id: str
+    name: str
+    link: str
