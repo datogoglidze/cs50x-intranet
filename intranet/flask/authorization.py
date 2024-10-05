@@ -35,7 +35,7 @@ def login(
     session.clear()
 
     user = User(
-        username=request.form.get("username", ""),
+        username=request.form.get("username", "").lower(),
         password=request.form.get("password", ""),
     )
 
@@ -73,7 +73,7 @@ def register(
     session.clear()
 
     user = User(
-        username=request.form.get("username", ""),
+        username=request.form.get("username", "").lower(),
         password=request.form.get("password", ""),
     )
 
