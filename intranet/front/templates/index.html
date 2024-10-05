@@ -45,6 +45,31 @@
     .close.btn:hover {
         border-color: #151515;
     }
+
+    /*https://stackoverflow.com/a/51914010*/
+    .pagination > li > a {
+        background-color: #fff;
+        color: #00b4d8;
+    }
+
+    .pagination > li > a:focus,
+    .pagination > li > a:hover,
+    .pagination > li > span:focus,
+    .pagination > li > span:hover {
+        color: #fff;
+        background-color: #0077b6;
+    }
+
+    .pagination > .active > a {
+        color: #fff;
+        background-color: #00b4d8 !Important;
+        border: solid 1px #00b4d8 !Important;
+    }
+
+    .pagination > .active > a:hover {
+        background-color: #00b4d8 !Important;
+        border: solid 1px #00b4d8;
+    }
 </style>
 
 {% if is_admin %}
@@ -111,11 +136,9 @@
 
 <div class="box table-responsive position-relative p-4 mb-5">
     {% if news %}
-    <table
-        class="table table-hover caption-top align-middle text-center"
-    >
-        <caption class="fw-bold">Current News</caption>
-        <thead class="table-dark align-middle">
+    <table class="table table-hover caption-top align-middle text-center">
+        <caption class="fw-bold">Current News (Page {{ page }} of {{ total_pages }})</caption>
+        <thead class="table-info align-middle">
         <tr>
             <th scope="col">Date</th>
             <th scope="col">Title</th>
@@ -174,6 +197,45 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <!--  Thanks to https://claude.ai/  -->
+    {% if total_pages > 1 %}
+    <nav aria-label="News pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{{ url_for('news.read_news', page=page-1) if page > 1 else '#' }}"
+                   {% if page== 1 %}
+                   tabindex="-1"
+                   aria-disabled="true"
+                   {% endif %}>
+                    Previous
+                </a>
+            </li>
+            {% for i in range(1, total_pages + 1) %}
+            <li class="page-item {% if i == page %}active{% endif %}"
+                {% if i== page %}
+                aria-current="page"
+                {% endif %}>
+                <a class="page-link"
+                   href="{{ url_for('news.read_news', page=i) }}">
+                    {{ i }}
+                </a>
+            </li>
+            {% endfor %}
+            <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{{ url_for('news.read_news', page=page+1) if page < total_pages else '#' }}"
+                   {% if page== total_pages %}
+                   tabindex="-1"
+                   aria-disabled="true"
+                   {% endif %}>
+                    Next
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
     {% else %}
     <h5>News is empty</h5>
     {% endif %}
