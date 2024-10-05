@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 from dataclasses import dataclass
 from io import BytesIO
 from uuid import uuid4
@@ -120,7 +119,6 @@ def create_document(
     document = Document(
         id=document_id,
         user_id=session["user_id"],
-        creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
         category=Category[form.category],
         directory=f"/documents/{document_id}.pdf",
         status="warning",

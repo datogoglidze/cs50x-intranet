@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Iterator, Protocol
 
@@ -23,10 +23,11 @@ class DocumentRepository(Protocol):  # pragma: no cover
 class Document:
     id: str
     user_id: str
-    creation_date: str
     category: Category
     directory: str
     status: str
+
+    creation_date: str | None = field(default_factory=lambda: None)
 
 
 class Category(Enum):

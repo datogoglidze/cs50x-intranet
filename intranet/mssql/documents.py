@@ -15,17 +15,15 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
                 INSERT INTO documents (
                     id,
                     user_id,
-                    creation_date,
                     category,
                     directory,
                     status
                 )
-                VALUES (%s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s)
                 """,
                 (
                     document.id,
                     document.user_id,
-                    document.creation_date,
                     document.category.value,
                     document.directory,
                     document.status,
@@ -84,10 +82,13 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
                 SELECT
                     id,
                     user_id,
-                    creation_date,
+                    FORMAT(
+                        creation_date, 'yyyy/MM/dd, HH:mm'
+                    ) AS formatted_creation_date,
                     category,
                     directory,
-                    status
+                    status,
+                    creation_date
                 FROM documents
                 ORDER BY creation_date DESC
             """)
@@ -95,10 +96,10 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
 
         for row in rows:
             yield Document(
-                row["id"],
-                row["user_id"],
-                row["creation_date"],
-                row["category"],
-                row["directory"],
-                row["status"],
+                id=row["id"],
+                user_id=row["user_id"],
+                creation_date=row["formatted_creation_date"],
+                category=row["category"],
+                directory=row["directory"],
+                status=row["status"],
             )
