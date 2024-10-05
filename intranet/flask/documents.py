@@ -211,7 +211,11 @@ class GenerateDocument:
         )
 
     def footer(self) -> str:
-        return self.read_template("document_templates/foot.txt")
+        footer = self.read_template("document_templates/foot.txt")
+
+        return footer.replace("!<<FIRST_NAME>>", self.first_name).replace(
+            "!<<LAST_NAME>>", self.last_name
+        )
 
     def with_layout(
         self,
