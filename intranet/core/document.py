@@ -30,7 +30,7 @@ class Document:
 
 
 class Category(Enum):
-    paid_vacation: str = "Paid Vacation"
-    unpaid_vacation: str = "Unpaid Vacation"
-    paid_maternity: str = "Paid Maternity Leave"
+    paid_vacation: str = "Vacation (Paid)"
+    unpaid_vacation: str = "Vacation (Unpaid)"
+    paid_maternity: str = "Maternity Leave (Paid)"
     resignation: str = "Resignation"
