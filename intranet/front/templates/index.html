@@ -45,6 +45,10 @@
     .close.btn:hover {
         border-color: #151515;
     }
+    
+    .btn.read-more:hover {
+        color: #0077b6;
+    }
 
     /*https://stackoverflow.com/a/51914010*/
     .pagination > li > a {
@@ -161,7 +165,7 @@
             </th>
             <th scope="row" class="fw-normal">
                 <button
-                    class="btn p-0 border-0 bg-transparent"
+                    class="btn read-more p-0 border-0 bg-transparent"
                     data-bs-toggle="modal"
                     data-bs-target="#{{ news.id }}Modal">
                     <i class="bi bi-three-dots fs-5"></i> Read More
