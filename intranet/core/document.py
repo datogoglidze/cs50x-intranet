@@ -33,3 +33,4 @@ class Category(Enum):
     paid_vacation: str = "Paid Vacation"
     unpaid_vacation: str = "Unpaid Vacation"
     resignation: str = "Resignation"
+    paid_maternity: str = "Paid Maternity Leave"
