@@ -1,4 +1,5 @@
 import datetime
+from math import ceil
 from uuid import uuid4
 
 from dependency_injector.wiring import Provide, inject
@@ -21,12 +22,25 @@ def read_news(
     users: UserRepository = Provide[Container.user_repository],
 ) -> str:
     is_admin = True if users.read(session["user_id"]).username == "admin" else False
-    news_items = [item for item in news_repository]
+
+    page = request.args.get("page", 1, type=int)
+    news_per_page = 10
+
+    all_news = [item for item in news_repository]
+    total_news = len(all_news)
+    total_pages = ceil(total_news / news_per_page)
+
+    start = (page - 1) * news_per_page
+    end = start + news_per_page
+    news_items = all_news[start:end]
 
     return render_template(
         "index.html",
-        news=news_items,
         is_admin=is_admin,
+        news=news_items,
+        page=page,
+        total_pages=total_pages,
+        total_news=total_news,
     )
 
 
