@@ -38,6 +38,7 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 @dataclass
 class DocumentForm:
     dates: str
+    dates_select: str
     course_name: str
     course_price: str
     category: str
@@ -105,6 +106,7 @@ def create_document(
 
     form = DocumentForm(
         dates=request.form.get("dates", ""),
+        dates_select=request.form.get("dates_select", ""),
         course_name=request.form.get("course_name", ""),
         course_price=request.form.get("course_price", ""),
         category=request.form.get("category", ""),
@@ -128,6 +130,7 @@ def create_document(
         .with_form(
             Category[form.category].name,
             form.dates,
+            form.dates_select,
             form.course_name,
             form.course_price,
         )
@@ -168,10 +171,17 @@ class GenerateDocument:
         self,
         category: str,
         dates: str,
+        dates_select: str,
         course_name: str,
         course_price: str,
     ) -> GenerateDocument:
-        self.body = self.body_using(category, dates, course_name, course_price)
+        self.body = self.body_using(
+            category,
+            dates,
+            dates_select,
+            course_name,
+            course_price,
+        )
 
         return self
 
@@ -196,6 +206,7 @@ class GenerateDocument:
         self,
         category: str,
         dates: str,
+        dates_select: str,
         course_name: str,
         course_price: str,
     ) -> str:
@@ -205,6 +216,7 @@ class GenerateDocument:
 
         return (
             body_template.replace("!<<DATE>>", dates)
+            .replace("!<<DATE_SELECT>>", dates_select)
             .replace("!<<COURSE_NAME>>", course_name)
             .replace("!<<COURSE_PRICE>>", course_price)
         )
