@@ -28,33 +28,6 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
 
             return news
 
-    def read(self, _id: str) -> News:
-        with MsSqlConnector().connect() as connection:
-            cursor = connection.cursor()
-            cursor.execute(
-                """
-                SELECT
-                    id,
-                    creation_date,
-                    title,
-                    content
-                FROM news
-                WHERE id = %s
-                """,
-                (_id,),
-            )
-            row = cursor.fetchone()
-
-            if row is not None:
-                return News(
-                    row["id"],
-                    row["creation_date"],
-                    row["title"],
-                    row["content"],
-                )
-
-        raise KeyError(f"News with id '{_id}' not found.")
-
     def __iter__(self) -> Iterator[News]:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()

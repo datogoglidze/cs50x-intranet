@@ -32,37 +32,6 @@ class DocumentMssqlRepository(DocumentRepository):  # pragma: no cover
 
             return document
 
-    def read(self, _id: str) -> Document:
-        with MsSqlConnector().connect() as connection:
-            cursor = connection.cursor()
-            cursor.execute(
-                """
-                SELECT
-                    id,
-                    user_id,
-                    creation_date,
-                    category,
-                    directory,
-                    status
-                FROM documents
-                WHERE id = %s
-                """,
-                (_id,),
-            )
-            row = cursor.fetchone()
-
-            if row is not None:
-                return Document(
-                    row["id"],
-                    row["user_id"],
-                    row["creation_date"],
-                    row["category"],
-                    row["directory"],
-                    row["status"],
-                )
-
-        raise KeyError(f"Document with id '{_id}' not found.")
-
     def update(self, _id: str, new_status: str) -> None:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()

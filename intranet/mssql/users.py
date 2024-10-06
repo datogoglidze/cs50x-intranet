@@ -65,9 +65,9 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
 
             if row is not None:
                 return User(
-                    row["id"],
-                    row["username"],
-                    row["password"],
+                    id=row["id"],
+                    username=row["username"],
+                    password=row["password"],
                 )
 
         raise KeyError(f"User with id '{_id}' not found.")
@@ -86,7 +86,7 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
 
         for row in rows:
             yield User(
-                row["id"],
-                row["username"],
-                row["password"],
+                id=row["id"],
+                username=row["username"],
+                password=row["password"],
             )

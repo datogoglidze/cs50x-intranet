@@ -75,13 +75,13 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
 
             if row is not None:
                 return UserDetails(
-                    row["id"],
-                    row["department"],
-                    row["first_name"],
-                    row["last_name"],
-                    row["birth_date"],
-                    row["email"],
-                    row["phone_number"],
+                    id=row["id"],
+                    department=row["department"],
+                    first_name=row["first_name"],
+                    last_name=row["last_name"],
+                    birth_date=row["birth_date"],
+                    email=row["email"],
+                    phone_number=row["phone_number"],
                 )
 
         raise KeyError(f"UserDetails with id '{_id}' not found.")
@@ -120,11 +120,11 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
 
         for row in rows:
             yield UserDetails(
-                row["id"],
-                Department[row["department"]],
-                row["first_name"],
-                row["last_name"],
-                row["birth_date"],
-                row["email"],
-                row["phone_number"],
+                id=row["id"],
+                department=Department[row["department"]],
+                first_name=row["first_name"],
+                last_name=row["last_name"],
+                birth_date=row["birth_date"],
+                email=row["email"],
+                phone_number=row["phone_number"],
             )

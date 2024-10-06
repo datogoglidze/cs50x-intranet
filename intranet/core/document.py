@@ -9,9 +9,6 @@ class DocumentRepository(Protocol):  # pragma: no cover
     def create(self, document: Document) -> Document:
         pass
 
-    def read(self, document_id: str) -> Document:
-        pass
-
     def update(self, document_id: str, new_status: str) -> None:
         pass
 

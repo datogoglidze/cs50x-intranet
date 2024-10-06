@@ -8,9 +8,6 @@ class UserLinksRepository(Protocol):  # pragma: no cover
     def create(self, user_link: UserLink) -> UserLink:
         pass
 
-    def read(self, link_id: str) -> UserLink:
-        pass
-
     def delete(self, link_id: str) -> None:
         pass
 

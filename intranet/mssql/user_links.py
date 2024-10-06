@@ -30,33 +30,6 @@ class UserLinksMssqlRepository(UserLinksRepository):  # pragma: no cover
 
             return user_link
 
-    def read(self, _id: str) -> UserLink:
-        with MsSqlConnector().connect() as connection:
-            cursor = connection.cursor()
-            cursor.execute(
-                """
-                SELECT
-                    id,
-                    user_id,
-                    name,
-                    link
-                FROM user_links
-                WHERE id = %s
-                """,
-                (_id,),
-            )
-            row = cursor.fetchone()
-
-            if row is not None:
-                return UserLink(
-                    row["id"],
-                    row["user_id"],
-                    row["name"],
-                    row["link"],
-                )
-
-        raise KeyError(f"User Link with id '{_id}' not found.")
-
     def delete(self, _id: str) -> None:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
@@ -85,8 +58,8 @@ class UserLinksMssqlRepository(UserLinksRepository):  # pragma: no cover
 
         for row in rows:
             yield UserLink(
-                row["id"],
-                row["user_id"],
-                row["name"],
-                row["link"],
+                id=row["id"],
+                user_id=row["user_id"],
+                name=row["name"],
+                link=row["link"],
             )
