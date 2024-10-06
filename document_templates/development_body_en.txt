@@ -1,0 +1,1 @@
+STATEMENT: Course/Training Aid RequestI hereby request approval and support for the following course/training:Course/Training Title: "!<<COURSE_NAME>>"Total Cost: !<<COURSE_PRICE>> USD
