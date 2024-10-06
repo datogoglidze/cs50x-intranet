@@ -10,7 +10,7 @@ from intranet.core.user import UserRepository
 from intranet.error import login_required
 from intranet.flask.dependable import Container
 
-news = Blueprint("news", __name__, template_folder="../front/templates")
+news = Blueprint("news", __name__)
 
 
 @news.get("/")

@@ -10,9 +10,7 @@ from intranet.core.user_details import Department, UserDetails, UserDetailsRepos
 from intranet.error import apology
 from intranet.flask.dependable import Container
 
-authorization = Blueprint(
-    "authorization", __name__, template_folder="../front/templates"
-)
+authorization = Blueprint("authorization", __name__)
 
 
 @authorization.get("/login")

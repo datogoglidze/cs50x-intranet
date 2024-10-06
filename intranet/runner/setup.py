@@ -30,7 +30,11 @@ def setup() -> Flask:
     except FileNotFoundError:
         pass
 
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        static_folder="../front/static",
+        template_folder="../front/templates",
+    )
 
     container = Container()
     app.container = container  # type: ignore

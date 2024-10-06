@@ -32,7 +32,7 @@ from intranet.core.user_details import UserDetailsRepository
 from intranet.error import apology, login_required
 from intranet.flask.dependable import Container
 
-documents = Blueprint("documents", __name__, template_folder="../front/templates")
+documents = Blueprint("documents", __name__)
 
 
 @dataclass
