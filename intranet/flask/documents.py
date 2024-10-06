@@ -39,6 +39,7 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 class DocumentForm:
     dates: str
     dates_select: str
+    date_range: str
     course_name: str
     course_price: str
     category: str
@@ -107,6 +108,7 @@ def create_document(
     form = DocumentForm(
         dates=request.form.get("dates", ""),
         dates_select=request.form.get("dates_select", ""),
+        date_range=request.form.get("date_range", ""),
         course_name=request.form.get("course_name", ""),
         course_price=request.form.get("course_price", ""),
         category=request.form.get("category", ""),
@@ -131,6 +133,7 @@ def create_document(
             Category[form.category].name,
             form.dates,
             form.dates_select,
+            form.date_range,
             form.course_name,
             form.course_price,
         )
@@ -172,6 +175,7 @@ class GenerateDocument:
         category: str,
         dates: str,
         dates_select: str,
+        date_range: str,
         course_name: str,
         course_price: str,
     ) -> GenerateDocument:
@@ -179,6 +183,7 @@ class GenerateDocument:
             category,
             dates,
             dates_select,
+            date_range,
             course_name,
             course_price,
         )
@@ -207,6 +212,7 @@ class GenerateDocument:
         category: str,
         dates: str,
         dates_select: str,
+        date_range: str,
         course_name: str,
         course_price: str,
     ) -> str:
@@ -217,6 +223,7 @@ class GenerateDocument:
         return (
             body_template.replace("!<<DATE>>", dates)
             .replace("!<<DATE_SELECT>>", dates_select)
+            .replace("!<<COURSE_DATE>>", date_range)
             .replace("!<<COURSE_NAME>>", course_name)
             .replace("!<<COURSE_PRICE>>", course_price)
         )

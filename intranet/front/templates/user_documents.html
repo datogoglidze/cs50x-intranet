@@ -60,6 +60,17 @@ main %}
                 placeholder="Effective From"/>
             <label for="floatingSelectDate">Effective From</label>
         </div>
+        <div id="dateRangeSelectContainer" class="col-md m-md-2 form-floating mb-3 hidden">
+            <input
+                class="form-control"
+                id="floatingSelectDateRange"
+                autocomplete="off"
+                autofocus
+                type="text"
+                name="date_range"
+                placeholder="Duration"/>
+            <label for="floatingSelectDateRange">Duration</label>
+        </div>
         <div id="courseNameInputContainer" class="col-md m-md-2 form-floating mb-3 hidden">
             <input
                 class="form-control"
@@ -164,6 +175,8 @@ main %}
         const dateInput = document.getElementById('floatingDate');
         const dateSelectContainer = document.getElementById('dateSelectContainer');
         const dateSelect = document.getElementById('floatingSelectDate');
+        const dateRangeSelectContainer = document.getElementById('dateRangeSelectContainer');
+        const dateRangeSelect = document.getElementById('floatingSelectDateRange');
         const courseNameInputContainer = document.getElementById('courseNameInputContainer');
         const courseNameInput = document.getElementById('floatingCourseName');
         const coursePriceInputContainer = document.getElementById('coursePriceInputContainer');
@@ -172,14 +185,17 @@ main %}
         categorySelect.addEventListener('change', function () {
             dateInputContainer.classList.add('hidden');
             dateSelectContainer.classList.add('hidden');
+            dateRangeSelectContainer.classList.add('hidden');
             courseNameInputContainer.classList.add('hidden');
             coursePriceInputContainer.classList.add('hidden');
             dateInput.removeAttribute('required');
             dateSelect.removeAttribute('required');
+            dateRangeSelect.removeAttribute('required');
             courseNameInput.removeAttribute('required');
             coursePriceInput.removeAttribute('required');
             dateInput.value = '';
             dateSelect.value = '';
+            dateRangeSelect.value = '';
             courseNameInput.value = '';
             coursePriceInput.value = '';
 
@@ -187,8 +203,10 @@ main %}
             } else if (this.value === 'development') {
                 courseNameInputContainer.classList.remove('hidden');
                 coursePriceInputContainer.classList.remove('hidden');
+                dateRangeSelectContainer.classList.remove('hidden');
                 courseNameInput.setAttribute('required', '');
                 coursePriceInput.setAttribute('required', '');
+                dateRangeSelect.setAttribute('required', '');
             } else if (this.value === 'resignation') {
                 dateSelectContainer.classList.remove('hidden');
                 dateSelect.setAttribute('required', '');
@@ -202,6 +220,16 @@ main %}
 
 <script>
     flatpickr("#floatingSelectDate", {
+        dateFormat: "Y/m/d",
+        minDate: "1900-01",
+        altInput: true,
+        defaultDate: "today"
+    });
+</script>
+
+<script>
+    flatpickr("#floatingSelectDateRange", {
+        mode: "range",
         dateFormat: "Y/m/d",
         minDate: "1900-01",
         altInput: true,
