@@ -20,12 +20,12 @@ class UserInMemoryRepository(UserRepository):  # pragma: no cover
             if username == existing.username:
                 raise ValueError(f"User with username '{username}' already exists.")
 
-    def read(self, user_id: str) -> User:
+    def read(self, _id: str) -> User:
         for user in self.users:
-            if user.id == user_id:
+            if user.id == _id:
                 return user
 
-        raise KeyError(f"User with id '{user_id}' not found.")
+        raise KeyError(f"User with id '{_id}' not found.")
 
     def read_all(self) -> list[User]:
         return self.users

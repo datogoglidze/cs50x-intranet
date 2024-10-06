@@ -75,30 +75,30 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
 
             if row is not None:
                 return UserDetails(
-                    row["id"],
-                    row["department"],
-                    row["first_name"],
-                    row["last_name"],
-                    row["birth_date"],
-                    row["email"],
-                    row["phone_number"],
+                    id=row["id"],
+                    department=row["department"],
+                    first_name=row["first_name"],
+                    last_name=row["last_name"],
+                    birth_date=row["birth_date"],
+                    email=row["email"],
+                    phone_number=row["phone_number"],
                 )
 
         raise KeyError(f"UserDetails with id '{_id}' not found.")
 
-    def delete(self, item_id: Any) -> None:
+    def delete(self, _id: Any) -> None:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
                 """
                 DELETE FROM user_details WHERE id = %s
                 """,
-                (item_id),
+                (_id),
             )
 
-    def update(self, item: UserDetails) -> None:
-        self.delete(item.id)
-        self.create(item)
+    def update(self, user_details: UserDetails) -> None:
+        self.delete(user_details.id)
+        self.create(user_details)
 
     def __iter__(self) -> Iterator[UserDetails]:
         with MsSqlConnector().connect() as connection:
@@ -120,11 +120,11 @@ class UserDetailsMssqlRepository(UserDetailsRepository):  # pragma: no cover
 
         for row in rows:
             yield UserDetails(
-                row["id"],
-                Department[row["department"]],
-                row["first_name"],
-                row["last_name"],
-                row["birth_date"],
-                row["email"],
-                row["phone_number"],
+                id=row["id"],
+                department=Department[row["department"]],
+                first_name=row["first_name"],
+                last_name=row["last_name"],
+                birth_date=row["birth_date"],
+                email=row["email"],
+                phone_number=row["phone_number"],
             )

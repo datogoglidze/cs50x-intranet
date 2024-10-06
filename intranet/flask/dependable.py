@@ -36,7 +36,7 @@ class Container(containers.DeclarativeContainer):
         else UsersDetailsInMemoryRepository()
     )
 
-    user_links_repository = providers.Singleton(
+    user_link_repository = providers.Singleton(
         lambda: UserLinksMssqlRepository()
         if "DB_HOST" in os.environ
         else UserLinksInMemoryRepository()

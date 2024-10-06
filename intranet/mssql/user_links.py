@@ -7,7 +7,7 @@ from intranet.mssql.connector import MsSqlConnector
 
 @dataclass
 class UserLinksMssqlRepository(UserLinksRepository):  # pragma: no cover
-    def create(self, user_links: UserLink) -> UserLink:
+    def create(self, user_link: UserLink) -> UserLink:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -21,41 +21,25 @@ class UserLinksMssqlRepository(UserLinksRepository):  # pragma: no cover
                 VALUES (%s, %s, %s, %s)
                 """,
                 (
-                    user_links.id,
-                    user_links.user_id,
-                    user_links.name,
-                    user_links.link,
+                    user_link.id,
+                    user_link.user_id,
+                    user_link.name,
+                    user_link.link,
                 ),
             )
 
-            return user_links
+            return user_link
 
-    def read(self, _id: str) -> UserLink:
+    def delete(self, _id: str) -> None:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
                 """
-                SELECT
-                    id,
-                    user_id,
-                    name,
-                    link
-                FROM user_links
+                DELETE FROM user_links
                 WHERE id = %s
                 """,
                 (_id,),
             )
-            row = cursor.fetchone()
-
-            if row is not None:
-                return UserLink(
-                    row["id"],
-                    row["user_id"],
-                    row["name"],
-                    row["link"],
-                )
-
-        raise KeyError(f"User Link with id '{_id}' not found.")
 
     def __iter__(self) -> Iterator[UserLink]:
         with MsSqlConnector().connect() as connection:
@@ -74,8 +58,8 @@ class UserLinksMssqlRepository(UserLinksRepository):  # pragma: no cover
 
         for row in rows:
             yield UserLink(
-                row["id"],
-                row["user_id"],
-                row["name"],
-                row["link"],
+                id=row["id"],
+                user_id=row["user_id"],
+                name=row["name"],
+                link=row["link"],
             )

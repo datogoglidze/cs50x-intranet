@@ -1,5 +1,5 @@
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, redirect, render_template, request, session
+from flask import Blueprint, redirect, render_template, request, session, url_for
 from werkzeug import Response
 
 from intranet.core.user_details import Department, UserDetails, UserDetailsRepository
@@ -15,7 +15,7 @@ user_details = Blueprint("user_details", __name__, template_folder="../front/tem
 @login_required
 def user_details_page(
     details: UserDetailsRepository = Provide[Container.user_details_repository],
-    links: UserLinksRepository = Provide[Container.user_links_repository],
+    links: UserLinksRepository = Provide[Container.user_link_repository],
 ) -> str:
     _user_details = details.read(session["user_id"])
     _user_links = [link for link in links if link.user_id == session["user_id"]]
@@ -52,4 +52,4 @@ def create_user_details(
 
     details.update(_details)
 
-    return redirect("/user-details")
+    return redirect(url_for("user_details.user_details_page"))

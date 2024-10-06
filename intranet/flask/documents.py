@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 from dataclasses import dataclass
 from io import BytesIO
 from uuid import uuid4
@@ -13,6 +12,7 @@ from flask import (
     request,
     send_from_directory,
     session,
+    url_for,
 )
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
@@ -37,13 +37,15 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 @dataclass
 class DocumentForm:
     dates: str
+    course_name: str
+    course_price: str
     category: str
 
 
 @documents.get("/documents")
 @inject
 @login_required
-def user_details_page(
+def documents_page(
     document_repository: DocumentRepository = Provide[Container.document_repository],
     users: UserRepository = Provide[Container.user_repository],
 ) -> str:
@@ -67,7 +69,7 @@ def user_details_page(
     )
 
 
-@documents.post("/update_document")
+@documents.post("/update-document")
 @inject
 @login_required
 def update_document(
@@ -82,7 +84,7 @@ def update_document(
             request.form.get("new_category", ""),
         )
 
-    return redirect("/documents")
+    return redirect(url_for("documents.documents_page"))
 
 
 @documents.get("/documents/<filename>")
@@ -102,23 +104,18 @@ def create_document(
 
     form = DocumentForm(
         dates=request.form.get("dates", ""),
+        course_name=request.form.get("course_name", ""),
+        course_price=request.form.get("course_price", ""),
         category=request.form.get("category", ""),
     )
 
     if not user.first_name or not user.last_name:
-        return apology("must fill details", 403)
-
-    if not form.dates:
-        return apology("must specify date", 403)
-
-    if not form.category:
-        return apology("must choose category", 403)
+        return apology("must fill user details", 403)
 
     document_id = str(uuid4())
     document = Document(
         id=document_id,
         user_id=session["user_id"],
-        creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
         category=Category[form.category],
         directory=f"/documents/{document_id}.pdf",
         status="warning",
@@ -127,7 +124,12 @@ def create_document(
     (
         GenerateDocument()
         .with_id(document.id)
-        .with_form(Category[form.category].name, form.dates)
+        .with_form(
+            Category[form.category].name,
+            form.dates,
+            form.course_name,
+            form.course_price,
+        )
         .with_name(user.first_name)
         .with_lastname(user.last_name)
         .with_layout(
@@ -140,7 +142,7 @@ def create_document(
 
     document_repository.create(document)
 
-    return redirect("/documents")
+    return redirect(url_for("documents.documents_page"))
 
 
 @dataclass
@@ -160,8 +162,14 @@ class GenerateDocument:
 
         return self
 
-    def with_form(self, category: str, dates: str) -> GenerateDocument:
-        self.body = self.body_using(category, dates)
+    def with_form(
+        self,
+        category: str,
+        dates: str,
+        course_name: str,
+        course_price: str,
+    ) -> GenerateDocument:
+        self.body = self.body_using(category, dates, course_name, course_price)
 
         return self
 
@@ -182,13 +190,27 @@ class GenerateDocument:
             "!<<LAST_NAME>>", self.last_name
         )
 
-    def body_using(self, category: str, dates: str) -> str:
+    def body_using(
+        self,
+        category: str,
+        dates: str,
+        course_name: str,
+        course_price: str,
+    ) -> str:
         body_template = self.read_template(f"document_templates/{category}_body.txt")
 
-        return body_template.replace("!<<DATE>>", dates)
+        return (
+            body_template.replace("!<<DATE>>", dates)
+            .replace("!<<COURSE_NAME>>", course_name)
+            .replace("!<<COURSE_PRICE>>", course_price)
+        )
 
     def footer(self) -> str:
-        return self.read_template("document_templates/foot.txt")
+        footer = self.read_template("document_templates/foot.txt")
+
+        return footer.replace("!<<FIRST_NAME>>", self.first_name).replace(
+            "!<<LAST_NAME>>", self.last_name
+        )
 
     def with_layout(
         self,

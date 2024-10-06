@@ -1,9 +1,8 @@
-import datetime
 from math import ceil
 from uuid import uuid4
 
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, redirect, render_template, request, session
+from flask import Blueprint, redirect, render_template, request, session, url_for
 from werkzeug import Response
 
 from intranet.core.news import News, NewsRepository
@@ -52,14 +51,13 @@ def create_news(
 ) -> Response | tuple[str, int]:
     _news = News(
         id=str(uuid4()),
-        creation_date=datetime.datetime.now().strftime("%Y/%m/%d, %H:%M"),
         title=request.form.get("title", ""),
         content=request.form.get("content", ""),
     )
 
     news_repository.create(_news)
 
-    return redirect("/")
+    return redirect(url_for("news.read_news"))
 
 
 @news.post("/delete-news")
@@ -74,4 +72,4 @@ def delete_news(
     if is_admin:
         news_repository.delete(request.form.get("news_id", ""))
 
-    return redirect("/")
+    return redirect(url_for("news.read_news"))

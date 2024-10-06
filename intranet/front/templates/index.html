@@ -158,18 +158,18 @@
         <tbody class="table-group-divider">
         {% for news in news %}
         <tr>
-            <th scope="row" class="fw-normal">{{ news.creation_date }}</th>
-            <th scope="row" class="fw-normal">{{ news.title }}</th>
-            <th scope="row" class="fw-normal">
+            <td class="fw-normal">{{ news.creation_date }}</td>
+            <td class="fw-normal">{{ news.title }}</td>
+            <td class="fw-normal">
                 {% set content_words = news.content.split() %}
                 {% if content_words|length > 20 %}
                 {{ content_words[:20]|join(' ') }}...
                 {% else %}
                 {{ news.content }}
                 {% endif %}
-            </th>
+            </td>
             {% if is_admin != True %}
-            <th scope="row" class="fw-normal px-3">
+            <td class="fw-normal px-3">
                 <button
                     class="btn read-more p-0 border-0 bg-transparent"
                     data-bs-toggle="modal"
@@ -202,9 +202,9 @@
                         </div>
                     </div>
                 </div>
-            </th>
+            </td>
             {% else %}
-            <th scope="row" class="fw-normal">
+            <td class="fw-normal">
                 <button
                     class="btn read-more p-0 border-0 bg-transparent"
                     data-bs-toggle="modal"
@@ -237,8 +237,8 @@
                         </div>
                     </div>
                 </div>
-            </th>
-            <th scope="row" class="fw-normal px-3">
+            </td>
+            <td class="fw-normal px-3">
                 <form class="row g-0" action="/delete-news" method="post">
                     <input
                         name="news_id"
@@ -249,9 +249,8 @@
                         Delete
                     </button>
                 </form>
-            </th>
+            </td>
             {% endif %}
-
         </tr>
         {% endfor %}
         </tbody>
@@ -439,7 +438,7 @@
                          class="card-img-top"
                          alt="mssql">
                     <div class="card-body">
-                        <h6 class="card-title">MsSQL Management</h6>
+                        <h6 class="card-title">MsSQL</h6>
                     </div>
                 </div>
             </div>

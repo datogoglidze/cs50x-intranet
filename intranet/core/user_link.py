@@ -5,10 +5,10 @@ from typing import Iterator, Protocol
 
 
 class UserLinksRepository(Protocol):  # pragma: no cover
-    def create(self, user_links: UserLink) -> UserLink:
+    def create(self, user_link: UserLink) -> UserLink:
         pass
 
-    def read(self, user_id: str) -> UserLink:
+    def delete(self, link_id: str) -> None:
         pass
 
     def __iter__(self) -> Iterator[UserLink]:
@@ -18,6 +18,6 @@ class UserLinksRepository(Protocol):  # pragma: no cover
 @dataclass
 class UserLink:
     id: str
-    user_id: str = ""
-    name: str = ""
-    link: str = ""
+    user_id: str
+    name: str
+    link: str

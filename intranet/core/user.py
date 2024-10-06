@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Iterator, Protocol
-from uuid import uuid4
 
 
 class UserRepository(Protocol):  # pragma: no cover
@@ -18,7 +17,6 @@ class UserRepository(Protocol):  # pragma: no cover
 
 @dataclass
 class User:
+    id: str
     username: str
     password: str
-
-    id: str = field(default_factory=lambda: str(uuid4()))

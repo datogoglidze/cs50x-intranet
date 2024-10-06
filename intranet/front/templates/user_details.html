@@ -197,12 +197,23 @@ block main %}
                     class="col-md-6 text-center text-md-end">
                     {{ link.name }}
                 </div>
-                <a
-                    class="col-md-6 text-center text-md-start text-break link-secondary link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover"
-                    href="{{ 'http://' + link.link if not (link.link.startswith('http') or link.link.startswith('https')) else link.link }}"
-                    target="_blank">
-                    Link <i class="bi bi-link-45deg"></i>
-                </a>
+                <div class="col-md-6 text-center text-md-start text-break text-muted">
+                    <a
+                        class="link-secondary link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover"
+                        href="{{ 'http://' + link.link if not (link.link.startswith('http') or link.link.startswith('https')) else link.link }}"
+                        target="_blank">
+                        Link <i class="bi bi-link-45deg"></i>
+                    </a>
+                    <form class="d-inline" action="/delete-link" method="post">
+                        <input
+                            name="link_id"
+                            type="hidden"
+                            value="{{ link.id }}"/>
+                        <button class="btn p-0 border-0 ms-3 type="submit" title="Delete">
+                            <i class="bi bi-x-circle-fill fs-5 text-danger"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
             {% endfor %}
             <div class="row align-items-center mb-3">
@@ -238,7 +249,7 @@ block main %}
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="/user_links" method="post">
+                                <form action="/user-links" method="post">
                                     <div class="mb-3">
                                         <label for="social-name" class="col-form-label">Social Network Name</label>
                                         <input type="text"

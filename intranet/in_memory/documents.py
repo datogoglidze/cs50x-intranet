@@ -1,3 +1,4 @@
+import datetime
 from dataclasses import dataclass, field
 from typing import Iterator
 
@@ -9,6 +10,7 @@ class DocumentInMemoryRepository(DocumentRepository):  # pragma: no cover
     documents: list[Document] = field(default_factory=list)
 
     def create(self, document: Document) -> Document:
+        document.creation_date = datetime.datetime.now().strftime("%Y/%m/%d, %H:%M")
         self.documents.append(document)
 
         return document
@@ -31,4 +33,4 @@ class DocumentInMemoryRepository(DocumentRepository):  # pragma: no cover
         raise KeyError(f"Document with id '{_id}' not found.")
 
     def __iter__(self) -> Iterator[Document]:
-        yield from self.documents
+        yield from reversed(self.documents)

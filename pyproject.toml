@@ -17,6 +17,8 @@ docx2pdf = "^0.1.8"
 python-docx = "^1.1.2"
 reportlab = "^4.2.0"
 pymssql = "^2.3.1"
+python-dotenv = "*"
+types-requests = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
@@ -27,7 +29,6 @@ coverage = "*"
 faker = "*"
 types-requests = "*"
 typer = "*"
-python-dotenv = "*"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "*"

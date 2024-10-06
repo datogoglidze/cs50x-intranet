@@ -1,3 +1,4 @@
+import datetime
 from dataclasses import dataclass, field
 from typing import Any, Iterator
 
@@ -9,6 +10,7 @@ class NewsInMemoryRepository(NewsRepository):  # pragma: no cover
     news: list[News] = field(default_factory=list)
 
     def create(self, news: News) -> News:
+        news.creation_date = datetime.datetime.now().strftime("%Y/%m/%d, %H:%M")
         self.news.append(news)
 
         return news
@@ -24,15 +26,15 @@ class NewsInMemoryRepository(NewsRepository):  # pragma: no cover
         return self.news
 
     def __iter__(self) -> Iterator[News]:
-        yield from self.news
+        yield from reversed(self.news)
 
-    def delete(self, item_id: Any) -> None:
+    def delete(self, _id: str) -> None:
         for i, news in enumerate(self.news):
-            if news.id == str(item_id):
+            if news.id == _id:
                 del self.news[i]
                 return
 
-        raise DoesNotExistError(item_id)
+        raise DoesNotExistError(_id)
 
 
 @dataclass

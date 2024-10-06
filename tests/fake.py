@@ -29,6 +29,7 @@ class FakeUser:
     @cached_property
     def entity(self) -> User:
         return User(
+            id=str(uuid4()),
             username=self.fake.text(length=10),
             password=self.fake.text(length=5),
         )

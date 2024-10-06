@@ -47,7 +47,7 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
             if cursor.fetchone() is not None:
                 raise ValueError(f"User with username '{username}' already exists.")
 
-    def read(self, user_id: str) -> User:
+    def read(self, _id: str) -> User:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -59,18 +59,18 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
                 FROM users
                 WHERE id = %s
                 """,
-                (user_id,),
+                (_id,),
             )
             row = cursor.fetchone()
 
             if row is not None:
                 return User(
-                    row["username"],
-                    row["password"],
-                    row["id"],
+                    id=row["id"],
+                    username=row["username"],
+                    password=row["password"],
                 )
 
-        raise KeyError(f"User with id '{user_id}' not found.")
+        raise KeyError(f"User with id '{_id}' not found.")
 
     def __iter__(self) -> Iterator[User]:
         with MsSqlConnector().connect() as connection:
@@ -86,7 +86,7 @@ class UserMssqlRepository(UserRepository):  # pragma: no cover
 
         for row in rows:
             yield User(
-                row["username"],
-                row["password"],
-                row["id"],
+                id=row["id"],
+                username=row["username"],
+                password=row["password"],
             )
