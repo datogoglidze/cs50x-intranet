@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from io import BytesIO
 from uuid import uuid4
@@ -122,7 +123,7 @@ def create_document(
     )
 
     (
-        GenerateDocument()
+        GenerateDocument(language=os.getenv("DOC_LANGUAGE"))
         .with_id(document.id)
         .with_form(
             Category[form.category].name,
@@ -147,6 +148,7 @@ def create_document(
 
 @dataclass
 class GenerateDocument:
+    language: str
     id: str = ""
     body: str = ""
     first_name: str = ""
@@ -184,7 +186,7 @@ class GenerateDocument:
         return self
 
     def header(self) -> str:
-        header = self.read_template("document_templates/head.txt")
+        header = self.read_template(f"document_templates/head_{self.language}.txt")
 
         return header.replace("!<<FIRST_NAME>>", self.first_name).replace(
             "!<<LAST_NAME>>", self.last_name
@@ -197,7 +199,9 @@ class GenerateDocument:
         course_name: str,
         course_price: str,
     ) -> str:
-        body_template = self.read_template(f"document_templates/{category}_body.txt")
+        body_template = self.read_template(
+            f"document_templates/{category}_body_{self.language}.txt"
+        )
 
         return (
             body_template.replace("!<<DATE>>", dates)
@@ -206,7 +210,7 @@ class GenerateDocument:
         )
 
     def footer(self) -> str:
-        footer = self.read_template("document_templates/foot.txt")
+        footer = self.read_template(f"document_templates/foot_{self.language}.txt")
 
         return footer.replace("!<<FIRST_NAME>>", self.first_name).replace(
             "!<<LAST_NAME>>", self.last_name
