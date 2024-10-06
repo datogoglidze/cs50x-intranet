@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from io import BytesIO
 from uuid import uuid4
@@ -37,6 +38,8 @@ documents = Blueprint("documents", __name__, template_folder="../front/templates
 @dataclass
 class DocumentForm:
     dates: str
+    dates_select: str
+    date_range: str
     course_name: str
     course_price: str
     category: str
@@ -104,6 +107,8 @@ def create_document(
 
     form = DocumentForm(
         dates=request.form.get("dates", ""),
+        dates_select=request.form.get("dates_select", ""),
+        date_range=request.form.get("date_range", ""),
         course_name=request.form.get("course_name", ""),
         course_price=request.form.get("course_price", ""),
         category=request.form.get("category", ""),
@@ -122,11 +127,13 @@ def create_document(
     )
 
     (
-        GenerateDocument()
+        GenerateDocument(language=str(os.getenv("DOC_LANGUAGE")))
         .with_id(document.id)
         .with_form(
             Category[form.category].name,
             form.dates,
+            form.dates_select,
+            form.date_range,
             form.course_name,
             form.course_price,
         )
@@ -147,6 +154,7 @@ def create_document(
 
 @dataclass
 class GenerateDocument:
+    language: str
     id: str = ""
     body: str = ""
     first_name: str = ""
@@ -166,10 +174,19 @@ class GenerateDocument:
         self,
         category: str,
         dates: str,
+        dates_select: str,
+        date_range: str,
         course_name: str,
         course_price: str,
     ) -> GenerateDocument:
-        self.body = self.body_using(category, dates, course_name, course_price)
+        self.body = self.body_using(
+            category,
+            dates,
+            dates_select,
+            date_range,
+            course_name,
+            course_price,
+        )
 
         return self
 
@@ -184,7 +201,7 @@ class GenerateDocument:
         return self
 
     def header(self) -> str:
-        header = self.read_template("document_templates/head.txt")
+        header = self.read_template(f"document_templates/head_{self.language}.txt")
 
         return header.replace("!<<FIRST_NAME>>", self.first_name).replace(
             "!<<LAST_NAME>>", self.last_name
@@ -194,19 +211,25 @@ class GenerateDocument:
         self,
         category: str,
         dates: str,
+        dates_select: str,
+        date_range: str,
         course_name: str,
         course_price: str,
     ) -> str:
-        body_template = self.read_template(f"document_templates/{category}_body.txt")
+        body_template = self.read_template(
+            f"document_templates/{category}_body_{self.language}.txt"
+        )
 
         return (
             body_template.replace("!<<DATE>>", dates)
+            .replace("!<<DATE_SELECT>>", dates_select)
+            .replace("!<<COURSE_DATE>>", date_range)
             .replace("!<<COURSE_NAME>>", course_name)
             .replace("!<<COURSE_PRICE>>", course_price)
         )
 
     def footer(self) -> str:
-        footer = self.read_template("document_templates/foot.txt")
+        footer = self.read_template(f"document_templates/foot_{self.language}.txt")
 
         return footer.replace("!<<FIRST_NAME>>", self.first_name).replace(
             "!<<LAST_NAME>>", self.last_name

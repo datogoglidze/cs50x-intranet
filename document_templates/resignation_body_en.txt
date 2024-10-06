@@ -1,0 +1,1 @@
+Statement: ResignationI hereby submit my resignation from my position, effective !<<DATE_SELECT>>.

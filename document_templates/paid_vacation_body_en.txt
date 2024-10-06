@@ -1,0 +1,1 @@
+STATEMENT: Paid Vacation RequestI hereby request vacation time for the following dates: !<<DATE>>.
