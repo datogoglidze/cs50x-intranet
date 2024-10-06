@@ -125,7 +125,7 @@ def create_document(
     )
 
     (
-        GenerateDocument(language=os.getenv("DOC_LANGUAGE"))
+        GenerateDocument(language=str(os.getenv("DOC_LANGUAGE")))
         .with_id(document.id)
         .with_form(
             Category[form.category].name,
