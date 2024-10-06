@@ -7,7 +7,7 @@ from intranet.core.user_link import UserLinksRepository
 from intranet.error import login_required
 from intranet.flask.dependable import Container
 
-user_details = Blueprint("user_details", __name__, template_folder="../front/templates")
+user_details = Blueprint("user_details", __name__)
 
 
 @user_details.get("/user-details")
