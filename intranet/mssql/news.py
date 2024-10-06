@@ -28,6 +28,17 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
 
             return news
 
+    def delete(self, _id: str) -> None:
+        with MsSqlConnector().connect() as connection:
+            cursor = connection.cursor()
+            cursor.execute(
+                """
+                DELETE FROM news
+                WHERE id = %s
+                """,
+                (_id,),
+            )
+
     def __iter__(self) -> Iterator[News]:
         with MsSqlConnector().connect() as connection:
             cursor = connection.cursor()
@@ -51,15 +62,4 @@ class NewsMssqlRepository(NewsRepository):  # pragma: no cover
                 creation_date=row["formatted_creation_date"],
                 title=row["title"],
                 content=row["content"],
-            )
-
-    def delete(self, _id: str) -> None:
-        with MsSqlConnector().connect() as connection:
-            cursor = connection.cursor()
-            cursor.execute(
-                """
-                DELETE FROM news
-                WHERE id = %s
-                """,
-                (_id,),
             )
