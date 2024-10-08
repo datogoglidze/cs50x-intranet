@@ -12,5 +12,5 @@ The project "Intranet" is about managing company-wide communications between emp
 > **How to run the project using Docker (Execute following commands in bash)**
 > * "make intranet-network";
 > * "make db";
-> * connect to the MsSQL server, execute `create database Intranet` and run sql scripts located in `intranet/mssql/scripts/` on Intranet database;
+> * connect to the newly created MsSQL server and execute `create database Intranet`;
 > * "make up".
