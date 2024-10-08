@@ -18,6 +18,7 @@ python-docx = "^1.1.2"
 reportlab = "^4.2.0"
 pymssql = "^2.3.1"
 python-dotenv = "*"
+alembic = "^1.13.1"
 types-requests = "*"
 
 [tool.poetry.group.dev.dependencies]

@@ -16,6 +16,7 @@ services:
       DB_NAME: Intranet
       DB_PASSWORD: Pass12345
       DOC_LANGUAGE: en
+      DB_MIGRATE: true
       TZ: Asia/Tbilisi
     networks:
       - intranet

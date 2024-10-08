@@ -6,6 +6,7 @@ from flask import Flask
 from flask_session import Session
 
 from intranet import flask
+from intranet.alembic import migrate_db
 from intranet.flask.authorization import authorization
 from intranet.flask.dependable import Container
 from intranet.flask.documents import documents
@@ -65,5 +66,8 @@ def setup() -> Flask:
     )
 
     app.after_request(no_cache_after_request)
+
+    if os.getenv("DB_MIGRATE", "") == "true":
+        migrate_db()
 
     return app
