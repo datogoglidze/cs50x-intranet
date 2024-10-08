@@ -29,7 +29,9 @@ test:
 run:
 	python -m intranet.runner --host localhost --port 5000
 
-#docker network create -d bridge intranet
+intranet-network:
+	docker network create -d bridge intranet
+
 db:
 	docker run --network=intranet -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Pass12345" -p 1433:1433 --name intranet-mssql --hostname intranet-mssql -d mcr.microsoft.com/mssql/server:2022-latest
 
